@@ -1,0 +1,34 @@
+--- libvpx/build/make/configure.sh.orig	2015-03-25 10:51:15.295931423 +0100
++++ libvpx/build/make/configure.sh	2015-03-25 10:51:19.111931475 +0100
+@@ -674,6 +674,8 @@
+             *os2*)
+                 tgt_os=os2
+                 ;;
++            *qnx*)
++                tgt_os=qnx
+         esac
+ 
+         if [ -n "$tgt_isa" ] && [ -n "$tgt_os" ]; then
+@@ -822,10 +824,6 @@
+                     check_add_cflags -mfpu=neon #-ftree-vectorize
+                     check_add_asflags -mfpu=neon
+                 fi
+-
+-                if [ -z "${tune_cpu}" ]; then
+-                    tune_cpu=cortex-a8
+-                fi
+             else
+                 check_add_cflags -march=${tgt_isa}
+                 check_add_asflags -march=${tgt_isa}
+@@ -884,6 +882,11 @@
+             disable_feature multithread
+             disable_feature os_support
+             ;;
++ 
++        qnx*)
++            disable_feature multithread
++            add_cflags --sysroot ${alt_libc}
++            ;;
+ 
+         android*)
+             SDK_PATH=${sdk_path}

@@ -21,8 +21,8 @@
 ############################################################################
 
 set(EP_ms2_GIT_REPOSITORY "git://git.linphone.org/mediastreamer2.git")
-set(EP_ms2_GIT_TAG_LATEST "master")
-set(EP_ms2_GIT_TAG "cb24d6f8fad1f540f65d91cdefedd791109952e1")
+set(EP_ms2_GIT_TAG_LATEST "dev_bb10")
+set(EP_ms2_GIT_TAG "7494e580b6127b950f29a5dff731789ed605b3a6")
 
 set(EP_ms2_CMAKE_OPTIONS )
 set(EP_ms2_LINKING_TYPE "-DENABLE_STATIC=NO")

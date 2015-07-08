@@ -44,7 +44,7 @@ set(DEFAULT_VALUE_ENABLE_OPENH264 OFF)
 set(DEFAULT_VALUE_ENABLE_X264 OFF)
 set(DEFAULT_VALUE_ENABLE_TUNNEL OFF)
 set(DEFAULT_VALUE_ENABLE_UNIT_TESTS ON)
-
+set(DEFAULT_VALUE_ENABLE_V4L OFF)
 
 # Global configuration
 get_filename_component(COMPILER_NAME ${CMAKE_C_COMPILER} NAME)
@@ -99,9 +99,6 @@ set(EP_speex_LINKING_TYPE "-DENABLE_STATIC=YES")
 
 # srtp
 set(EP_srtp_LINKING_TYPE "-DENABLE_STATIC=YES")
-
-# vpx
-set(EP_vpx_LINKING_TYPE "--enable-static" "--disable-shared" "--enable-pic")
 
 # xml2
 set(EP_xml2_LINKING_TYPE "-DENABLE_STATIC=YES")

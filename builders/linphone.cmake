@@ -22,7 +22,7 @@
 
 set(EP_linphone_GIT_REPOSITORY "git://git.linphone.org/linphone.git")
 set(EP_linphone_GIT_TAG_LATEST "master")
-set(EP_linphone_GIT_TAG "6ef6e970433aae2e513a2edb98351a0405bb8cfe")
+set(EP_linphone_GIT_TAG "ced2dc9316a7f4474885ff34dee8e9e742ff3d67")
 
 set(EP_linphone_CMAKE_OPTIONS )
 set(EP_linphone_LINKING_TYPE "-DENABLE_STATIC=NO")

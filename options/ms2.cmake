@@ -94,3 +94,4 @@ ms2_add_strict_dependent_option("X264" "H.264 video encoding support with the x2
 
 # Other options
 ms2_add_option("PCAP" "PCAP support." "${DEFAULT_VALUE_ENABLE_PCAP}")
+ms2_add_option("FreeRDP" "FreeRDP support." "${DEFAULT_VALUE_ENABLE_FREERDP}")

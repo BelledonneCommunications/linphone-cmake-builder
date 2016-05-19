@@ -147,4 +147,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		CMAKE_GENERATOR ${CMAKE_GENERATOR}
 		CMAKE_ARGS ${LINPHONE_BUILDER_EP_ARGS} -DANDROID_NDK_PATH=${ANDROID_NDK_PATH} -DARCHITECTURE=${ARCHITECTURE}
 	)
+
+	# Dummy stript to not strip compiled libs from the general Makefile
+	file(WRITE "${LINPHONE_BUILDER_WORK_DIR}/strip.sh" "")
+else()
+	# Script to be able to strip compiled libs from the general Makefile
+	configure_file("${CMAKE_CURRENT_LIST_DIR}/android/strip.sh.cmake" "${LINPHONE_BUILDER_WORK_DIR}/strip.sh" @ONLY)
 endif()

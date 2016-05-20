@@ -102,6 +102,7 @@ if(CLANG_EXECUTABLE)
 	set(CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN "${EXTERNAL_TOOLCHAIN_PATH}/..")
 
 	set(ANDROID_TOOLCHAIN_PREFIX "${EXTERNAL_TOOLCHAIN_PATH}/${COMPILER_PREFIX}-")
+	set(ANDROID_TOOLCHAIN_STRIP "${ANDROID_TOOLCHAIN_PREFIX}strip")
 
 else()
 
@@ -159,6 +160,7 @@ else()
 	message(FATAL_ERROR "Cannot find cpu-features.c")
 endif()
 include_directories(SYSTEM ${ANDROID_CPU_FEATURES_INCLUDE_DIRS} ${ANDROID_STL_INCLUDE_DIRS})
+add_definitions("-DANDROID")
 if(GCC_LIBRARY_PATH)
 	#link_directories("${GCC_LIBRARY_PATH}")
 	# link_directories has no effet for external projects so add the GCC library path to the compiler flags

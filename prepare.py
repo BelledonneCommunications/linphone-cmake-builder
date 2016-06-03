@@ -23,12 +23,19 @@
 ############################################################################
 
 import argparse
+import copy
 import os
 import platform
+import re
 import shutil
 import stat
 import subprocess
 import sys
+import tempfile
+from distutils.spawn import find_executable
+from logging import error, warning, info, INFO, basicConfig
+from subprocess import Popen, PIPE
+
 
 
 class Target:
@@ -46,6 +53,8 @@ class Target:
         self.abs_work_dir = os.getcwd() + '/' + self.work_dir
         self.cmake_dir = self.work_dir + '/cmake'
         self.abs_cmake_dir = os.getcwd() + '/' + self.cmake_dir
+        self.external_source_path = None
+        self.lazy_install_message = True
 
     def output_dir(self):
         output_dir = self.output
@@ -56,8 +65,10 @@ class Target:
             output_dir = output_dir.replace('\\', '/')
         return output_dir
 
-    def cmake_command(self, build_type, latest, list_cmake_variables, additional_args, verbose=True):
+    def cmake_command(self, build_type, args, additional_args, verbose=True):
         current_path = os.path.dirname(os.path.realpath(__file__))
+        if args.generator is not None:
+            self.generator = args.generator # The user defined generator takes the precedence over the default target one
         cmd = ['cmake', current_path]
         if self.generator is not None:
             cmd += ['-G', self.generator]
@@ -65,14 +76,26 @@ class Target:
             cmd += ['-A', self.platform_name]
         cmd += ['-DCMAKE_BUILD_TYPE=' + build_type]
         cmd += ['-DCMAKE_PREFIX_PATH=' + self.output_dir(), '-DCMAKE_INSTALL_PREFIX=' + self.output_dir()]
+        cmd += ['-DCMAKE_NO_SYSTEM_FROM_IMPORTED=YES']
         cmd += ['-DLINPHONE_BUILDER_WORK_DIR=' + self.abs_work_dir]
+        if args.ccache:
+            cmd += ['-DCMAKE_C_COMPILER_LAUNCHER=ccache']
+            cmd += ['-DCMAKE_CXX_COMPILER_LAUNCHER=ccache']
         if self.toolchain_file is not None:
             cmd += ['-DCMAKE_TOOLCHAIN_FILE=' + self.toolchain_file]
+        if self.lazy_install_message:
+            cmd += ['-DCMAKE_INSTALL_MESSAGE=LAZY']
         if self.config_file is not None:
             cmd += ['-DLINPHONE_BUILDER_CONFIG_FILE=' + self.config_file]
-        if latest:
-            cmd += ['-DLINPHONE_BUILDER_LATEST=YES']
-        if list_cmake_variables:
+        if self.external_source_path is not None:
+            if platform.system() == 'Windows':
+                self.external_source_path = self.external_source_path.replace('\\', '/')
+            cmd += ['-DLINPHONE_BUILDER_EXTERNAL_SOURCE_PATH=' + self.external_source_path]
+        if args.group:
+            cmd += ['-DLINPHONE_BUILDER_GROUP_EXTERNAL_SOURCE_PATH_BUILDERS=YES']
+        if args.debug_verbose:
+            cmd += ['-DENABLE_DEBUG_LOGS=YES']
+        if args.list_cmake_variables:
             cmd += ['-L']
         for arg in self.additional_args:
             cmd += [arg]
@@ -120,121 +143,288 @@ class Target:
             return "Run the following command to build:\n\t{builder} -C {cmake_dir}".format(builder=builder, cmake_dir=self.cmake_dir)
 
 
-class DesktopTarget(Target):
 
-    def __init__(self):
-        Target.__init__(self, 'desktop')
-        self.config_file = 'configs/config-desktop.cmake'
+class TargetListAction(argparse.Action):
+
+    def __init__(self, option_strings, targets, dest=None, nargs=0, default=None, required=False, type=None, metavar=None, help=None):
+        self.targets = targets
+        super(TargetListAction, self).__init__(option_strings=option_strings, dest=dest, nargs=nargs, default=default, required=required, metavar=metavar, type=type, help=help)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if values:
+            for value in values:
+                if value not in self.targets:
+                    message = ("invalid platform: {0!r} (choose from {1})".format(value, ', '.join([repr(target) for target in self.targets])))
+                    raise argparse.ArgumentError(self, message)
+            setattr(namespace, self.dest, values)
+
+class ToggleAction(argparse.Action):
+    def __call__(self, parser, ns, values, option):
+        setattr(ns, self.dest, option[2:4] != 'no')
+
+class Preparator:
+
+    def __init__(self, targets={}, default_targets=[], virtual_targets={}):
+        basicConfig(format="%(levelname)s: %(message)s", level=INFO)
+        self.targets = targets
+        self.virtual_targets = virtual_targets
+        self.additional_args = []
+        self.missing_dependencies = {}
+        self.veryclean = False
+        self.show_gpl_disclaimer = False
+
+        self.argparser = argparse.ArgumentParser(description="Prepare build of Linphone and its dependencies.")
+        self.argparser.add_argument('-c', '--clean', help="Clean a previous build instead of preparing a build.", action='store_true')
+        if platform.system() != 'Windows':
+            self.argparser.add_argument('-cc', '--ccache', help="Use ccache to speed up the build process.", action='store_true')
+        self.argparser.add_argument('-d', '--debug', help="Prepare a debug build, eg. add debug symbols and use no optimizations.", action='store_true')
+        self.argparser.add_argument('-dv', '--debug-verbose', help="Activate ms_debug logs.", action='store_true')
+        self.argparser.add_argument('-f', '--force', help="Force preparation, even if working directory already exist.", action='store_true')
+        self.argparser.add_argument('-G', '--generator', help="CMake build system generator (default: let CMake choose, use cmake -h to get the complete list).", default=None, dest='generator')
+        self.argparser.add_argument('-g', '--group', help="Group Linphone related builders.", action='store_true')
+        self.argparser.add_argument('-L', '--list-cmake-variables', help="List non-advanced CMake cache variables.", action='store_true', dest='list_cmake_variables')
+        self.argparser.add_argument('-lf', '--list-features', help="List optional features and their default values.", action='store_true', dest='list_features')
+        self.argparser.add_argument('--tunnel', '--no-tunnel', help="Enable/Disable Tunnel.", action=ToggleAction, nargs=0)
+
+        if not default_targets:
+            default_targets = list(self.targets.keys())
+        if len(self.targets) > 1:
+            self.argparser.add_argument('target', nargs='*', action=TargetListAction, default=default_targets, targets=self.available_targets(),
+                help="The target(s) to build for (default is '{0}'). Space separated targets in list: {1}.".format(' '.join(default_targets), ', '.join(self.available_targets())))
+
+    def available_targets(self):
+        targets = [target for target in self.targets.keys()]
+        targets += [target for target in self.virtual_targets.keys()]
+        return targets
+
+    def parse_args(self):
+        self.args, self.user_additional_args = self.argparser.parse_known_args()
         if platform.system() == 'Windows':
-            self.generator = 'Visual Studio 12 2013'
+            self.args.ccache = False
+        new_targets = []
+        for target_name in self.args.target:
+            if target_name in self.virtual_targets.keys():
+                new_targets += self.virtual_targets[target_name]
+            else:
+                new_targets += [target_name]
+        self.args.target = list(set(new_targets))
 
+    def check_is_installed(self, binary, prog='it', warn=True):
+        if not find_executable(binary):
+            if warn:
+                self.missing_dependencies[binary] = prog
+                #error("Could not find {}. Please install {}.".format(binary, prog))
+            return False
+        return True
 
-class FlexisipTarget(Target):
+    def check_tools(self):
+        ret = 0
 
-    def __init__(self):
-        Target.__init__(self, 'flexisip')
-        self.required_build_platforms = ['Linux', 'Darwin']
-        self.config_file = 'configs/config-flexisip.cmake'
-        self.additional_args = ['-DLINPHONE_BUILDER_TARGET=flexisip']
+        # at least FFmpeg requires no whitespace in sources path...
+        if " " in os.path.dirname(os.path.realpath(__file__)):
+            error("Invalid location: path should not contain any spaces.")
+            ret = 1
 
+        ret |= not self.check_is_installed('cmake')
 
-class FlexisipRpmTarget(Target):
+        if not os.path.isdir("submodules/linphone/mediastreamer2/src") or not os.path.isdir("submodules/linphone/oRTP/src"):
+            error("Missing some git submodules. Did you run:\n\tgit submodule update --init --recursive")
+            ret = 1
 
-    def __init__(self):
-        Target.__init__(self, 'flexisip-rpm')
-        self.required_build_platforms = ['Linux', 'Darwin']
-        self.config_file = 'configs/config-flexisip-rpm.cmake'
-        self.additional_args = ['-DLINPHONE_BUILDER_TARGET=flexisip']
+        return ret
 
+    def show_missing_dependencies(self):
+        if self.missing_dependencies:
+            error("The following binaries are missing: {}. Please install them.".format(' '.join(self.missing_dependencies.keys())))
 
-class PythonTarget(Target):
+    def gpl_disclaimer(self):
+        if not self.show_gpl_disclaimer:
+            return
+        cmakecache = os.path.join(self.first_target().abs_work_dir, 'cmake', 'CMakeCache.txt')
+        gpl_third_parties_enabled = "ENABLE_GPL_THIRD_PARTIES:BOOL=YES" in open(
+           cmakecache).read() or "ENABLE_GPL_THIRD_PARTIES:BOOL=ON" in open(cmakecache).read()
 
-    def __init__(self):
-        Target.__init__(self, 'python')
-        self.config_file = 'configs/config-python.cmake'
-        if platform.system() == 'Windows':
-            self.generator = 'Visual Studio 9 2008'
+        if gpl_third_parties_enabled:
+            warning("\n***************************************************************************"
+                    "\n***************************************************************************"
+                    "\n***** CAUTION, this liblinphone SDK is built using 3rd party GPL code *****"
+                    "\n***** Even if you acquired a proprietary license from Belledonne      *****"
+                    "\n***** Communications, this SDK is GPL and GPL only.                   *****"
+                    "\n***** To disable 3rd party gpl code, please use:                      *****"
+                    "\n***** $ ./prepare.py -DENABLE_GPL_THIRD_PARTIES=NO                    *****"
+                    "\n***************************************************************************"
+                    "\n***************************************************************************")
+        else:
+            warning("\n***************************************************************************"
+                    "\n***************************************************************************"
+                    "\n***** Linphone SDK without 3rd party GPL software                     *****"
+                    "\n***** If you acquired a proprietary license from Belledonne           *****"
+                    "\n***** Communications, this SDK can be used to create                  *****"
+                    "\n***** a proprietary linphone-based application.                       *****"
+                    "\n***************************************************************************"
+                    "\n***************************************************************************")
 
+    def first_target(self):
+        return self.targets[self.args.target[0]]
 
-class PythonRaspberryTarget(Target):
+    def generator(self):
+        return self.first_target().generator
 
-    def __init__(self):
-        Target.__init__(self, 'python-raspberry')
-        self.required_build_platforms = ['Linux']
-        self.config_file = 'configs/config-python-raspberry.cmake'
-        self.toolchain_file = 'toolchains/toolchain-raspberry.cmake'
+    def get_additional_args(self):
+        # Append user_additional_args to additional_args so that the user's option take the priority
+        return self.additional_args + self.user_additional_args
 
+    def list_features_with_args(self, args, additional_args):
+        tmpdir = tempfile.mkdtemp(prefix="linphone-prepare")
+        tmptarget = self.first_target()
+        tmptarget.abs_cmake_dir = tmpdir
+        option_regex = re.compile("ENABLE_(.*):(.*)=(.*)")
+        options = {}
+        ended = True
+        build_type = 'Debug' if args.debug else 'Release'
 
-targets = {}
-targets['desktop'] = DesktopTarget()
-targets['flexisip'] = FlexisipTarget()
-targets['flexisip-rpm'] = FlexisipRpmTarget()
-targets['python'] = PythonTarget()
-targets['python-raspberry'] = PythonRaspberryTarget()
-target_names = sorted(targets.keys())
+        p = Popen(tmptarget.cmake_command(build_type, args, additional_args, verbose=False), cwd=tmpdir, shell=False, stdout=PIPE, universal_newlines=True)
+        p.wait()
+        if p.returncode != 0:
+            sys.exit(-1)
+        for line in p.stdout.readlines():
+            match = option_regex.match(line)
+            if match is not None:
+                (name, typeof, value) = match.groups()
+                options["ENABLE_{}".format(name)] = value
+                ended &= (value == 'ON')
+        shutil.rmtree(tmpdir)
+        return (options, ended)
 
+    def list_features(self, args, additional_args):
+        args.list_cmake_variables = True
+        additional_args_copy = additional_args
+        options = {}
+        info("Searching for available features...")
+        # We have to iterate multiple times to activate ALL options, so that options depending
+        # of others are also listed (cmake_dependent_option macro will not output options if
+        # prerequisite is not met)
+        while True:
+            (options, ended) = self.list_features_with_args(args, additional_args_copy)
+            if ended or (len(options) == len(additional_args_copy)):
+                break
+            else:
+                additional_args_copy = []
+                # Activate ALL available options
+                for k in options.keys():
+                    additional_args_copy.append("-D{}=ON".format(k))
 
-def run(target, debug, latest, list_cmake_variables, force_build, additional_args):
-    if type(debug) is str:
-        build_type = debug
-    else:
-        build_type = 'Debug' if debug else 'Release'
+        # Now that we got the list of ALL available options, we must correct default values
+        # Step 1: all options are turned off by default
+        for x in options.keys():
+            options[x] = 'OFF'
+        # Step 2: except options enabled when running with default args
+        (options_tmp, ended) = self.list_features_with_args(args, additional_args)
+        final_dict = dict(options, **options_tmp)
 
-    if target.required_build_platforms is not None:
-        if not platform.system() in target.required_build_platforms:
-            print("Cannot build target '{target}' on '{bad_build_platform}' build platform. Build it on one of {good_build_platforms}.".format(
-                target=target.name, bad_build_platform=platform.system(), good_build_platforms=', '.join(target.required_build_platforms)))
-            return 52
+        notice_features = "Here are available features:"
+        for k, v in final_dict.items():
+            notice_features += "\n\t{}={}".format(k, v)
+        info(notice_features)
+        info("To enable some feature, please use -DENABLE_SOMEOPTION=ON (example: -DENABLE_OPUS=ON)")
+        info("Similarly, to disable some feature, please use -DENABLE_SOMEOPTION=OFF (example: -DENABLE_OPUS=OFF)")
 
-    if os.path.isdir(target.abs_cmake_dir):
-        if force_build is False:
-            print("Working directory {} already exists. Please remove it (option -C or -c) before re-executing CMake "
-                  "to avoid conflicts between executions, or force execution (option -f) if you are aware of consequences.".format(target.cmake_dir))
-            return 51
-    else:
-        os.makedirs(target.abs_cmake_dir)
+    def target_clean(self, target):
+        if self.veryclean:
+            target.veryclean()
+        else:
+            target.clean()
 
-    proc = subprocess.Popen(target.cmake_command(
-        build_type, latest, list_cmake_variables, additional_args), cwd=target.abs_cmake_dir, shell=False)
-    proc.communicate()
-    return proc.returncode
+    def target_prepare(self, target):
+        if target.required_build_platforms is not None:
+            if not platform.system() in target.required_build_platforms:
+                print("Cannot build target '{target}' on '{bad_build_platform}' build platform. Build it on one of {good_build_platforms}.".format(
+                    target=target.name, bad_build_platform=platform.system(), good_build_platforms=', '.join(target.required_build_platforms)))
+                return 52
 
+        if type(self.args.debug) is str:
+            build_type = self.args.debug
+        else:
+            build_type = 'Debug' if self.args.debug else 'Release'
 
-def main(argv=None):
-    if argv is None:
-        argv = sys.argv
-    argparser = argparse.ArgumentParser(description="Prepare build of Linphone and its dependencies.")
-    argparser.add_argument(
-        '-c', '--clean', help="Clean a previous build instead of preparing a build.", action='store_true')
-    argparser.add_argument(
-        '-C', '--veryclean', help="Clean a previous build and its installation directory.", action='store_true')
-    argparser.add_argument('-d', '--debug', help="Prepare a debug build.", action='store_true')
-    argparser.add_argument(
-        '-f', '--force', help="Force preparation, even if working directory already exist.", action='store_true')
-    argparser.add_argument('-l', '--latest', help="Build latest versions of all dependencies.", action='store_true')
-    argparser.add_argument('-o', '--output', help="Specify output directory.")
-    argparser.add_argument('-G', '--generator', metavar='generator', help="CMake generator to use.")
-    argparser.add_argument('-L', '--list-cmake-variables',
-                           help="List non-advanced CMake cache variables.", action='store_true', dest='list_cmake_variables')
-    argparser.add_argument('target', choices=target_names, help="The target to build.")
-    args, additional_args = argparser.parse_known_args()
+        if not os.path.isdir(target.abs_cmake_dir):
+            os.makedirs(target.abs_cmake_dir)
 
-    target = targets[args.target]
-    if args.generator:
-        target.generator = args.generator
-    if args.output:
-        target.output = args.output
+        self.prepare_tunnel()
 
-    retcode = 0
-    if args.veryclean:
-        target.veryclean()
-    elif args.clean:
-        target.clean()
-    else:
-        retcode = run(target, args.debug, args.latest, args.list_cmake_variables, args.force, additional_args)
-        if retcode == 0:
-            print("\n" + target.build_instructions(args.debug))
-    return retcode
+        p = Popen(target.cmake_command(build_type, self.args, self.get_additional_args()), cwd=target.abs_cmake_dir, shell=False)
+        p.communicate()
 
-if __name__ == "__main__":
-    sys.exit(main())
+        if target.generator is None:
+            # No generator has been specified, find the one CMake has used
+            cmakecache = os.path.join(target.abs_work_dir, 'cmake', 'CMakeCache.txt')
+            generator_regex = re.compile("CMAKE_GENERATOR:(.*)=(.*)", flags=re.MULTILINE)
+            content = open(cmakecache).read()
+            match = generator_regex.search(content)
+            if match:
+                target.generator = match.group(2)
+
+        return p.returncode
+
+    def clean(self):
+        for target_name, target in self.targets.items():
+            self.target_clean(target)
+        return 0
+
+    def prepare(self):
+        ret = 0
+
+        if self.args.list_features:
+            self.list_features(self.args, self.get_additional_args())
+            sys.exit(0)
+
+        if self.args.force is False:
+            for target_name, target in self.targets.items():
+                if os.path.isdir(target.abs_cmake_dir):
+                    print("Working directory {} already exists. Please remove it (option -c) before re-executing prepare.py "
+                          "to avoid conflicts between executions, or force execution (option -f) if you are aware of consequences.".format(target.cmake_dir))
+                    ret = 51
+                    break
+
+        if ret == 0:
+            for target_name in self.args.target:
+                ret = self.target_prepare(self.targets[target_name])
+                if ret != 0:
+                    break
+        if ret != 0:
+            if ret == 51:
+                if os.path.isfile('Makefile'):
+                    Popen("make help-prepare-options".split(" "))
+                ret = 0
+            return ret
+        # Only generated makefile if we are using Ninja or Makefile
+        if self.generator().endswith('Ninja'):
+            if not self.check_is_installed("ninja", "it"):
+                return 1
+            self.generate_makefile('ninja -C')
+            info("You can now run 'make' to build.")
+        elif self.generator().endswith("Unix Makefiles"):
+            self.generate_makefile('$(MAKE) -C')
+            info("You can now run 'make' to build.")
+        else:
+            warning("Not generating meta-makefile for generator {}.".format(self.generator()))
+        self.gpl_disclaimer()
+        return ret
+
+    def run(self):
+        if self.args.clean:
+            return self.clean()
+        else:
+            return self.prepare()
+
+    def prepare_tunnel(self):
+        if self.args.tunnel:
+            if not os.path.isdir("submodules/tunnel"):
+                info("Tunnel wanted but not found yet, trying to clone it...")
+                p = Popen("git clone gitosis@git.linphone.org:tunnel.git submodules/tunnel".split(" "))
+                p.wait()
+                if p.returncode != 0:
+                    error("Could not clone tunnel. Please see http://www.belledonne-communications.com/voiptunnel.html")
+                    return 1
+            info("Tunnel enabled.")
+            self.additional_args += ["-DENABLE_TUNNEL=YES"]

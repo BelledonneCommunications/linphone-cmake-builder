@@ -1,6 +1,6 @@
 ############################################################################
-# bcg729.cmake
-# Copyright (C) 2014  Belledonne Communications, Grenoble France
+# androidsupport.cmake
+# Copyright (C) 2016  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,11 +20,4 @@
 #
 ############################################################################
 
-set(EP_bcg729_GIT_REPOSITORY "git://git.linphone.org/bcg729.git" CACHE STRING "bcg729 repository URL")
-set(EP_bcg729_GIT_TAG_LATEST "master" CACHE STRING "bcg729 tag to use when compiling latest version")
-set(EP_bcg729_GIT_TAG "1.0.1" CACHE STRING "bcg729 tag to use")
-set(EP_bcg729_EXTERNAL_SOURCE_PATHS "bcg729")
-set(EP_bcg729_GROUPABLE YES)
-
-set(EP_bcg729_LINKING_TYPE ${DEFAULT_VALUE_CMAKE_PLUGIN_LINKING_TYPE})
-set(EP_bcg729_DEPENDENCIES EP_ms2)
+set(EP_androidsupport_EXTERNAL_SOURCE_PATHS "externals/build/support")

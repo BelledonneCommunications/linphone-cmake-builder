@@ -21,7 +21,6 @@
 ############################################################################
 
 # Define default values for the linphone builder options
-set(DEFAULT_VALUE_ENABLE_DTLS ON)
 set(DEFAULT_VALUE_ENABLE_FFMPEG ON)
 set(DEFAULT_VALUE_ENABLE_GPL_THIRD_PARTIES ON)
 set(DEFAULT_VALUE_ENABLE_GSM ON)
@@ -81,6 +80,7 @@ set(EP_ffmpeg_LINKING_TYPE "--enable-static" "--disable-shared" "--enable-pic")
 # linphone
 linphone_builder_add_cmake_option(linphone "-DENABLE_RELATIVE_PREFIX=YES")
 linphone_builder_add_cmake_option(linphone "-DENABLE_CONSOLE_UI=NO")
+linphone_builder_add_cmake_option(linphone "-DENABLE_DAEMON=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_GTK_UI=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_NOTIFY=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_TOOLS=NO")
@@ -133,6 +133,12 @@ set(EP_vpx_LINKING_TYPE "--enable-static" "--disable-shared")
 # x264
 set(EP_x264_LINKING_TYPE "--enable-static" "--enable-pic")
 set(EP_x264_INSTALL_TARGET "install-lib-static")
+
+
+# Copy c++ library to install prefix
+file(COPY "${ANDROID_NDK_PATH}/sources/cxx-stl/gnu-libstdc++/${GCC_VERSION}/libs/${CMAKE_SYSTEM_PROCESSOR}/libgnustl_shared.so"
+	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+)
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

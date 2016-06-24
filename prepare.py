@@ -24,6 +24,7 @@
 
 import argparse
 import copy
+import imp
 import os
 import platform
 import re
@@ -114,6 +115,11 @@ class Target:
     def clean(self):
         if os.path.isdir(self.abs_work_dir):
             shutil.rmtree(self.abs_work_dir, ignore_errors=False, onerror=self.handle_remove_read_only)
+        # special hack for vpx: we have switched from inside sources build to outside, so we must clean the folder properly
+        vpx_dir = os.path.join(self.external_source_path, "externals", "libvpx")
+        if os.path.isfile(os.path.join(vpx_dir, "Makefile")):
+            info("Cleaning vpx source directory since we are now building it from outside directory...")
+            Popen("git clean -xfd".split(" "), cwd=vpx_dir).wait()
 
     def veryclean(self):
         self.clean()
@@ -169,7 +175,9 @@ class Preparator:
         self.targets = targets
         self.virtual_targets = virtual_targets
         self.additional_args = []
+        self.missing_python_dependencies = []
         self.missing_dependencies = {}
+        self.release_with_debug_info = False
         self.veryclean = False
         self.show_gpl_disclaimer = False
 
@@ -192,13 +200,29 @@ class Preparator:
             self.argparser.add_argument('target', nargs='*', action=TargetListAction, default=default_targets, targets=self.available_targets(),
                 help="The target(s) to build for (default is '{0}'). Space separated targets in list: {1}.".format(' '.join(default_targets), ', '.join(self.available_targets())))
 
+        self.argv = sys.argv[1:]
+        self.load_user_config()
+        self.load_project_config()
+
+    def load_config(self, config):
+        if os.path.isfile(config):
+            argv = open(config).read().split()
+            info("Loaded '{}' configuration: {}".format(config, argv))
+            self.argv = argv + self.argv
+
+    def load_project_config(self):
+        self.load_config(os.path.join(os.getcwd(), "prepare.conf"))
+
+    def load_user_config(self):
+        self.load_config(os.path.join(os.getcwd(), "prepare.conf.user"))
+
     def available_targets(self):
         targets = [target for target in self.targets.keys()]
         targets += [target for target in self.virtual_targets.keys()]
         return targets
 
     def parse_args(self):
-        self.args, self.user_additional_args = self.argparser.parse_known_args()
+        self.args, self.user_additional_args = self.argparser.parse_known_args(self.argv)
         if platform.system() == 'Windows':
             self.args.ccache = False
         new_targets = []
@@ -209,7 +233,15 @@ class Preparator:
                 new_targets += [target_name]
         self.args.target = list(set(new_targets))
 
-    def check_is_installed(self, binary, prog='it', warn=True):
+    def check_python_module_is_present(self, modname):
+        try:
+            imp.find_module(modname)
+            return True
+        except ImportError:
+            self.missing_python_dependencies += [modname]
+            return False
+
+    def check_is_installed(self, binary, prog=None, warn=True):
         if not find_executable(binary):
             if warn:
                 self.missing_dependencies[binary] = prog
@@ -217,7 +249,7 @@ class Preparator:
             return False
         return True
 
-    def check_tools(self):
+    def check_environment(self):
         ret = 0
 
         # at least FFmpeg requires no whitespace in sources path...
@@ -233,9 +265,18 @@ class Preparator:
 
         return ret
 
+    def show_environment_errors(self):
+        self.show_missing_dependencies()
+        self.show_missing_python_dependencies()
+
     def show_missing_dependencies(self):
         if self.missing_dependencies:
             error("The following binaries are missing: {}. Please install them.".format(' '.join(self.missing_dependencies.keys())))
+
+    def show_missing_python_dependencies(self):
+        if self.missing_python_dependencies:
+            error("The following python modules are missing: {}. Please install them using:\n\tpip install {}".format(
+                ' '.join(self.missing_python_dependencies), ' '.join(self.missing_python_dependencies)))
 
     def gpl_disclaimer(self):
         if not self.show_gpl_disclaimer:
@@ -264,6 +305,9 @@ class Preparator:
                     "\n***************************************************************************"
                     "\n***************************************************************************")
 
+    def list_feature_target(self):
+        return None
+
     def first_target(self):
         return self.targets[self.args.target[0]]
 
@@ -276,12 +320,19 @@ class Preparator:
 
     def list_features_with_args(self, args, additional_args):
         tmpdir = tempfile.mkdtemp(prefix="linphone-prepare")
-        tmptarget = self.first_target()
+        tmptarget = self.list_feature_target()
+        if tmptarget is None:
+            tmptarget = self.first_target()
         tmptarget.abs_cmake_dir = tmpdir
         option_regex = re.compile("ENABLE_(.*):(.*)=(.*)")
         options = {}
         ended = True
-        build_type = 'Debug' if args.debug else 'Release'
+        if args.debug:
+            build_type = 'Debug'
+        elif self.release_with_debug_info:
+            build_type = 'RelWithDebInfo'
+        else:
+            build_type = 'Release'
 
         p = Popen(tmptarget.cmake_command(build_type, args, additional_args, verbose=False), cwd=tmpdir, shell=False, stdout=PIPE, universal_newlines=True)
         p.wait()
@@ -344,8 +395,12 @@ class Preparator:
 
         if type(self.args.debug) is str:
             build_type = self.args.debug
+        elif self.args.debug:
+            build_type = 'Debug'
+        elif self.release_with_debug_info:
+            build_type = 'RelWithDebInfo'
         else:
-            build_type = 'Debug' if self.args.debug else 'Release'
+            build_type = 'Release'
 
         if not os.path.isdir(target.abs_cmake_dir):
             os.makedirs(target.abs_cmake_dir)
@@ -394,7 +449,7 @@ class Preparator:
         if ret != 0:
             if ret == 51:
                 if os.path.isfile('Makefile'):
-                    Popen("make help-prepare-options".split(" "))
+                    Popen("make help-prepare-options".split(" ")).wait()
                 ret = 0
             return ret
         # Only generated makefile if we are using Ninja or Makefile
@@ -406,6 +461,9 @@ class Preparator:
         elif self.generator().endswith("Unix Makefiles"):
             self.generate_makefile('$(MAKE) -C')
             info("You can now run 'make' to build.")
+        elif self.generator().endswith("Xcode"):
+            self.generate_makefile('xcodebuild -project', 'Project.xcodeproj')
+            info("You can now run 'make' to build.")
         else:
             warning("Not generating meta-makefile for generator {}.".format(self.generator()))
         self.gpl_disclaimer()
@@ -416,6 +474,9 @@ class Preparator:
             return self.clean()
         else:
             return self.prepare()
+
+    def generate_makefile(self, generator, project_file=''):
+        pass
 
     def prepare_tunnel(self):
         if self.args.tunnel:

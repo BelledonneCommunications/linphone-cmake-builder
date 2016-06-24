@@ -88,6 +88,12 @@ set(CMAKE_CROSSCOMPILING TRUE)
 set(CMAKE_SYSTEM_NAME "Darwin")
 set(IOS True)
 
+# The following variables are needed to build correctly with Xcode
+if(CMAKE_GENERATOR STREQUAL "Xcode")
+	set(CMAKE_MACOSX_BUNDLE YES)
+	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED NO)
+endif()
+
 # Define the compiler
 CMAKE_FORCE_C_COMPILER(${IOS_TOOLCHAIN_CC} Clang)
 CMAKE_FORCE_CXX_COMPILER(${IOS_TOOLCHAIN_CXX} Clang)
@@ -99,3 +105,6 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+#important: the GUI identifier is required so that executables can be launched on iOS devices/simulators
+set(MACOSX_BUNDLE_GUI_IDENTIFIER "org.linphone.\${PRODUCT_NAME:identifier}")

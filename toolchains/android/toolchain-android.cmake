@@ -21,7 +21,7 @@
 ############################################################################
 
 set(CMAKE_ANDROID_API 14)
-set(CMAKE_ANDROID_STL_TYPE gnustl_static)
+set(CMAKE_ANDROID_STL_TYPE gnustl_shared)
 
 include(CMakeForceCompiler)
 
@@ -172,6 +172,6 @@ if(GCC_LIBRARY_PATH)
 	set(CMAKE_MODULE_LINKER_FLAGS "-L${GCC_LIBRARY_PATH}" CACHE STRING "linker flags" FORCE)
 	set(CMAKE_SHARED_LINKER_FLAGS "-L${GCC_LIBRARY_PATH}" CACHE STRING "linker flags" FORCE)
 endif()
-link_libraries("${ANDROID_NDK_PATH}/sources/cxx-stl/gnu-libstdc++/${GCC_VERSION}/libs/${CMAKE_SYSTEM_PROCESSOR}/libgnustl_static.a")
+link_libraries("${ANDROID_NDK_PATH}/sources/cxx-stl/gnu-libstdc++/${GCC_VERSION}/libs/${CMAKE_SYSTEM_PROCESSOR}/libgnustl_shared.so")
 link_libraries("log")
 link_libraries("atomic")

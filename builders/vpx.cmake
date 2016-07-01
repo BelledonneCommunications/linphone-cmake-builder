@@ -113,11 +113,11 @@ else()
 			else()
 				set(EP_vpx_TARGET "x86-darwin10-gcc")
 			endif()
-			if(CMAKE_GENERATOR STREQUAL "Xcode")
-				# It appears that the build occurs in the cmake directory instead of the Build/vpx one with Xcode, so these flags are needed for include files to be found...
-				set(EP_vpx_EXTRA_CFLAGS "${EP_vpx_EXTRA_CFLAGS} -I${LINPHONE_BUILDER_WORK_DIR}/Build/vpx")
-				set(EP_vpx_EXTRA_ASFLAGS "${EP_vpx_EXTRA_ASFLAGS} -I${LINPHONE_BUILDER_WORK_DIR}/Build/vpx")
-			endif()
+		endif()
+		if(CMAKE_GENERATOR STREQUAL "Xcode")
+			# It appears that the build occurs in the cmake directory instead of the Build/vpx one with Xcode, so these flags are needed for include files to be found...
+			set(EP_vpx_EXTRA_CFLAGS "${EP_vpx_EXTRA_CFLAGS} -I${LINPHONE_BUILDER_WORK_DIR}/Build/vpx")
+			set(EP_vpx_EXTRA_ASFLAGS "${EP_vpx_EXTRA_ASFLAGS} -I${LINPHONE_BUILDER_WORK_DIR}/Build/vpx")
 		endif()
 		set(EP_vpx_LINKING_TYPE "--enable-static" "--disable-shared" "--enable-pic")
 	elseif(ANDROID)
@@ -129,7 +129,7 @@ else()
 			set(EP_vpx_TARGET "x86-android-gcc")
 		endif()
 		list(APPEND EP_vpx_CONFIGURE_OPTIONS
-			"--sdk-path=${ANDROID_NDK_PATH}"
+			"--sdk-path=${ANDROID_NDK_PATH}/"
 			"--enable-pic"
 		)
 		set(EP_vpx_LINKING_TYPE "--enable-static" "--disable-shared" "--enable-pic")

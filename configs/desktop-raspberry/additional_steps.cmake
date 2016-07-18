@@ -1,6 +1,6 @@
 ############################################################################
-# zlib.cmake
-# Copyright (C) 2015  Belledonne Communications, Grenoble France
+# additional_steps.cmake
+# Copyright (C) 2016  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,13 +20,26 @@
 #
 ############################################################################
 
-set(EP_zlib_GIT_REPOSITORY "git://git.linphone.org/zlib.git" CACHE STRING "zlib repository URL")
-set(EP_zlib_GIT_TAG_LATEST "master" CACHE STRING "zlib tag to use when compiling latest version")
-set(EP_zlib_GIT_TAG "91eb77a7c5bfe7b4cc6b722aa96548d7143a9936" CACHE STRING "zlib tag to use")
-set(EP_zlib_EXTERNAL_SOURCE_PATHS "externals/zlib")
-set(EP_zlib_MAY_BE_FOUND_ON_SYSTEM TRUE)
-set(EP_zlib_IGNORE_WARNINGS TRUE)
+# Packaging
+if(ENABLE_PACKAGING)
+	get_cmake_property(_varnames VARIABLES)
+	set(ENABLE_VARIABLES )
+	foreach(_varname ${_varnames})
+		if(_varname MATCHES "^ENABLE_.*")
+			list(APPEND ENABLE_VARIABLES -D${_varname}=${${_varname}})
+	    endif()
+	endforeach()
 
-if(MSVC)
-	set(EP_zlib_EXTRA_LDFLAGS "/SAFESEH:NO")
+	linphone_builder_apply_flags()
+	linphone_builder_set_ep_directories(package)
+	linphone_builder_expand_external_project_vars()
+	ExternalProject_Add(TARGET_linphone_package
+		DEPENDS TARGET_linphone_builder
+		TMP_DIR ${ep_tmp}
+		BINARY_DIR ${ep_build}
+		SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/package"
+		DOWNLOAD_COMMAND ""
+		CMAKE_GENERATOR ${CMAKE_GENERATOR}
+		CMAKE_ARGS ${LINPHONE_BUILDER_EP_ARGS} -DLINPHONE_OUTPUT_DIR=${CMAKE_INSTALL_PREFIX} -DLINPHONE_SOURCE_DIR=${EP_linphone_SOURCE_DIR} ${ENABLE_VARIABLES} -DRASPBERRY_VERSION=${RASPBERRY_VERSION}
+	)
 endif()

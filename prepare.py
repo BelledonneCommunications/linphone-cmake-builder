@@ -50,6 +50,7 @@ class Target:
         self.toolchain_file = None
         self.required_build_platforms = None
         self.additional_args = []
+        self.packaging_args = None
         self.work_dir = work_dir + '/' + self.name
         self.abs_work_dir = os.getcwd() + '/' + self.work_dir
         self.cmake_dir = self.work_dir + '/cmake'
@@ -98,6 +99,10 @@ class Target:
             cmd += ['-DENABLE_DEBUG_LOGS=YES']
         if args.list_cmake_variables:
             cmd += ['-L']
+        if 'package' in vars(args) and args.package:
+            cmd += ["-DENABLE_PACKAGING=YES"]
+            if self.packaging_args is not None:
+                cmd += self.packaging_args
         for arg in self.additional_args:
             cmd += [arg]
         for arg in additional_args:
@@ -132,21 +137,6 @@ class Target:
             func(path)
         else:
             raise
-
-    def build_instructions(self, debug=False):
-        if self.generator is not None and self.generator.startswith('Visual Studio'):
-            config = "Release"
-            if debug:
-                config = "Debug"
-            return "Open the \"{cmake_dir}/Project.sln\" Visual Studio solution and build with the \"{config}\" configuration".format(cmake_dir=self.cmake_dir, config=config)
-        else:
-            if self.generator in [None, "Unix Makefiles"]:
-                builder = "make"
-            elif self.generator == "Ninja":
-                builder = "ninja"
-            else:
-                return "Unknown generator. Files have been generated in {cmake_dir}".format(cmake_dir=self.cmake_dir)
-            return "Run the following command to build:\n\t{builder} -C {cmake_dir}".format(builder=builder, cmake_dir=self.cmake_dir)
 
 
 
@@ -466,6 +456,8 @@ class Preparator:
         elif self.generator().endswith("Xcode"):
             self.generate_makefile('xcodebuild -project', 'Project.xcodeproj')
             info("You can now run 'make' to build.")
+        elif self.generator().startswith("Visual Studio"):
+            self.generate_vs_solution()
         else:
             warning("Not generating meta-makefile for generator {}.".format(self.generator()))
         self.gpl_disclaimer()
@@ -478,6 +470,9 @@ class Preparator:
             return self.prepare()
 
     def generate_makefile(self, generator, project_file=''):
+        pass
+
+    def generate_vs_solution(self):
         pass
 
     def prepare_tunnel(self):

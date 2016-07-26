@@ -290,6 +290,8 @@ if(WIN32)
 endif()
 
 if(WIN32)
+	# Use template from the current source directory to force uninstallation and ensure that linphone is not running before installation
+	set(CPACK_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 	set(CPACK_GENERATOR "NSIS")
 	set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\linphone-banner.bmp")
 	set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${LINPHONE_GIT_REVISION}-win32")
@@ -298,21 +300,21 @@ if(WIN32)
 	set(CPACK_NSIS_DISPLAY_NAME "Linphone")
 	set(CPACK_NSIS_PACKAGE_NAME "Linphone ${LINPHONE_MAJOR_VERSION}.${LINPHONE_MINOR_VERSION}.${LINPHONE_MICRO_VERSION}")
 	set(CPACK_NSIS_URL_INFO_ABOUT "http://www.linphone.org/")
-	set(CPACK_NSIS_MUI_FINISHPAGE_RUN "linphone")
-	set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON")
 
 	file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" DOS_STYLE_SOURCE_DIR)
 	string(REPLACE "\\" "\\\\" ESCAPED_DOS_STYLE_SOURCE_DIR "${DOS_STYLE_SOURCE_DIR}")
 	file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" DOS_STYLE_BINARY_DIR)
 	string(REPLACE "\\" "\\\\" ESCAPED_DOS_STYLE_BINARY_DIR "${DOS_STYLE_BINARY_DIR}")
 
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/uninstall.nsi" "${CMAKE_CURRENT_BINARY_DIR}/uninstall.nsi" COPYONLY)
+	set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include \\\"${ESCAPED_DOS_STYLE_BINARY_DIR}\\\\uninstall.nsi\\\"")
 	if(ENABLE_OPENH264)
 		# Add NSI instructions to download the openh264 codec from Cisco's servers whether msopenh264 has been installed
 		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/openh264-install.nsi.in" "${CMAKE_CURRENT_BINARY_DIR}/openh264-install.nsi" @ONLY)
 		set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "!include \\\"${ESCAPED_DOS_STYLE_BINARY_DIR}\\\\openh264-install.nsi\\\"")
 
 		# Add NSI instructions to delete the openh264 codecs while uninstalling Linphone
-		set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include \\\"${ESCAPED_DOS_STYLE_SOURCE_DIR}\\\\openh264-uninstall.nsi\\\"")
+		set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n!include \\\"${ESCAPED_DOS_STYLE_SOURCE_DIR}\\\\openh264-uninstall.nsi\\\"")
 	endif()
 
 	# Sign the installer

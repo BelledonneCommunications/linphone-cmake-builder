@@ -16,12 +16,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
 # Linphone build options
 
+option(ENABLE_GTK_UI "Enable the GTK user interface of Linphone." ${DEFAULT_VALUE_ENABLE_GTK_UI})
+add_feature_info("GTK" ENABLE_GTK_UI "Enable the GTK user interface of Linphone.")
 option(ENABLE_NLS "Enable internationalization of Linphone and Liblinphone." ON)
 add_feature_info("NLS" ENABLE_NLS "Enable internationalization of Linphone and Liblinphone. (Only for the desktop target)")
 option(ENABLE_VCARD "Enable vCard 4 support in Linphone and Liblinphone." ${DEFAULT_VALUE_ENABLE_VCARD})

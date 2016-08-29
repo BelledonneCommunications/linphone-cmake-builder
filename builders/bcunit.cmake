@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -27,8 +27,5 @@ set(EP_bcunit_EXTERNAL_SOURCE_PATHS "bcunit")
 set(EP_bcunit_IGNORE_WARNINGS TRUE)
 
 set(EP_bcunit_LINKING_TYPE ${DEFAULT_VALUE_CMAKE_LINKING_TYPE})
-if(MSVC)
-	set(EP_bcunit_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()
 
 set(EP_bcunit_CMAKE_OPTIONS "-DENABLE_AUTOMATED=YES" "-DENABLE_CONSOLE=NO")

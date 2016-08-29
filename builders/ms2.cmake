@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -36,9 +36,6 @@ set(EP_ms2_DEPENDENCIES EP_ortp EP_bctoolbox)
 if(ANDROID)
 	list(APPEND EP_ms2_DEPENDENCIES EP_androidcpufeatures EP_androidsupport)
 endif()
-if(MSVC)
-	set(EP_ms2_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()
 
 set(EP_ms2_CMAKE_OPTIONS
 	"-DENABLE_NON_FREE_CODECS=${ENABLE_NON_FREE_CODECS}"
@@ -52,6 +49,7 @@ if(IOS)
 	list(APPEND EP_ms2_CMAKE_OPTIONS "-DENABLE_STRICT=NO")
 endif()
 
+list(APPEND EP_ms2_CMAKE_OPTIONS "-DENABLE_G726=${ENABLE_G726}")
 list(APPEND EP_ms2_CMAKE_OPTIONS "-DENABLE_GSM=${ENABLE_GSM}")
 if(ENABLE_GSM AND LINPHONE_BUILDER_BUILD_DEPENDENCIES)
 	list(APPEND EP_ms2_DEPENDENCIES EP_gsm)

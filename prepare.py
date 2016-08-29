@@ -18,7 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -34,6 +34,7 @@ import subprocess
 import sys
 import tempfile
 from distutils.spawn import find_executable
+from distutils.version import LooseVersion
 from logging import error, warning, info, INFO, basicConfig
 from subprocess import Popen, PIPE
 
@@ -50,6 +51,7 @@ class Target:
         self.toolchain_file = None
         self.required_build_platforms = None
         self.additional_args = []
+        self.packaging_args = None
         self.work_dir = work_dir + '/' + self.name
         self.abs_work_dir = os.getcwd() + '/' + self.work_dir
         self.cmake_dir = self.work_dir + '/cmake'
@@ -98,6 +100,10 @@ class Target:
             cmd += ['-DENABLE_DEBUG_LOGS=YES']
         if args.list_cmake_variables:
             cmd += ['-L']
+        if 'package' in vars(args) and args.package:
+            cmd += ["-DENABLE_PACKAGING=YES"]
+            if self.packaging_args is not None:
+                cmd += self.packaging_args
         for arg in self.additional_args:
             cmd += [arg]
         for arg in additional_args:
@@ -133,21 +139,6 @@ class Target:
         else:
             raise
 
-    def build_instructions(self, debug=False):
-        if self.generator is not None and self.generator.startswith('Visual Studio'):
-            config = "Release"
-            if debug:
-                config = "Debug"
-            return "Open the \"{cmake_dir}/Project.sln\" Visual Studio solution and build with the \"{config}\" configuration".format(cmake_dir=self.cmake_dir, config=config)
-        else:
-            if self.generator in [None, "Unix Makefiles"]:
-                builder = "make"
-            elif self.generator == "Ninja":
-                builder = "ninja"
-            else:
-                return "Unknown generator. Files have been generated in {cmake_dir}".format(cmake_dir=self.cmake_dir)
-            return "Run the following command to build:\n\t{builder} -C {cmake_dir}".format(builder=builder, cmake_dir=self.cmake_dir)
-
 
 
 class TargetListAction(argparse.Action):
@@ -158,11 +149,20 @@ class TargetListAction(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
         if values:
+            filtered_values = []
+            additional_cmake_options = []
             for value in values:
-                if value not in self.targets:
+                if value.startswith('-D'):
+                    additional_cmake_options += [value]
+                elif value not in self.targets:
                     message = ("invalid platform: {0!r} (choose from {1})".format(value, ', '.join([repr(target) for target in self.targets])))
                     raise argparse.ArgumentError(self, message)
-            setattr(namespace, self.dest, values)
+                else:
+                    filtered_values += [value]
+            if filtered_values:
+                setattr(namespace, self.dest, filtered_values)
+            if additional_cmake_options:
+                setattr(namespace, 'additional_cmake_options', additional_cmake_options)
 
 class ToggleAction(argparse.Action):
     def __call__(self, parser, ns, values, option):
@@ -177,9 +177,11 @@ class Preparator:
         self.additional_args = []
         self.missing_python_dependencies = []
         self.missing_dependencies = {}
+        self.wrong_cmake_version = False
         self.release_with_debug_info = False
         self.veryclean = False
         self.show_gpl_disclaimer = False
+        self.min_cmake_version = None
 
         self.argparser = argparse.ArgumentParser(description="Prepare build of Linphone and its dependencies.")
         self.argparser.add_argument('-c', '--clean', help="Clean a previous build instead of preparing a build.", action='store_true')
@@ -225,6 +227,8 @@ class Preparator:
         self.args, self.user_additional_args = self.argparser.parse_known_args(self.argv)
         if platform.system() == 'Windows':
             self.args.ccache = False
+        if hasattr(self.args, 'additional_cmake_options'):
+            self.user_additional_args += self.args.additional_cmake_options
         new_targets = []
         for target_name in self.args.target:
             if target_name in self.virtual_targets.keys():
@@ -241,13 +245,25 @@ class Preparator:
             self.missing_python_dependencies += [modname]
             return False
 
-    def check_is_installed(self, binary, prog=None, warn=True):
+    def check_is_installed(self, binary, prog, warn=True):
         if not find_executable(binary):
             if warn:
                 self.missing_dependencies[binary] = prog
                 #error("Could not find {}. Please install {}.".format(binary, prog))
             return False
         return True
+
+    def check_cmake_version(self):
+        cmake = find_executable('cmake')
+        p = Popen([cmake, '--version'], shell=False, stdout=PIPE, universal_newlines=True)
+        p.wait()
+        if p.returncode != 0:
+            self.wrong_cmake_version = True
+        else:
+            cmake_version = p.stdout.readlines()[0].split()[-1]
+            if LooseVersion(cmake_version) < LooseVersion(self.min_cmake_version):
+                self.wrong_cmake_version = True
+        return not self.wrong_cmake_version
 
     def check_environment(self, submodule_directory_to_check=None):
         ret = 0
@@ -257,7 +273,9 @@ class Preparator:
             error("Invalid location: path should not contain any spaces.")
             ret = 1
 
-        ret |= not self.check_is_installed('cmake')
+        ret |= not self.check_is_installed('cmake', 'cmake')
+        if not ret and self.min_cmake_version is not None:
+            ret |= not self.check_cmake_version()
 
         if submodule_directory_to_check is None:
             submodule_directory_to_check = "submodules/linphone/mediastreamer2/src"
@@ -268,8 +286,13 @@ class Preparator:
         return ret
 
     def show_environment_errors(self):
+        self.show_wrong_cmake_version()
         self.show_missing_dependencies()
         self.show_missing_python_dependencies()
+
+    def show_wrong_cmake_version(self):
+        if self.wrong_cmake_version:
+            error("You need at leat CMake version {}.".format(self.min_cmake_version))
 
     def show_missing_dependencies(self):
         if self.missing_dependencies:
@@ -456,7 +479,7 @@ class Preparator:
             return ret
         # Only generated makefile if we are using Ninja or Makefile
         if self.generator().endswith('Ninja'):
-            if not self.check_is_installed("ninja", "it"):
+            if not self.check_is_installed("ninja", "ninja"):
                 return 1
             self.generate_makefile('ninja -C')
             info("You can now run 'make' to build.")
@@ -466,6 +489,8 @@ class Preparator:
         elif self.generator().endswith("Xcode"):
             self.generate_makefile('xcodebuild -project', 'Project.xcodeproj')
             info("You can now run 'make' to build.")
+        elif self.generator().startswith("Visual Studio"):
+            self.generate_vs_solution()
         else:
             warning("Not generating meta-makefile for generator {}.".format(self.generator()))
         self.gpl_disclaimer()
@@ -478,6 +503,9 @@ class Preparator:
             return self.prepare()
 
     def generate_makefile(self, generator, project_file=''):
+        pass
+
+    def generate_vs_solution(self):
         pass
 
     def prepare_tunnel(self):

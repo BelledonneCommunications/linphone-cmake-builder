@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -32,9 +32,6 @@ else()
 	set(EP_belr_LINKING_TYPE ${DEFAULT_VALUE_CMAKE_LINKING_TYPE})
 endif()
 set(EP_belr_DEPENDENCIES EP_bctoolbox)
-if(MSVC)
-	set(EP_belr_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()
 
 # TODO: Activate strict compilation options on IOS
 if(IOS)

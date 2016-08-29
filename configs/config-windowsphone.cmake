@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -44,7 +44,6 @@ include(builders/CMakeLists.txt)
 linphone_builder_add_cmake_option(linphone "-DENABLE_RELATIVE_PREFIX=YES")
 linphone_builder_add_cmake_option(linphone "-DENABLE_CONSOLE_UI=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_DAEMON=NO")
-linphone_builder_add_cmake_option(linphone "-DENABLE_GTK_UI=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_NOTIFY=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_TOOLS=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_TUTORIALS=NO")

@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -898,4 +898,12 @@ macro(linphone_builder_add_cmake_option BUILDER_NAME OPTION)
 		endforeach()
 	endif()
 	list(APPEND EP_${BUILDER_NAME}_CMAKE_OPTIONS ${OPTION})
+endmacro()
+
+macro(linphone_builder_add_extra_cflags BUILDER_NAME CFLAGS)
+	set(EP_${BUILDER_NAME}_EXTRA_CFLAGS "${EP_${BUILDER_NAME}_EXTRA_CFLAGS} ${CFLAGS}")
+endmacro()
+
+macro(linphone_builder_add_extra_ldflags BUILDER_NAME LDFLAGS)
+	set(EP_${BUILDER_NAME}_EXTRA_LDFLAGS "${EP_${BUILDER_NAME}_EXTRA_LDFLAGS} ${LDFLAGS}")
 endmacro()

@@ -16,13 +16,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
 set(CMAKE_SYSTEM_PROCESSOR "x86_64")
 set(LINPHONE_BUILDER_OSX_ARCHITECTURES "x86_64")
 set(COMPILER_PREFIX "x86_64-apple-darwin")
+set(CLANG_TARGET "x86_64-apple-darwin")
 set(PLATFORM "Simulator")
 include("${CMAKE_CURRENT_LIST_DIR}/ios/toolchain-ios.cmake")
 

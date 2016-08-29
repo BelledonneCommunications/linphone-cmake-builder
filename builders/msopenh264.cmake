@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -28,6 +28,3 @@ set(EP_msopenh264_GROUPABLE YES)
 
 set(EP_msopenh264_LINKING_TYPE ${DEFAULT_VALUE_CMAKE_PLUGIN_LINKING_TYPE})
 set(EP_msopenh264_DEPENDENCIES EP_ms2 EP_openh264)
-if(MSVC)
-	set(EP_msopenh264_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()

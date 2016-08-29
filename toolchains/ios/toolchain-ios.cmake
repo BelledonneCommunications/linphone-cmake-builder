@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -95,8 +95,15 @@ if(CMAKE_GENERATOR STREQUAL "Xcode")
 endif()
 
 # Define the compiler
-CMAKE_FORCE_C_COMPILER(${TOOLCHAIN_CC} Clang)
-CMAKE_FORCE_CXX_COMPILER(${TOOLCHAIN_CXX} Clang)
+set(CMAKE_C_COMPILER "${TOOLCHAIN_CC}")
+set(CMAKE_C_COMPILER_TARGET "${CLANG_TARGET}")
+set(CMAKE_CXX_COMPILER "${TOOLCHAIN_CXX}")
+set(CMAKE_CXX_FLAGS "-stdlib=libc++ ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_COMPILER_TARGET "${CLANG_TARGET}")
+set(CMAKE_AR "${TOOLCHAIN_AR}" CACHE FILEPATH "ar")
+set(CMAKE_RANLIB "${TOOLCHAIN_RANLIB}" CACHE FILEPATH "ranlib")
+set(CMAKE_LINKER "${TOOLCHAIN_LD}" CACHE FILEPATH "linker")
+set(CMAKE_NM "${TOOLCHAIN_NM}" CACHE FILEPATH "nm")
 
 set(CMAKE_FIND_ROOT_PATH ${CMAKE_OSX_SYSROOT} ${CMAKE_INSTALL_PREFIX})
 # search for programs in the build host directories

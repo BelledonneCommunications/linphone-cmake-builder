@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -31,5 +31,4 @@ set(EP_mbedtls_LINKING_TYPE "-DUSE_STATIC_MBEDTLS_LIBRARY=NO" "-DUSE_SHARED_MBED
 set(EP_mbedtls_CMAKE_OPTIONS "-DENABLE_PROGRAMS=NO" "-DENABLE_TESTING=NO")
 if(MSVC)
 	set(EP_mbedtls_EXTRA_CFLAGS "-DMBEDTLS_PLATFORM_SNPRINTF_MACRO=_snprintf -DMBEDTLS_EXPORTS")
-	set(EP_mbedtls_EXTRA_LDFLAGS "/SAFESEH:NO")
 endif()

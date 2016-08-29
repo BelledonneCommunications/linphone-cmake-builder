@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -35,11 +35,9 @@ if(LINPHONE_BUILDER_BUILD_DEPENDENCIES AND NOT APPLE)
 		list(APPEND EP_linphone_DEPENDENCIES EP_zlib)
 	endif()
 endif()
-if(MSVC)
-	set(EP_linphone_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()
 
 set(EP_linphone_CMAKE_OPTIONS
+	"-DENABLE_GTK_UI=${ENABLE_GTK_UI}"
 	"-DENABLE_VIDEO=${ENABLE_VIDEO}"
 	"-DENABLE_DEBUG_LOGS=${ENABLE_DEBUG_LOGS}"
 	"-DENABLE_DOC=${ENABLE_DOC}"

@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -68,6 +68,7 @@ endif()
 ms2_add_option("Codec2" "Codec2 audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_CODEC2}")
 ms2_add_strict_dependent_option("G729" "G.729 audio encoding/decoding support (require license)." OFF ON OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
 ms2_add_strict_dependent_option("G729B CNG" "G.729 annex B confort noise generation (require license)." OFF ON OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
+ms2_add_option("G726" "G.726 audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_G726}")
 ms2_add_option("GSM"  "GSM audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_GSM}")
 ms2_add_option("iLBC"  "iLBC audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_ILBC}")
 ms2_add_option("ISAC"  "ISAC audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_ISAC}")

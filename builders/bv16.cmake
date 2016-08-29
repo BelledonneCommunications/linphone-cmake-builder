@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -26,6 +26,3 @@ set(EP_bv16_GIT_TAG "6899f2759c7b19d5402335d3a937c53020abfeca" CACHE STRING "bv1
 set(EP_bv16_EXTERNAL_SOURCE_PATHS "externals/bv16-floatingpoint")
 
 set(EP_bv16_LINKING_TYPE ${DEFAULT_VALUE_CMAKE_LINKING_TYPE})
-if(MSVC)
-	set(EP_bv16_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()

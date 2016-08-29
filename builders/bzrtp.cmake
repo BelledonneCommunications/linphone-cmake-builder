@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -31,9 +31,6 @@ set(EP_bzrtp_DEPENDENCIES EP_bctoolbox)
 if(LINPHONE_BUILDER_BUILD_DEPENDENCIES AND NOT APPLE)
 	# Do not build xml2 on Apple systems (Mac OS X and iOS), it is provided by the system
 	list(APPEND EP_bzrtp_DEPENDENCIES EP_xml2)
-endif()
-if(MSVC)
-	set(EP_bzrtp_EXTRA_LDFLAGS "/SAFESEH:NO")
 endif()
 if(MINGW)
 	set(EP_bzrtp_EXTRA_CPPFLAGS "-D__USE_MINGW_ANSI_STDIO")

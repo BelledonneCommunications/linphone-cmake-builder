@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -28,8 +28,5 @@ set(EP_polarssl_MAY_BE_FOUND_ON_SYSTEM TRUE)
 set(EP_polarssl_IGNORE_WARNINGS TRUE)
 
 set(EP_polarssl_LINKING_TYPE "-DUSE_SHARED_POLARSSL_LIBRARY=1")
-if(MSVC)
-	set(EP_polarssl_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()
 
 set(EP_polarssl_CMAKE_OPTIONS "-DENABLE_PROGRAMS=0" "-DENABLE_TESTING=0")

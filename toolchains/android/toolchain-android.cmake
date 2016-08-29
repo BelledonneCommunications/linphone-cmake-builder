@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -30,20 +30,23 @@ set(CMAKE_POSITION_INDEPENDENT_CODE YES)
 set(CMAKE_SYSTEM_NAME "Linux")
 set(ANDROID True)
 
-find_path(ANDROID_NDK_PATH ndk-build)
-if(NOT ANDROID_NDK_PATH)
+find_program(ANDROID_NDK_BUILD_PROGRAM ndk-build)
+if(NOT ANDROID_NDK_BUILD_PROGRAM)
 	message(FATAL_ERROR "Cannot find 'ndk-build', make sure you installed the NDK and added it to your PATH")
 endif()
+get_filename_component(ANDROID_NDK_PATH "${ANDROID_NDK_BUILD_PROGRAM}" DIRECTORY)
 
-find_path(ANDROID_SDK_PATH android)
-if(NOT ANDROID_SDK_PATH)
+find_program(ANDROID_ANDROID_PROGRAM android)
+if(NOT ANDROID_ANDROID_PROGRAM)
 	message(FATAL_ERROR "Cannot find 'android', make sure you installed the SDK and added it to your PATH")
 endif()
+get_filename_component(ANDROID_SDK_PATH "${ANDROID_ANDROID_PROGRAM}" DIRECTORY)
 
-find_path(ANDROID_SDK_PLATFORM_TOOLS_PATH adb)
-if(NOT ANDROID_SDK_PLATFORM_TOOLS_PATH)
+find_program(ANDROID_ADB_PROGRAM adb)
+if(NOT ANDROID_ADB_PROGRAM)
 	message(FATAL_ERROR "Cannot find 'adb', make sure you installed the SDK platform tools and added it to your PATH")
 endif()
+get_filename_component(ANDROID_SDK_PLATFORM_TOOLS_PATH "${ANDROID_ADB_PROGRAM}" DIRECTORY)
 
 find_file(CLANG_EXECUTABLE "clang"
 	PATHS

@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -33,6 +33,7 @@ set(DEFAULT_VALUE_ENABLE_SILK ON)
 set(DEFAULT_VALUE_ENABLE_SPEEX ON)
 set(DEFAULT_VALUE_ENABLE_SRTP ON)
 set(DEFAULT_VALUE_ENABLE_UNIT_TESTS ON)
+set(DEFAULT_VALUE_ENABLE_VCARD ON)
 set(DEFAULT_VALUE_ENABLE_VIDEO ON)
 set(DEFAULT_VALUE_ENABLE_VPX ON)
 set(DEFAULT_VALUE_ENABLE_WASAPI ON)
@@ -55,14 +56,10 @@ include(builders/CMakeLists.txt)
 linphone_builder_add_cmake_option(linphone "-DENABLE_RELATIVE_PREFIX=YES")
 linphone_builder_add_cmake_option(linphone "-DENABLE_CONSOLE_UI=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_DAEMON=NO")
-linphone_builder_add_cmake_option(linphone "-DENABLE_GTK_UI=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_NOTIFY=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_TOOLS=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_TUTORIALS=NO")
 linphone_builder_add_cmake_option(linphone "-DENABLE_UPNP=NO")
-
-# mbedtls
-set(EP_mbedtls_EXTRA_CFLAGS "${EP_mbedtls_EXTRA_CFLAGS} -DMBEDTLS_NO_PLATFORM_ENTROPY")
 
 # ms2
 linphone_builder_add_cmake_option(ms2 "-DENABLE_RELATIVE_PREFIX=YES")

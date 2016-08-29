@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
 
@@ -43,9 +43,6 @@ if(ENABLE_UNIT_TESTS AND LINPHONE_BUILDER_BUILD_DEPENDENCIES)
 	list(APPEND EP_bctoolbox_DEPENDENCIES EP_bcunit)
 endif()
 
-if(MSVC)
-	set(EP_bctoolbox_EXTRA_LDFLAGS "/SAFESEH:NO")
-endif()
 # TODO: Activate strict compilation options on IOS
 if(IOS)
 	list(APPEND EP_bctoolbox_CMAKE_OPTIONS "-DENABLE_STRICT=NO")

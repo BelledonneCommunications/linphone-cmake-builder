@@ -94,3 +94,9 @@ include_directories(SYSTEM ${ANDROID_MACHINE_INCLUDE_DIRS} ${ANDROID_STL_INCLUDE
 link_libraries("${ANDROID_NDK_PATH}/sources/android/libportable/libs/${CMAKE_SYSTEM_PROCESSOR}/libportable.a")
 link_libraries("${ANDROID_NDK_PATH}/sources/cxx-stl/gnu-libstdc++/4.8/libs/${CMAKE_SYSTEM_PROCESSOR}/libgnustl_static.a")
 link_libraries("log")
+
+set(CMAKE_CXX_FLAGS_RELEASE             "-Os -DNDEBUG")
+set(CMAKE_C_FLAGS_RELEASE               "-Os -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO      "-Os -g -DNDEBUG")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO        "-Os -g -DNDEBUG")
+

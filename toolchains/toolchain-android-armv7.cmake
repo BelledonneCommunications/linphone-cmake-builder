@@ -23,4 +23,5 @@
 set(CMAKE_SYSTEM_PROCESSOR "armv7-a")
 set(CMAKE_ANDROID_ARM_NEON 1)
 set(CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION "clang")
+set(CMAKE_ANDROID_AAUDIO_PATH "arch-arm/usr/lib/libaaudio.so")
 include("${CMAKE_CURRENT_LIST_DIR}/android/toolchain-android.cmake")

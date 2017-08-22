@@ -157,7 +157,9 @@ lcb_builder_install_target(x264 "install-lib-static")
 file(COPY "${CMAKE_ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/${CMAKE_CXX_ANDROID_TOOLCHAIN_VERSION}/libs/${CMAKE_ANDROID_ARCH_ABI}/libgnustl_shared.so"
 	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
 )
-
+file(COPY "${CMAKE_ANDROID_NDK}/platforms/android-${CMAKE_ANDROID_API}/${CMAKE_ANDROID_AAUDIO_PATH}"
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	# GDB server setup

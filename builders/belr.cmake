@@ -28,4 +28,7 @@ lcb_groupable(YES)
 lcb_package_source(YES)
 
 lcb_dependencies("bctoolbox")
-lcb_cmake_options("-DENABLE_TOOLS=${ENABLE_TOOLS}")
+lcb_cmake_options(
+    "-DENABLE_TOOLS=${ENABLE_TOOLS}"
+    "-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
+)

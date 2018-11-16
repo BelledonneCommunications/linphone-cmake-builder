@@ -28,7 +28,7 @@ lcb_groupable(YES)
 lcb_sanitizable(YES)
 
 lcb_spec_file("flexisip.spec")
-lcb_dependencies("sofiasip" "belr")
+lcb_dependencies("belr" "sofiasip")
 if(ENABLE_CONFERENCE)
 	lcb_dependencies("linphone")
 endif()

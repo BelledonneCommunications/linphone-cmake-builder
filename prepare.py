@@ -57,6 +57,7 @@ class Target:
         self.cmake_dir = self.work_dir + '/cmake'
         self.abs_cmake_dir = os.getcwd() + '/' + self.cmake_dir
         self.external_source_path = None
+        self.alternate_external_source_path = None
         self.lazy_install_message = True
 
     def output_dir(self):
@@ -94,6 +95,10 @@ class Target:
             if platform.system() == 'Windows':
                 self.external_source_path = self.external_source_path.replace('\\', '/')
             cmd += ['-DLINPHONE_BUILDER_EXTERNAL_SOURCE_PATH=' + self.external_source_path]
+        if self.alternate_external_source_path is not None:
+            if platform.system() == 'Windows':
+                self.alternate_external_source_path = self.alternate_external_source_path.replace('\\', '/')
+            cmd += ['-DLINPHONE_BUILDER_ALTERNATE_EXTERNAL_SOURCE_PATH=' + self.alternate_external_source_path]
         if args.group:
             cmd += ['-DLINPHONE_BUILDER_GROUP_EXTERNAL_SOURCE_PATH_BUILDERS=YES']
         if args.debug_verbose:

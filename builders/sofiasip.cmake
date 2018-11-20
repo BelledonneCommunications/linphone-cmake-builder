@@ -39,6 +39,10 @@ lcb_cross_compilation_options(
 	"--prefix=${CMAKE_INSTALL_PREFIX}"
 	"--host=${LINPHONE_BUILDER_HOST}"
 )
+if(APPLE)
+	lcb_configure_env("CC=\"xcrun clang\"")
+endif()
+
 
 lcb_spec_file("packages/sofia-sip-*.spec")
 lcb_rpmbuild_name("sofia-sip")

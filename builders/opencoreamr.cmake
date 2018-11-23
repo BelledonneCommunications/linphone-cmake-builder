@@ -38,7 +38,6 @@ else()
 	lcb_external_source_paths("externals/opencore-amr" "opencore-amr" "external/opencore-amr")
 	lcb_ignore_warnings(YES)
 
-	lcb_patch_command("${CMAKE_COMMAND}" "-E" "copy" "${CMAKE_CURRENT_SOURCE_DIR}/builders/opencoreamr/CMakeLists.txt" "<SOURCE_DIR>")
 	lcb_linking_type("-DENABLE_STATIC=YES")
 
 	lcb_cmake_options(

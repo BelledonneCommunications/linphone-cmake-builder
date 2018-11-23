@@ -40,7 +40,6 @@ else()
 
 	lcb_dependencies("opencoreamr")
 
-	lcb_patch_command("${CMAKE_COMMAND}" "-E" "copy" "${CMAKE_CURRENT_SOURCE_DIR}/builders/voamrwbenc/CMakeLists.txt" "<SOURCE_DIR>")
 	lcb_linking_type("-DENABLE_STATIC=YES")
 
 	if(ANDROID)

@@ -131,19 +131,21 @@ else()
 				"--disable-mmx"
 				"--enable-cross-compile"
 				"--cross-prefix=${TOOLCHAIN_PATH}/"
-				"--sysroot=${CMAKE_SYSROOT}"
+				"--sysroot=${ANDROID_SYSTEM_LIBRARY_PATH}"
 			)
-			set(FFMPEG_TARGET_OS "linux")
+			set(FFMPEG_TARGET_OS "android")
 			set(FFMPEG_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
 			lcb_make_options("RANLIB=\"\$RANLIB\"")
-			if(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7-a")
+			if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+				set(FFMPEG_ARCH "arm64")
+			elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7-a")
 				lcb_configure_options("--enable-neon" "--cpu=cortex-a8" "--disable-armv5te" "--enable-armv6" "--enable-armv6t2")
 			else()
 				lcb_configure_options("--disable-mmx" "--disable-sse2" "--disable-ssse3" "--disable-asm")
 			endif()
 			if(CMAKE_C_COMPILER_TARGET) # When building with clang
-				lcb_configure_options("--extra-cflags=--target=${CMAKE_C_COMPILER_TARGET} --gcc-toolchain=${_ANDROID_TOOL_C_COMPILER_EXTERNAL_TOOLCHAIN}")
-				lcb_configure_options("--extra-ldflags=--target=${CMAKE_C_COMPILER_TARGET} --gcc-toolchain=${_ANDROID_TOOL_C_COMPILER_EXTERNAL_TOOLCHAIN}")
+				lcb_configure_options("--extra-cflags=-isystem ${CMAKE_SYSROOT}/usr/include/ ${ANDROID_COMPILER_FLAGS} --target=${CMAKE_C_COMPILER_TARGET} --gcc-toolchain=${ANDROID_TOOLCHAIN_ROOT}")
+				lcb_configure_options("--extra-ldflags=${ANDROID_LINKER_FLAGS} --target=${CMAKE_C_COMPILER_TARGET} --gcc-toolchain=${ANDROID_TOOLCHAIN_ROOT}")
 			endif()
 		else()
 			set(FFMPEG_TARGET_OS "linux")

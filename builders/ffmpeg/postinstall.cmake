@@ -20,37 +20,44 @@
 #
 ############################################################################
 
-if(EXISTS ${INSTALL_PREFIX}/lib/avcodec-53.def)
-	execute_process(COMMAND "lib" "/def:${INSTALL_PREFIX}/lib/avcodec-53.def" "/out:${INSTALL_PREFIX}/lib/avcodec.lib" "/machine:X86")
+file(GLOB AVCODEC_DEF "${INSTALL_PREFIX}/lib/avcodec-*.def")
+if(AVCODEC_DEF)
+	execute_process(COMMAND "lib" "/def:${AVCODEC_DEF}" "/out:${INSTALL_PREFIX}/lib/avcodec.lib" "/machine:X86")
 endif()
-if(EXISTS ${INSTALL_PREFIX}/lib/avutil-51.def)
-	execute_process(COMMAND "lib" "/def:${INSTALL_PREFIX}/lib/avutil-51.def" "/out:${INSTALL_PREFIX}/lib/avutil.lib" "/machine:X86")
+file(GLOB AVUTIL_DEF "${INSTALL_PREFIX}/lib/avutil-*.def")
+if(AVUTIL_DEF)
+	execute_process(COMMAND "lib" "/def:${AVUTIL_DEF}" "/out:${INSTALL_PREFIX}/lib/avutil.lib" "/machine:X86")
 endif()
-if(EXISTS ${INSTALL_PREFIX}/lib/swresample-0.def)
-	execute_process(COMMAND "lib" "/def:${INSTALL_PREFIX}/lib/swresample-0.def" "/out:${INSTALL_PREFIX}/lib/swresample.lib" "/machine:X86")
+file(GLOB SWRESAMPLE_DEF "${INSTALL_PREFIX}/lib/swresample-*.def")
+if(SWRESAMPLE_DEF)
+	execute_process(COMMAND "lib" "/def:${SWRESAMPLE_DEF}" "/out:${INSTALL_PREFIX}/lib/swresample.lib" "/machine:X86")
 endif()
-if(EXISTS ${INSTALL_PREFIX}/lib/swscale-2.def)
-	execute_process(COMMAND "lib" "/def:${INSTALL_PREFIX}/lib/swscale-2.def" "/out:${INSTALL_PREFIX}/lib/swscale.lib" "/machine:X86")
+file(GLOB SWSCALE_DEF "${INSTALL_PREFIX}/lib/swscale-*.def")
+if(SWSCALE_DEF)
+	execute_process(COMMAND "lib" "/def:${SWSCALE_DEF}" "/out:${INSTALL_PREFIX}/lib/swscale.lib" "/machine:X86")
 endif()
 
-if(APPLE AND NOT IOS)
+file(GLOB AVUTIL_DYLIB RELATIVE "${INSTALL_PREFIX}/lib" "${INSTALL_PREFIX}/lib/libavutil.*.*.*.dylib")
+file(GLOB AVCODEC_DYLIB RELATIVE "${INSTALL_PREFIX}/lib" "${INSTALL_PREFIX}/lib/libavcodec.*.*.*.dylib")
+file(GLOB SWRESAMPLE_DYLIB RELATIVE "${INSTALL_PREFIX}/lib" "${INSTALL_PREFIX}/lib/libswresample.*.*.*.dylib")
+file(GLOB SWSCALE_DYLIB RELATIVE "${INSTALL_PREFIX}/lib" "${INSTALL_PREFIX}/lib/libswscale.*.*.*.dylib")
+
+if(AVUTIL_DYLIB)
+	execute_process(COMMAND install_name_tool -id @rpath/${AVUTIL_DYLIB} ${INSTALL_PREFIX}/lib/${AVUTIL_DYLIB})
 	execute_process(COMMAND install_name_tool
-		-id @rpath/libavcodec.53.61.100.dylib
-		-change ${INSTALL_PREFIX}/lib/libavutil.51.35.100.dylib @rpath/libavutil.51.35.100.dylib
-		${INSTALL_PREFIX}/lib/libavcodec.53.61.100.dylib
+		-id @rpath/${AVCODEC_DYLIB}
+		-change ${INSTALL_PREFIX}/lib/${AVUTIL_DYLIB} @rpath/${AVUTIL_DYLIB}
+		${INSTALL_PREFIX}/lib/${AVCODEC_DYLIB}
 	)
 	execute_process(COMMAND install_name_tool
-		-id @rpath/libavutil.51.35.100.dylib
-		${INSTALL_PREFIX}/lib/libavutil.51.35.100.dylib
+		-id @rpath/${SWRESAMPLE_DYLIB}
+		-change ${INSTALL_PREFIX}/lib/${AVUTIL_DYLIB} @rpath/${AVUTIL_DYLIB}
+		${INSTALL_PREFIX}/lib/${SWRESAMPLE_DYLIB}
 	)
 	execute_process(COMMAND install_name_tool
-		-id @rpath/libswresample.0.6.100.dylib
-		-change ${INSTALL_PREFIX}/lib/libavutil.51.35.100.dylib @rpath/libavutil.51.35.100.dylib
-		${INSTALL_PREFIX}/lib/libswresample.0.6.100.dylib
-	)
-	execute_process(COMMAND install_name_tool
-		-id @rpath/libswscale.2.1.100.dylib
-		-change ${INSTALL_PREFIX}/lib/libavutil.51.35.100.dylib @rpath/libavutil.51.35.100.dylib
-		${INSTALL_PREFIX}/lib/libswscale.2.1.100.dylib
+		-id @rpath/${SWSCALE_DYLIB}
+		-change ${INSTALL_PREFIX}/lib/${AVUTIL_DYLIB} @rpath/${AVUTIL_DYLIB}
+		${INSTALL_PREFIX}/lib/${SWSCALE_DYLIB}
 	)
 endif()
+

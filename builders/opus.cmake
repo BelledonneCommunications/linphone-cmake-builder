@@ -38,10 +38,4 @@ else()
 	lcb_external_source_paths("opus" "externals/opus" "external/opus")
 	lcb_may_be_found_on_system(YES)
 	lcb_ignore_warnings(YES)
-
-	lcb_patch_command(
-		"${CMAKE_COMMAND}" "-E" "copy" "${CMAKE_CURRENT_SOURCE_DIR}/builders/opus/CMakeLists.txt" "<SOURCE_DIR>"
-		"COMMAND"
-		"${CMAKE_COMMAND}" "-E" "copy" "${CMAKE_CURRENT_SOURCE_DIR}/builders/opus/config.h.cmake" "<SOURCE_DIR>"
-	)
 endif()

@@ -23,7 +23,7 @@
 include(${CMAKE_CURRENT_LIST_DIR}/options-ios.cmake)
 
 
-set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")
+set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=NO" "-DENABLE_STATIC=YES")
 
 
 set(CMAKE_MACOSX_RPATH TRUE)
@@ -54,17 +54,20 @@ set(LINPHONE_BUILDER_LDFLAGS "${LINPHONE_BUILDER_LDFLAGS} -stdlib=libc++")
 # Include builders
 include(builders/CMakeLists.txt)
 
+# bctoolbox
+lcb_builder_linking_type(bctoolbox "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+# belcard
+lcb_builder_linking_type(belcard "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+# belr
+lcb_builder_linking_type(belr "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
 # ffmpeg
 lcb_builder_linking_type(ffmpeg "--enable-static" "--disable-shared" "--enable-pic")
 
-# bctoolbox
-lcb_builder_linking_type(bctoolbox "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-
-#belcard
-lcb_builder_linking_type(belcard "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-
-#belcard
-lcb_builder_linking_type(belr "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
+# lime
+lcb_builder_linking_type(lime "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 # linphone
 lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=YES")
@@ -76,7 +79,7 @@ lcb_builder_cmake_options(linphone "-DENABLE_UPNP=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_MSG_STORAGE=YES")
 lcb_builder_cmake_options(linphone "-DENABLE_DOC=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_NLS=NO")
-lcb_builder_linking_type(linphone "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
+lcb_builder_linking_type(linphone "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 # mbedtls
 lcb_builder_linking_type(mbedtls "-DUSE_STATIC_MBEDTLS_LIBRARY=YES" "-DUSE_SHARED_MBEDTLS_LIBRARY=NO")
@@ -90,22 +93,22 @@ lcb_builder_cmake_options(ms2 "-DENABLE_GLX=NO")
 lcb_builder_cmake_options(ms2 "-DENABLE_X11=NO")
 lcb_builder_cmake_options(ms2 "-DENABLE_XV=NO")
 lcb_builder_cmake_options(ms2 "-DENABLE_DOC=NO")
+lcb_builder_linking_type(ms2 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
-lcb_builder_linking_type(ms2 "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-## ms2 plugins
-lcb_builder_linking_type(mswebrtc "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-lcb_builder_linking_type(msamr "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-lcb_builder_linking_type(mscodec2 "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-lcb_builder_linking_type(msopenh264 "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-lcb_builder_linking_type(mssilk "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
-lcb_builder_linking_type(msx264 "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
+# ms2 plugins
+lcb_builder_linking_type(msamr "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+lcb_builder_linking_type(mscodec2 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+lcb_builder_linking_type(msopenh264 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+lcb_builder_linking_type(mssilk "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+lcb_builder_linking_type(mswebrtc "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+lcb_builder_linking_type(msx264 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 # opus
 lcb_builder_cmake_options(opus "-DENABLE_FIXED_POINT=YES")
 
 # ortp
 lcb_builder_cmake_options(ortp "-DENABLE_DOC=NO")
-lcb_builder_linking_type(ortp "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
+lcb_builder_linking_type(ortp "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 # polarssl
 lcb_builder_linking_type(polarssl "-DUSE_SHARED_POLARSSL_LIBRARY=0")
@@ -117,6 +120,9 @@ lcb_builder_linking_type(soci "-DSOCI_STATIC=YES" "-DSOCI_SHARED=NO")
 lcb_builder_cmake_options(speex "-DENABLE_FLOAT_API=NO")
 lcb_builder_cmake_options(speex "-DENABLE_FIXED_POINT=YES")
 
+# srtp
+lcb_builder_linking_type(srtp "-DENABLE_STATIC=YES")
+
 # vpx
 lcb_builder_linking_type(vpx "--enable-static" "--disable-shared")
 
@@ -124,5 +130,3 @@ lcb_builder_linking_type(vpx "--enable-static" "--disable-shared")
 lcb_builder_linking_type(x264 "--enable-static" "--enable-pic")
 lcb_builder_install_target(x264 "install-lib-static")
 
-# zxing
-lcb_builder_linking_type(zxing "-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")

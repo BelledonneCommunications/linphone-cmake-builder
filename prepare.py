@@ -518,12 +518,4 @@ class Preparator:
 
     def prepare_tunnel(self):
         if self.args.tunnel:
-            if not os.path.isdir("submodules/tunnel"):
-                info("Tunnel wanted but not found yet, trying to clone it...")
-                p = Popen("git clone gitosis@git.linphone.org:tunnel.git submodules/tunnel".split(" "))
-                p.wait()
-                if p.returncode != 0:
-                    error("Could not clone tunnel. Please see http://www.belledonne-communications.com/voiptunnel.html")
-                    return 1
-            info("Tunnel enabled.")
             self.additional_args += ["-DENABLE_TUNNEL=YES"]

@@ -1,6 +1,6 @@
 ############################################################################
-# ms2plugins.cmake
-# Copyright (C) 2016  Belledonne Communications, Grenoble France
+# msaaudio.cmake
+# Copyright (C) 2019  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,36 +20,12 @@
 #
 ############################################################################
 
-lcb_build_method("dummy")
-lcb_dependencies("ms2")
+lcb_git_repository("https://gitlab.linphone.org/BC/public/msaaudio.git")
+lcb_git_tag_latest("master")
+lcb_git_tag("master")
+lcb_external_source_paths("msaaudio")
+lcb_groupable(YES)
+lcb_sanitizable(YES)
+lcb_plugin(YES)
 
-if(ENABLE_AMRNB OR ENABLE_AMRWB)
-	lcb_dependencies("msamr")
-endif()
-if(ENABLE_CODEC2)
-	lcb_dependencies("mscodec2")
-endif()
-if(ENABLE_ISAC OR ENABLE_ILBC OR ENABLE_WEBRTC_AEC OR ENABLE_WEBRTC_AECM OR ENABLE_WEBRTC_VAD)
-	lcb_dependencies("mswebrtc")
-endif()
-if(ENABLE_SILK)
-	lcb_dependencies("mssilk")
-endif()
-if(ENABLE_OPENH264)
-	lcb_dependencies("msopenh264")
-endif()
-if(ENABLE_WASAPI)
-	lcb_dependencies("mswasapi")
-endif()
-if(ENABLE_X264)
-	lcb_dependencies("msx264")
-endif()
-if(ENABLE_VIDEO AND (CMAKE_SYSTEM_NAME STREQUAL "WindowsPhone"))
-	lcb_dependencies("mswp8vid")
-endif()
-if(ENABLE_VIDEO AND (CMAKE_SYSTEM_NAME STREQUAL "WindowsStore"))
-	lcb_dependencies("mswinrtvid")
-endif()
-if (ENABLE_AAUDIO)
-	lcb_dependencies("msaaudio")
-endif()
+lcb_dependencies("ms2")

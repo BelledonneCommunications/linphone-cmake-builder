@@ -33,7 +33,11 @@ file(READ "${CMAKE_ANDROID_NDK}/source.properties" SOURCE_PROPERTIES_CONTENT)
 string(REGEX MATCH "Pkg\\.Revision = ([0-9]+)\\." NDK_VERSION_MATCH "${SOURCE_PROPERTIES_CONTENT}")
 set(CMAKE_ANDROID_NDK_VERSION ${CMAKE_MATCH_1})
 
+if(ENABLE_AAUDIO)
+set(ANDROID_NATIVE_API_LEVEL "android-28")
+else()
 set(ANDROID_NATIVE_API_LEVEL "android-17")
+endif()
 set(ANDROID_CPP_FEATURES "rtti exceptions")
 set(ANDROID_STL "c++_shared")
 

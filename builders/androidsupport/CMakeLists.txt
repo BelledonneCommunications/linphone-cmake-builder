@@ -36,8 +36,8 @@ elseif(CMAKE_ANDROID_NDK_VERSION VERSION_LESS 17)
 	)
 else()
 	set(SUPPORT_SOURCES
-                "${CMAKE_ANDROID_NDK}/sources/android/support/src/locale_support.cpp"
-        )
+		"${CMAKE_ANDROID_NDK}/sources/android/support/src/locale_support.cpp"
+	)
 endif()
 
 add_library(support STATIC ${SUPPORT_SOURCES})

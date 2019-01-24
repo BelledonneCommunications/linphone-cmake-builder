@@ -32,7 +32,11 @@ lcb_rpmbuild_name("mediastreamer")
 
 lcb_dependencies("ortp" "bctoolbox")
 if(ANDROID)
-	lcb_dependencies("androidcpufeatures" "androidsupport")
+	if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS 19)
+		lcb_dependencies("androidcpufeatures" "androidsupport")
+	else()
+		lcb_dependencies("androidcpufeatures")
+	endif()
 endif()
 
 lcb_cmake_options(

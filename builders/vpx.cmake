@@ -59,6 +59,7 @@ else()
 		"--disable-unit-tests"
 		"--disable-tools"
 		"--as=yasm"
+		"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
 	)
 	string(FIND "${CMAKE_C_COMPILER_LAUNCHER}" "ccache" CCACHE_ENABLED)
 	if (NOT "${CCACHE_ENABLED}" STREQUAL "-1")

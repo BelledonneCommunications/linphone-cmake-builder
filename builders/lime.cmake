@@ -32,3 +32,7 @@ lcb_dependencies("bctoolbox" "soci")
 if(ENABLE_UNIT_TESTS)
 	lcb_dependencies("bellesip")
 endif()
+
+lcb_cmake_options(
+        "-DENABLE_C_INTERFACE=yes"
+)

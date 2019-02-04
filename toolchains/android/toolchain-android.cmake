@@ -38,6 +38,8 @@ set(ANDROID_NATIVE_API_LEVEL "android-28")
 else()
 set(ANDROID_NATIVE_API_LEVEL "android-21")
 endif()
+# We have to set ANDROID_PLATFORM to ANDROID_NATIVE_API_LEVEL otherwise on next cmake call ANDROID_NATIVE_API_LEVEL value will change (android- prefix will be removed...)
+set(ANDROID_PLATFORM ${ANDROID_NATIVE_API_LEVEL})
 set(ANDROID_CPP_FEATURES "rtti exceptions")
 set(ANDROID_STL "c++_shared")
 

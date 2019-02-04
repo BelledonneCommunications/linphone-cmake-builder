@@ -59,7 +59,6 @@ else()
 		"--disable-unit-tests"
 		"--disable-tools"
 		"--as=yasm"
-		"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
 	)
 	string(FIND "${CMAKE_C_COMPILER_LAUNCHER}" "ccache" CCACHE_ENABLED)
 	if (NOT "${CCACHE_ENABLED}" STREQUAL "-1")
@@ -136,7 +135,10 @@ else()
 		else()
 			set(VPX_TARGET "x86-android-gcc")
 		endif()
-		lcb_configure_options("--sdk-path=${CMAKE_ANDROID_NDK}/" )
+		lcb_configure_options(
+			"--sdk-path=${CMAKE_ANDROID_NDK}/"
+			"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
+		)
 		lcb_linking_type("--enable-static" "--disable-shared" "--enable-pic")
 	elseif(QNX)
 		set(VPX_TARGET "armv7-qnx-gcc")

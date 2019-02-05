@@ -30,3 +30,4 @@ lcb_add_option("Transcoder" "Enable transcoder support." "${DEFAULT_ENABLE_TRANS
 lcb_add_option("Protobuf" "Enable protobuf for REDIS." "${DEFAULT_ENABLE_PROTOBUF}" "ENABLE_PROTOBUF" OFF)
 lcb_add_option("Jwe Auth Plugin" "Enable JweAuth plugin support." "${DEFAULT_VALUE_ENABLE_JWE_AUTH_PLUGIN}")
 lcb_add_option("External Auth Plugin" "Enable ExternalAuth plugin support" "${DEFAULT_VALUE_ENABLE_EXTERNAL_AUTH_PLUGIN}")
+lcb_add_option("SOCI" "Enable SOCI support." "${DEFAULT_VALUE_ENABLE_SOCI}")

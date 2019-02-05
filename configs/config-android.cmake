@@ -72,7 +72,7 @@ lcb_builder_extra_cflags(codec2 "-ffast-math")
 lcb_builder_linking_type(ffmpeg "--enable-static" "--disable-shared" "--enable-pic")
 
 # lime
-lcb_builder_cmake_options(lime "-DENABLE_UNIT_TESTS=NO")
+lcb_builder_cmake_options(lime "-DENABLE_UNIT_TESTS=NO" "-DENABLE_JNI=YES")
 
 # linphone
 lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=YES")

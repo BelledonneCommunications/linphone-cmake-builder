@@ -1,4 +1,5 @@
 
+@if "%1" == "16" goto vs16
 @if "%1" == "15" goto vs15
 @if "%1" == "14" goto vs14
 @if "%1" == "12" goto vs12
@@ -6,6 +7,10 @@
 @if "%1" == "10" goto vs10
 @if "%1" == "9" goto vs9
 @goto end
+
+:vs16
+@call "%VS160COMNTOOLS%vsvars32.bat"
+@goto printenv
 
 :vs15
 @call "%VS150COMNTOOLS%vsvars32.bat"

@@ -8,7 +8,8 @@
 @goto end
 
 :vs15
-@call "%VS150COMNTOOLS%\..\..\VC\Auxiliary\Build\vcvars32.bat"
+:: No more env variable without load VsDevCmd script
+@call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
 @goto printenv
 
 :vs14

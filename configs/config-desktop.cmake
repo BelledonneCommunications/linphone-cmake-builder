@@ -58,3 +58,59 @@ endif()
 if(NOT LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS)
 	set(LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS "${CMAKE_CURRENT_LIST_DIR}/desktop/additional_steps.cmake")
 endif()
+
+if(APPLE)
+	set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=NO" "-DENABLE_STATIC=YES")
+
+	# bctoolbox
+	lcb_builder_linking_type(bctoolbox "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+	# belcard
+	lcb_builder_linking_type(belcard "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+	# belr
+	lcb_builder_linking_type(belr "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+	# lime
+	lcb_builder_linking_type(lime "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+	
+	# linphone
+	lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=YES")
+	lcb_builder_cmake_options(linphone "-DENABLE_CONSOLE_UI=NO")
+	lcb_builder_cmake_options(linphone "-DENABLE_DAEMON=NO")
+	lcb_builder_cmake_options(linphone "-DENABLE_NOTIFY=NO")
+	lcb_builder_cmake_options(linphone "-DENABLE_TUTORIALS=NO")
+	lcb_builder_cmake_options(linphone "-DENABLE_UPNP=NO")
+	lcb_builder_cmake_options(linphone "-DENABLE_MSG_STORAGE=YES")
+	lcb_builder_cmake_options(linphone "-DENABLE_DOC=NO")
+	lcb_builder_cmake_options(linphone "-DENABLE_NLS=NO")
+	lcb_builder_linking_type(linphone "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+	# mbedtls
+	lcb_builder_linking_type(mbedtls "-DUSE_STATIC_MBEDTLS_LIBRARY=YES" "-DUSE_SHARED_MBEDTLS_LIBRARY=NO")
+
+	# mediastreamer2
+	lcb_builder_cmake_options(ms2 "-DENABLE_RELATIVE_PREFIX=YES")
+	lcb_builder_cmake_options(ms2 "-DENABLE_ALSA=NO")
+	lcb_builder_cmake_options(ms2 "-DENABLE_PULSEAUDIO=NO")
+	lcb_builder_cmake_options(ms2 "-DENABLE_OSS=NO")
+	lcb_builder_cmake_options(ms2 "-DENABLE_GLX=NO")
+	lcb_builder_cmake_options(ms2 "-DENABLE_X11=NO")
+	lcb_builder_cmake_options(ms2 "-DENABLE_XV=NO")
+	lcb_builder_cmake_options(ms2 "-DENABLE_DOC=NO")
+	lcb_builder_linking_type(ms2 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+	# ms2 plugins
+	lcb_builder_linking_type(msamr "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+	lcb_builder_linking_type(mscodec2 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+	lcb_builder_linking_type(msopenh264 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+	lcb_builder_linking_type(mssilk "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+	lcb_builder_linking_type(mswebrtc "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+	lcb_builder_linking_type(msx264 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+	# ortp
+	lcb_builder_cmake_options(ortp "-DENABLE_DOC=NO")
+	lcb_builder_linking_type(ortp "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
+
+endif()
+

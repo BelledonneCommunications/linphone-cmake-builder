@@ -93,6 +93,7 @@ include(builders/CMakeLists.txt)
 # linphone
 if(WIN32)
 	lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=YES")
+	lcb_builder_extra_ldflags(linphone "/SAFESEH:NO")
 else()
 	lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=${ENABLE_RELATIVE_PREFIX}")
 endif()

@@ -1,10 +1,16 @@
 
+@if "%1" == "15" goto vs15
 @if "%1" == "14" goto vs14
 @if "%1" == "12" goto vs12
 @if "%1" == "11" goto vs11
 @if "%1" == "10" goto vs10
 @if "%1" == "9" goto vs9
 @goto end
+
+:vs15
+:: No more env variable without load VsDevCmd script
+@call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
+@goto printenv
 
 :vs14
 @call "%VS140COMNTOOLS%vsvars32.bat"

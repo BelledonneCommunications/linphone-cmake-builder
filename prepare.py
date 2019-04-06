@@ -185,7 +185,7 @@ class Preparator:
         self.missing_python_dependencies = []
         self.missing_dependencies = {}
         self.wrong_cmake_version = False
-        self.release_with_debug_info = False
+        self.release_with_debug_info = True
         self.veryclean = False
         self.show_gpl_disclaimer = False
         self.min_cmake_version = None

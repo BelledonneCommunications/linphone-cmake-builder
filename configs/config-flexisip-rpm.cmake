@@ -64,9 +64,10 @@ if(LSB_RELEASE_DISTRO STREQUAL "Debian" AND (LSB_RELEASE_DISTRO_VERSION STREQUAL
 else()
        set(DEFAULT_VALUE_ENABLE_MBEDTLS ON)
 endif()
+set(DEFAULT_VALUE_ENABLE_TRANSCODER ON)
 set(DEFAULT_VALUE_ENABLE_REDIS ON)
 set(DEFAULT_VALUE_ENABLE_SOCI ON)
-set(DEFAULT_VALUE_ENABLE_UNIT_TESTS ON)
+set(DEFAULT_VALUE_ENABLE_UNIT_TESTS OFF)
 set(ENABLE_SRTP NO CACHE BOOL "" FORCE) # Mainly to avoid issues with old libsrtp (sha1_update conflict with polarssl)
 
 set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
@@ -95,6 +96,7 @@ lcb_builder_cmake_options(linphone
 lcb_builder_cmake_options(soci
 	"-DWITH_MYSQL=ON"
 	"-DWITH_POSTGRESQL=ON"
+	"-DSOCI_SHARED=ON"
 )
 
 # prepare the RPMBUILD options that we need to pass

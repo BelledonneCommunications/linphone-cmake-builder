@@ -97,4 +97,4 @@ if(ENABLE_CONFERENCE)
 endif()
 
 # soci
-lcb_builder_cmake_options(soci "-DWITH_MYSQL=ON")
+lcb_builder_cmake_options(soci "-DWITH_MYSQL=ON" "-DSOCI_FRAMEWORK=OFF")

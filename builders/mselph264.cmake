@@ -21,8 +21,8 @@
 ############################################################################
 
 lcb_git_repository("https://gitlab.linphone.org/BC/public/mselph264.git")
-lcb_git_tag_latest("feature/ms2_integration")
-lcb_git_tag("feature/ms2_integration")
+lcb_git_tag_latest("master")
+lcb_git_tag("master")
 lcb_external_source_paths("mselph264")
 lcb_groupable(YES)
 lcb_sanitizable(YES)

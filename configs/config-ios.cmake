@@ -130,3 +130,5 @@ lcb_builder_linking_type(vpx "--enable-static" "--disable-shared")
 lcb_builder_linking_type(x264 "--enable-static" "--enable-pic")
 lcb_builder_install_target(x264 "install-lib-static")
 
+# bellesip
+lcb_builder_linking_type(bellesip "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")

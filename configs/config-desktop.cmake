@@ -116,5 +116,7 @@ if(APPLE)
 	lcb_builder_cmake_options(ortp "-DENABLE_DOC=NO")
 	lcb_builder_linking_type(ortp "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
-endif()
+	# bellesip
+	lcb_builder_linking_type(bellesip "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
+endif()

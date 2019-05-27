@@ -26,7 +26,9 @@ lcb_git_tag("d65cd2ea9d740f62884e0beaf8ab86740620c783")
 lcb_external_source_paths("externals/minizip")
 lcb_spec_file("minizip.spec")
 
-lcb_dependencies("zlib")
+if (ENABLE_ZLIB)
+	lcb_dependencies("zlib")
+endif()
 
 lcb_cmake_options(
 	"-DUSE_AES=NO"

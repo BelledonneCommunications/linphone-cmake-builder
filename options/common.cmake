@@ -27,6 +27,10 @@ lcb_add_option("Debug logs" "Enable debug level logs in libinphone and mediastre
 lcb_add_option("Doc" "Enable documentation generation with Doxygen and Sphinx" NO)
 lcb_add_option("Tools" "Enable tools binary compilation." "${DEFAULT_VALUE_ENABLE_TOOLS}")
 lcb_add_option("unmaintained" "Allow inclusion of unmaintained code in the build." OFF)
+lcb_add_option("Xml2" "Enable bc version of libxml2" ON)
+lcb_add_option("Sqlite" "Enable bc version of sqlite3" ON)
+lcb_add_option("Zlib" "Enable bc version of zlib" ON)
+lcb_add_option("Soci mysql" "Enable mysql support of SOCI" OFF)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT IOS AND NOT ANDROID)
 	lcb_add_option("Sanitizer" "Enable Clang sanitizer" "${DEFAULT_VALUE_ENABLE_SANITIZER}")

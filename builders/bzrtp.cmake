@@ -31,8 +31,13 @@ lcb_spec_file("bzrtp.spec")
 
 lcb_dependencies("bctoolbox")
 if(NOT APPLE)
-	# Do not build xml2 neither sqlite3 on Apple systems (Mac OS X and iOS), they are provided by the system
-	lcb_dependencies("xml2" "sqlite3")
+  # Do not build xml2 neither sqlite3 on Apple systems (Mac OS X and iOS), they are provided by the system
+	if (ENABLE_SQLITE)
+		lcb_dependencies("sqlite3")
+	endif()
+	if (ENABLE_XML2)
+		lcb_dependencies("xml2")
+	endif()
 endif()
 if(ENABLE_UNIT_TESTS)
 	lcb_dependencies("bcunit")

@@ -25,4 +25,6 @@ lcb_external_source_paths("externals/jose")
 lcb_spec_file("jose.spec")
 
 lcb_dependencies("jansson")
-lcb_dependencies("zlib")
+if (ENABLE_ZLIB)
+	lcb_dependencies("zlib")
+endif()

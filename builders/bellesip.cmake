@@ -35,7 +35,7 @@ if(ENABLE_TUNNEL)
 	lcb_dependencies("tunnel")
 endif()
 
-if(NOT APPLE AND NOT ANDROID AND NOT QNX)
+if(NOT APPLE AND NOT ANDROID AND NOT QNX AND ENABLE_ZLIB)
 	lcb_dependencies("zlib")
 endif()
 

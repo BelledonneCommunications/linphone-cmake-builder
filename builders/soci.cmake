@@ -23,14 +23,20 @@
 lcb_git_repository("https://gitlab.linphone.org/BC/public/external/soci.git")
 lcb_external_source_paths("externals/soci" "external/soci")
 if(NOT APPLE)
-	# Do not build sqlite3 on Apple systems (Mac OS X and iOS), it is provided by the system
-	lcb_dependencies("sqlite3")
+  # Do not build sqlite3 on Apple systems (Mac OS X and iOS), it is provided by the system
+	if (ENABLE_SQLITE)
+		lcb_dependencies("sqlite3")
+	endif()
 endif()
 
 lcb_cmake_options(
 	"-DSOCI_TESTS=NO"
 	"-DWITH_SQLITE3=YES"
 )
+
+if (ENABLE_SOCI_MYSQL)
+	lcb_cmake_options("-DWITH_MYSQL=YES")
+endif()
 lcb_package_source(YES)
 lcb_spec_file("soci.spec")
 lcb_linking_type("-DSOCI_SHARED=YES" "-DSOCI_STATIC=NO")

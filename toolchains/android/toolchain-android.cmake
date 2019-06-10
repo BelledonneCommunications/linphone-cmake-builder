@@ -66,3 +66,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Os -DNDEBUG")
 set(CMAKE_C_FLAGS_RELEASE "-Os -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Os -g -DNDEBUG")
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "-Os -g -DNDEBUG")
+
+set(CMAKE_C_FLAGS_ASAN "-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+set(CMAKE_CXX_FLAGS_ASAN "-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+set(CMAKE_SHARED_LINKER_FLAGS_ASAN "-fsanitize=address")

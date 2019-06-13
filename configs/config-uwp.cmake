@@ -37,6 +37,7 @@ include(builders/CMakeLists.txt)
 # linphone
 lcb_builder_cmake_options(linphone "-DENABLE_CSHARP_WRAPPER=YES")
 lcb_builder_cmake_options(linphone "-DENABLE_SWIFT_WRAPPER=YES")
+lcb_builder_cmake_options(linphone "-DENABLE_JAZZY_DOC=YES")
 lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=YES")
 lcb_builder_cmake_options(linphone "-DENABLE_CONSOLE_UI=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_DAEMON=NO")

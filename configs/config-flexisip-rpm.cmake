@@ -37,7 +37,7 @@ function(CHECK_LIBRARY libname)
 	endif()
 endfunction()
 
-set(FLEXISIP_LIBDEPS ssl mysqlclient_r mysqlclient)
+set(FLEXISIP_LIBDEPS ssl)
 
 foreach(LIBNAME ${FLEXISIP_LIBDEPS})
 	check_library(${LIBNAME})

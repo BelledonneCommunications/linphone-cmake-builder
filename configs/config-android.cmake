@@ -137,11 +137,10 @@ lcb_builder_linking_type(vpx "--enable-static" "--disable-shared")
 lcb_builder_linking_type(x264 "--enable-static" "--enable-pic")
 lcb_builder_install_target(x264 "install-lib-static")
 
+#Copy c++ library to install prefix
+#The library has to be present for cmake dependencies and before the install target
+file(COPY "${CMAKE_ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/${CMAKE_ANDROID_ARCH_ABI}/libc++_shared.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/")
 
-# Copy c++ library to install prefix
-install(FILES "${CMAKE_ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/${CMAKE_ANDROID_ARCH_ABI}/libc++_shared.so"
-	DESTINATION "lib"
-)
 if(ENABLE_SANITIZER)
 	set(SANITIZER_ARCH ${CMAKE_SYSTEM_PROCESSOR})
 	if(SANITIZER_ARCH MATCHES "^arm")

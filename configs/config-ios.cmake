@@ -31,7 +31,7 @@ set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
 
 # Global configuration
 if(NOT LINPHONE_IOS_DEPLOYMENT_TARGET)
-	set(LINPHONE_IOS_DEPLOYMENT_TARGET 8.0)
+	set(LINPHONE_IOS_DEPLOYMENT_TARGET 9.0)
 endif()
 set(LINPHONE_BUILDER_HOST "${CMAKE_SYSTEM_PROCESSOR}-apple-darwin")
 set(COMMON_FLAGS "-miphoneos-version-min=${LINPHONE_IOS_DEPLOYMENT_TARGET} -fms-extensions")

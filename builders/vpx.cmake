@@ -176,4 +176,7 @@ else()
 		lcb_configure_options("--disable-avx512")
 	endif()
 	lcb_configure_env("CC=$CC_NO_LAUNCHER LD=$CC_NO_LAUNCHER ASFLAGS=$ASFLAGS CFLAGS=$CFLAGS LDFLAGS=$LDFLAGS")
+	# BUILD_ROOT is set by Xcode, but we still need the current build root.
+	# See https://gitlab.linphone.org/BC/public/external/libvpx/blob/v1.7.0-linphone/build/make/Makefile
+	lcb_make_options("BUILD_ROOT=.")
 endif()

@@ -34,5 +34,6 @@ if(ENABLE_UNIT_TESTS)
 endif()
 
 lcb_cmake_options(
-        "-DENABLE_C_INTERFACE=yes"
+	"-DENABLE_C_INTERFACE=yes"
+	"-DENABLE_UNIT_TESTS=${ENABLE_UNIT_TESTS}"
 )

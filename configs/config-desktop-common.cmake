@@ -88,7 +88,7 @@ endif()
 
 
 # Include builders
-include(builders/CMakeLists.txt)
+include(${CMAKE_CURRENT_LIST_DIR}/../builders/CMakeLists.txt)
 
 # linphone
 if(WIN32)

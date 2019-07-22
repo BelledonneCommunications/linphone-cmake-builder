@@ -1,6 +1,6 @@
 ############################################################################
-# CMakeLists.txt
-# Copyright (C) 2016-2018  Belledonne Communications, Grenoble France
+# linphoneqt.cmake
+# Copyright (C) 2017-2018  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,15 +20,22 @@
 #
 ############################################################################
 
-lcb_define_targets(
-	bctoolbox
-	belcard
-	bellesip
-	belr
-	flexisip
-	linphone
-	linphoneqt
-	ms2
-	ms2plugins
-	ortp
-)
+lcb_git_repository("https://gitlab.linphone.org/BC/public/linphone-desktop.git")
+lcb_git_tag_latest("master")
+lcb_external_source_paths("${CMAKE_SOURCE_DIR}/cmake")
+lcb_git_tag("release/4.2")
+lcb_groupable(NO)
+lcb_sanitizable(YES)
+lcb_spec_file("linphoneqt.spec")
+
+lcb_dependencies("linphone" "ms2plugins" "minizip")
+
+lcb_cmake_options("-DENABLE_UPDATE_CHECK=${ENABLE_UPDATE_CHECK}")
+
+#Add config step for packaging.
+set(LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS "${CMAKE_CURRENT_LIST_DIR}/linphoneqt/additional_steps.cmake")
+
+#NMN pointer, check this regarding jpeg2yuv issue
+if(NOT WIN32 AND NOT APPLE)
+#	lcb_blacklist_dependencies("turbo-jpeg") # turbo-jpeg is already provided by Qt5 so do not build it.
+endif()

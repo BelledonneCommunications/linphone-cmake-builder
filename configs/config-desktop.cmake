@@ -26,12 +26,10 @@ if(APPLE)
 	set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../lib")
 endif()
 
-include(configs/config-desktop-common.cmake)
-
+include(${CMAKE_CURRENT_LIST_DIR}/config-desktop-common.cmake)
 
 lcb_builder_cmake_options(belr "-DENABLE_TOOLS=YES")
 lcb_builder_cmake_options(linphone "-DENABLE_TOOLS=YES")
-
 
 # Install GTK and intltool for build with Visual Studio
 if(MSVC AND ENABLE_GTK_UI)
@@ -52,7 +50,6 @@ if(MSVC AND ENABLE_GTK_UI)
 		)
 	endif()
 endif()
-
 
 # Add config step for packaging
 if(NOT LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS)
@@ -77,7 +74,7 @@ if(APPLE)
 
 	# lime
 	lcb_builder_linking_type(lime "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
-	
+
 	# linphone
 	lcb_builder_cmake_options(linphone "-DENABLE_RELATIVE_PREFIX=YES")
 	lcb_builder_cmake_options(linphone "-DENABLE_CONSOLE_UI=NO")
@@ -117,4 +114,3 @@ if(APPLE)
 	lcb_builder_linking_type(ortp "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 endif()
-

@@ -49,6 +49,7 @@ lcb_add_option("WebRTC VAD"  "WebRTC voice activation detector support." "${DEFA
 lcb_add_option("BV16"  "BroadVoice 16 audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_BV16}")
 #video options and codecs
 lcb_add_option("Video" "Ability to capture and display video." "${DEFAULT_VALUE_ENABLE_VIDEO}")
+lcb_add_option("V4L" "Ability to capture and display video using libv4l2 ." "${DEFAULT_VALUE_ENABLE_V4L}")
 lcb_add_option("jpeg"  "JPEG support with libjpeg-turbo." "${DEFAULT_VALUE_ENABLE_JPEG}")
 lcb_add_option("qrcode" "QRCode support with zxing." "${DEFAULT_VALUE_ENABLE_QRCODE}")
 # FFMpeg is LGPL which is an issue only for iOS applications; otherwise it can be used in proprietary software as well

@@ -33,6 +33,7 @@ lcb_add_option("LIME X3DH" "Enable Linphone IM Encryption version 2 support in  
 lcb_add_option("NLS" "Enable internationalization of Linphone and Liblinphone." "${DEFAULT_VALUE_ENABLE_NLS}")
 lcb_add_option("Update Check" "Enable update check." "${DEFAULT_VALUE_ENABLE_UPDATE_CHECK}")
 lcb_add_option("VCARD" "Enable vCard 4 support in Linphone and Liblinphone." "${DEFAULT_VALUE_ENABLE_VCARD}")
+lcb_add_option("Assets" "Enable packaging of assets (ringtones) when building the SDK." "${DEFAULT_VALUE_ENABLE_ASSETS}")
 
 if(UNIX AND NOT IOS)
 	lcb_add_option("Relative prefix" "liblinphone and mediastreamer will look for their respective ressources relatively to their location." OFF)

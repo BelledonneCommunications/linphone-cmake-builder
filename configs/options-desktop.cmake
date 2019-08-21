@@ -21,8 +21,10 @@
 ############################################################################
 
 # Define default values for the linphone builder options
+set(DEFAULT_VALUE_ENABLE_ADVANCED_IM ON)
 set(DEFAULT_VALUE_ENABLE_BV16 ON)
 set(DEFAULT_VALUE_ENABLE_CXX_WRAPPER ON)
+set(DEFAULT_VALUE_ENABLE_DB_STORAGE ON)
 set(DEFAULT_VALUE_ENABLE_FFMPEG OFF)
 set(DEFAULT_VALUE_ENABLE_G729 ${DEFAULT_VALUE_ENABLE_GPL_THIRD_PARTIES})
 set(DEFAULT_VALUE_ENABLE_G729B_CNG OFF)

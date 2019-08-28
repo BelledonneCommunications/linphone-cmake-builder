@@ -69,6 +69,8 @@ set(DEFAULT_VALUE_ENABLE_REDIS ON)
 set(DEFAULT_VALUE_ENABLE_SOCI ON)
 set(DEFAULT_VALUE_ENABLE_UNIT_TESTS OFF)
 set(ENABLE_SRTP NO CACHE BOOL "" FORCE) # Mainly to avoid issues with old libsrtp (sha1_update conflict with polarssl)
+set(DEFAULT_VALUE_ENABLE_ADVANCED_IM ON)
+set(DEFAULT_VALUE_ENABLE_DB_STORAGE ON)
 
 set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
@@ -91,8 +93,6 @@ include(builders/CMakeLists.txt)
 lcb_builder_cmake_options(linphone
 	"-DENABLE_CONSOLE_UI=NO"
 	"-DENABLE_DAEMON=NO"
-	"-DENABLE_ADVANCED_IM=ON"
-	"-DENABLE_DB_STORAGE=ON"
 )
 
 lcb_builder_cmake_options(soci

@@ -91,6 +91,8 @@ include(builders/CMakeLists.txt)
 lcb_builder_cmake_options(linphone
 	"-DENABLE_CONSOLE_UI=NO"
 	"-DENABLE_DAEMON=NO"
+	"-DENABLE_ADVANCED_IM=ON"
+	"-DENABLE_DB_STORAGE=ON"
 )
 
 lcb_builder_cmake_options(soci

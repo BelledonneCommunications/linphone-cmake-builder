@@ -88,11 +88,14 @@ lcb_builder_cmake_options(linphone
 	"-DENABLE_CONSOLE_UI=NO"
 	"-DENABLE_DAEMON=NO"
 )
+
 if(ENABLE_CONFERENCE)
 	lcb_builder_cmake_options(linphone
 		"-DENABLE_CXX_WRAPPER=YES"
 		"-DENABLE_SOCI=YES"
 		"-DENABLE_UNIT_TESTS=${ENABLE_UNIT_TESTS}"
+		"-DENABLE_ADVANCED_IM=ON"
+		"-DENABLE_DB_STORAGE=ON"
 	)
 endif()
 

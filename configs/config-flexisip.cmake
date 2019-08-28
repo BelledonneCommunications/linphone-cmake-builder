@@ -21,6 +21,8 @@
 ############################################################################
 
 # Define default values for the flexisip builder options
+set(DEFAULT_VALUE_ENABLE_ADVANCED_IM ON)
+set(DEFAULT_VALUE_ENABLE_DB_STORAGE ON)
 set(DEFAULT_VALUE_ENABLE_REDIS ON)
 set(DEFAULT_VALUE_ENABLE_UNIT_TESTS ON)
 set(DEFAULT_VALUE_ENABLE_PRESENCE ON)
@@ -44,6 +46,7 @@ set(DEFAULT_VALUE_ENABLE_SPEEX ON)
 
 # Global configuration
 set(LINPHONE_BUILDER_HOST "")
+set(USE_SYSTEM_XSD YES)
 
 # Adjust PKG_CONFIG_PATH to include install directory
 if(UNIX)

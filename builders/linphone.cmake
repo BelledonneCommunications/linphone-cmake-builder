@@ -39,7 +39,7 @@ else()
 	set(ENABLE_ADVANCED_IM OFF CACHE BOOL "Enable advanced instant messaging such as group chat." FORCE)
 endif()
 
-if(ENABLE_ADVANCED_IM)
+if(ENABLE_ADVANCED_IM AND NOT USE_SYSTEM_XSD)
 	lcb_dependencies("libxsd")
 endif()
 

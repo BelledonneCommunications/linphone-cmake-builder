@@ -24,8 +24,8 @@ if(EXISTS ${INSTALL_PREFIX}/bin/openh264.dll AND NOT EXISTS ${INSTALL_PREFIX}/li
 	execute_process(COMMAND "${PYTHON_EXECUTABLE}" "${SOURCE_DIR}/cmake/importlib.py" "${INSTALL_PREFIX}/bin/openh264.dll" "${INSTALL_PREFIX}/lib/openh264.lib")
 endif()
 
-if(EXISTS ${INSTALL_PREFIX}/lib/libopenh264.1.dylib)
-	execute_process(COMMAND install_name_tool -id @rpath/libopenh264.1.dylib ${INSTALL_PREFIX}/lib/libopenh264.1.dylib)
+if(EXISTS ${INSTALL_PREFIX}/lib/libopenh264.4.dylib)
+	execute_process(COMMAND install_name_tool -id @rpath/libopenh264.4.dylib ${INSTALL_PREFIX}/lib/libopenh264.4.dylib)
 endif()
 
 file(GLOB OPENH264_LIBS "${INSTALL_PREFIX}/lib/libopenh264.*.dylib")

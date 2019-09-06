@@ -34,16 +34,21 @@ string(REGEX MATCH "Pkg\\.Revision = ([0-9]+)\\.([0-9]+)\\." NDK_VERSION_MATCH "
 set(CMAKE_ANDROID_NDK_VERSION ${CMAKE_MATCH_1})
 set(CMAKE_ANDROID_NDK_VERSION_MINOR ${CMAKE_MATCH_2})
 
-if(ENABLE_AAUDIO)
-	set(ANDROID_NATIVE_API_LEVEL "android-28")
-else()
-	if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS 19)
-		set(ANDROID_NATIVE_API_LEVEL "android-17")
+if(NOT ANDROID_NATIVE_API_LEVEL)
+	if(ENABLE_AAUDIO)
+		set(ANDROID_NATIVE_API_LEVEL "android-28")
+	elseif(ENABLE_CAMERA2)
+		set(ANDROID_NATIVE_API_LEVEL "android-26")
 	else()
-		# Starting with NDK 19, API 17 no longer exists
-		set(ANDROID_NATIVE_API_LEVEL "android-21")
+		if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS 19)
+			set(ANDROID_NATIVE_API_LEVEL "android-17")
+		else()
+			# Starting with NDK 19, API 17 no longer exists
+			set(ANDROID_NATIVE_API_LEVEL "android-21")
+		endif()
 	endif()
 endif()
+
 set(ANDROID_CPP_FEATURES "rtti exceptions")
 set(ANDROID_STL "c++_shared")
 

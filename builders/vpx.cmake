@@ -148,9 +148,12 @@ else()
 			"--disable-runtime-cpu-detect"
 		)
 		list(REMOVE_ITEM EP_vpx_CONFIGURE_OPTIONS "--enable-multithread")
-	else()
+      else()
 		lcb_use_c_compiler_for_assembler(NO)
 		if(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
+			set(VPX_TARGET "armv7-linux-gcc")
+	        elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm")
+			#A bit hacky, but CMAKE_SYSTEM_PROCESSOR sometimes doesn't include abi version so assume `armv7` by default
 			set(VPX_TARGET "armv7-linux-gcc")
 		else()
 			if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -165,6 +168,7 @@ else()
 	if(USE_TARGET)
 		lcb_cross_compilation_options(
 			"--prefix=${CMAKE_INSTALL_PREFIX}"
+			"--libdir=${CMAKE_INSTALL_PREFIX}/lib"
 			"--target=${VPX_TARGET}"
 		)
 	else()

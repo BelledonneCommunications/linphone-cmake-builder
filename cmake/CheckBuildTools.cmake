@@ -78,7 +78,8 @@ if(WIN32)
 endif()
 
 find_program(PATCH_PROGRAM
-	NAMES patch patch.exe
+  NAMES patch patch.exe
+  CMAKE_FIND_ROOT_PATH_BOTH
 )
 if(NOT PATCH_PROGRAM)
 	if(WIN32)
@@ -89,7 +90,8 @@ if(NOT PATCH_PROGRAM)
 endif()
 
 find_program(SED_PROGRAM
-	NAMES sed sed.exe
+  NAMES sed sed.exe
+  CMAKE_FIND_ROOT_PATH_BOTH
 )
 if(NOT SED_PROGRAM)
 	if(WIN32)

@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 ############################################################################
+lcb_add_dependent_option("Embedded OpenH264" "Embed the openh264 library instead of downloading it from Cisco." "${DEFAULT_VALUE_ENABLE_EMBEDDED_OPENH264}" "ENABLE_OPENH264" OFF)
 
 # Define default values for the linphone builder options
 set(DEFAULT_VALUE_ENABLE_ADVANCED_IM ON)

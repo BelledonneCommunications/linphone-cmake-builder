@@ -25,7 +25,9 @@ lcb_add_option("Theora" "Theora video encoding/decoding support." "${DEFAULT_VAL
 lcb_add_option("Static only" "Enable compilation of libraries in static mode." "${DEFAULT_VALUE_ENABLE_STATIC_ONLY}")
 lcb_add_option("Packaging" "Enable packaging" "${DEFAULT_VALUE_ENABLE_PACKAGING}")
 lcb_add_option("Source packaging" "Enable source packaging" "${DEFAULT_VALUE_ENABLE_SOURCE_PACKAGING}")
-
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+	set(LINPHONE_BUILDER_LDFLAGS "${LINPHONE_BUILDER_LDFLAGS} -Wl,--fatal-warnings -Wl,-warn-common")
+endif()
 
 if(ENABLE_STATIC_ONLY)
 	set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=NO" "-DENABLE_STATIC=YES")

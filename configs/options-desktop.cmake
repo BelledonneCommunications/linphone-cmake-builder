@@ -52,5 +52,6 @@ set(DEFAULT_VALUE_ENABLE_ZRTP ON)
 set(DEFAULT_VALUE_ENABLE_ASSETS ON)
 
 if ((NOT DEFINED CMAKE_INSTALL_PREFIX) OR CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	set(CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}/linphone-sdk/desktop;${CMAKE_PREFIX_PATH}" CACHE PATH "Prefer locally built libraries instead of system ones (mbedtls, xml2, speex, ...)" FORCE)
 	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk/desktop" CACHE PATH "Default linphone-sdk installation prefix" FORCE)
 endif()

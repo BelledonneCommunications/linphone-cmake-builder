@@ -50,3 +50,7 @@ set(DEFAULT_VALUE_ENABLE_ZRTP ON)
 #cmake detection from ms2 does not work yat
 set(DEFAULT_VALUE_ENABLE_V4L OFF)
 set(DEFAULT_VALUE_ENABLE_ASSETS ON)
+
+if ((NOT DEFINED CMAKE_INSTALL_PREFIX) OR CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk/raspberry" CACHE PATH "Default linphone-sdk installation prefix" FORCE)
+endif()

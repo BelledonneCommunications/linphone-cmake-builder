@@ -59,5 +59,5 @@ set(DEFAULT_VALUE_ENABLE_AAUDIO OFF)
 set(DEFAULT_VALUE_ENABLE_CAMERA2 OFF)
 
 if ((NOT DEFINED CMAKE_INSTALL_PREFIX) OR CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk/desktop" CACHE PATH "Default linphone-sdk installation prefix" FORCE)
+	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk" CACHE PATH "Default linphone-sdk installation prefix" FORCE)
 endif()

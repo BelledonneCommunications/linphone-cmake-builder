@@ -65,8 +65,13 @@ lcb_add_strict_dependent_option("MPEG4" "MPEG4 video encoding/decoding support (
 lcb_add_strict_dependent_option("OpenH264" "H.264 video encoding/decoding support with the openh264 library (require license)." OFF "ENABLE_VIDEO" OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
 lcb_add_dependent_option("VPX" "VPX (VP8) video encoding/decoding support." "${DEFAULT_VALUE_ENABLE_VPX}" "ENABLE_VIDEO" OFF)
 lcb_add_strict_dependent_option("X264" "H.264 video encoding support with the x264 library (require license)." OFF "ENABLE_VIDEO;ENABLE_GPL_THIRD_PARTIES;ENABLE_UNMAINTAINED" OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
-lcb_add_option("AAudio" "AAudio Android sound card for Android 8+." "${DEFAULT_VALUE_ENABLE_AAUDIO}")
-lcb_add_option("Camera2" "Android capture filter using Camera2 API for Android 8+" "${DEFAULT_VALUE_ENABLE_CAMERA2}")
+
+set(CMAKE_ABOVE_16 False)
+if (CMAKE_ANDROID_NDK_VERSION VERSION_GREATER 16)
+	set(CMAKE_ABOVE_16 True)
+endif()
+lcb_add_dependent_option("AAudio" "AAudio Android sound card for Android 8+." "${DEFAULT_VALUE_ENABLE_AAUDIO}" "CMAKE_ABOVE_16" OFF)
+lcb_add_dependent_option("Camera2" "Android capture filter using Camera2 API for Android 8+" "${DEFAULT_VALUE_ENABLE_CAMERA2}" "ENABLE_VIDEO" OFF)
 
 # Other options
 lcb_add_option("PCAP" "PCAP support." "${DEFAULT_VALUE_ENABLE_PCAP}")

@@ -104,7 +104,7 @@ lcb_builder_linking_type(mswebrtc "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 lcb_builder_linking_type(msx264 "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 # opus
-lcb_builder_cmake_options(opus "-DENABLE_FIXED_POINT=YES")
+lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
 
 # ortp
 lcb_builder_cmake_options(ortp "-DENABLE_DOC=NO")

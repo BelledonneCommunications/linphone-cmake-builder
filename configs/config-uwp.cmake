@@ -50,6 +50,4 @@ lcb_builder_cmake_options(linphone "-DENABLE_SOCI=NO")
 lcb_builder_cmake_options(ms2 "-DENABLE_RELATIVE_PREFIX=YES")
 
 # opus
-lcb_builder_cmake_options(opus "-DENABLE_ASM=NO")
-lcb_builder_cmake_options(opus "-DENABLE_FIXED_POINT=YES")
-lcb_builder_linking_type(opus "-DENABLE_SHARED=NO" "-DENABLE_STATIC=YES")
+lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")

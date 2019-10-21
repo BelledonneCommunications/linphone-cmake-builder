@@ -168,7 +168,7 @@ else()
 	if(USE_TARGET)
 		lcb_cross_compilation_options(
 			"--prefix=${CMAKE_INSTALL_PREFIX}"
-			"--libdir=${CMAKE_INSTALL_PREFIX}/lib"
+			"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 			"--target=${VPX_TARGET}"
 		)
 	else()

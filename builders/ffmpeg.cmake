@@ -158,8 +158,12 @@ else()
 		lcb_configure_options("--cc=$CC")
 	endif()
 
+	include(GNUInstallDirs)
+
 	lcb_cross_compilation_options(
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
+		"--libdir=${CMAKE_INSTALL_FULL_LIBDIR}"
+		"--shlibdir=${CMAKE_INSTALL_FULL_LIBDIR}"
 		"--arch=${FFMPEG_ARCH}"
 		"--target-os=${FFMPEG_TARGET_OS}"
 	)

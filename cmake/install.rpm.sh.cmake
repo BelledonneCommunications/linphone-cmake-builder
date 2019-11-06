@@ -29,7 +29,7 @@ export RPM_TOPDIR="@LINPHONE_BUILDER_WORK_DIR@/rpmbuild"
 if [ "@PLATFORM@" = "Debian" ]; then
 	DEBS_TOPDIR="$RPM_TOPDIR/DEBS"
 	mkdir -p "$DEBS_TOPDIR" && cd "$DEBS_TOPDIR"
-	find "$RPM_TOPDIR/RPMS" -iname "*@LINPHONE_BUILDER_RPMBUILD_NAME@*.rpm" -exec fakeroot alien -d {} +
+	find "$RPM_TOPDIR/RPMS" -iname "*@LINPHONE_BUILDER_RPMBUILD_NAME@*.rpm" -exec fakeroot alien -d --keep-version {} +
 	find "$DEBS_TOPDIR" -iname "*@LINPHONE_BUILDER_RPMBUILD_NAME@*.deb" -exec sudo dpkg -i {} +
 else
 	find "$RPM_TOPDIR/RPMS" -iname "*@LINPHONE_BUILDER_RPMBUILD_NAME@*.rpm" -exec sudo rpm -Uvh --replacefiles --replacepkgs --oldpackage  {} +

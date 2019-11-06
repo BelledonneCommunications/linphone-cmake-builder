@@ -51,6 +51,7 @@ if(NOT ANDROID_NATIVE_API_LEVEL)
 endif()
 
 set(ANDROID_CPP_FEATURES "rtti exceptions")
+
 set(ANDROID_STL "c++_shared")
 
 include("${CMAKE_ANDROID_NDK}/build/cmake/android.toolchain.cmake")
@@ -72,7 +73,3 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Os -DNDEBUG")
 set(CMAKE_C_FLAGS_RELEASE "-Os -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Os -g -DNDEBUG")
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "-Os -g -DNDEBUG")
-
-set(CMAKE_C_FLAGS_ASAN "-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
-set(CMAKE_CXX_FLAGS_ASAN "-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
-set(CMAKE_SHARED_LINKER_FLAGS_ASAN "-fsanitize=address")

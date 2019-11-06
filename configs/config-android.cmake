@@ -145,7 +145,16 @@ if(ENABLE_SANITIZER)
 	file(GLOB_RECURSE _clang_rt_library "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}/*/clang/*/lib/linux/libclang_rt.asan-${SANITIZER_ARCH}-android.so")
 	if(_clang_rt_library)
 		list(GET _clang_rt_library 0 _clang_rt_library)
-		file(COPY ${_clang_rt_library} DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
+		file(COPY ${_clang_rt_library} DESTINATION "${CMAKE_INSTALL_PREFIX}/lib") 	
+  	
+  	#we search for liblog.so in the folder of the ndk, then if it is found we add it to the linker flags
+		find_library(log_library log PATHS "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}/sysroot/")
+		if(NOT DEFINED log_library-NOTFOUND)
+		  set(CMAKE_EXE_LINKER_FLAGS "${_clang_rt_library} ${log_library}")
+		else()
+		  message(fatal_error "LOG LIBRARY NOT FOUND. It is mandatory for the Android Sanitizer")
+		endif()
+		  
 		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/configs/android/wrap.sh.cmake" "${CMAKE_INSTALL_PREFIX}/lib/wrap.sh" @ONLY)
 	endif()
 endif()

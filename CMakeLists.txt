@@ -74,7 +74,6 @@ else()
 		linphone_builder_get_autotools_configuration()
 	endif()
 
-
 	# Add external projects
 	linphone_builder_add_projects()
 	linphone_builder_add_dummy_libraries_generation()
@@ -84,7 +83,6 @@ else()
 	if(LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS)
 		include(${LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS})
 	endif()
-
 
 	# Give a feature summary
 	feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features:")

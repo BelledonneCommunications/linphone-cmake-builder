@@ -142,18 +142,27 @@ if(ENABLE_SANITIZER)
 	if(SANITIZER_ARCH MATCHES "^arm")
 		set(SANITIZER_ARCH "arm")
 	endif()
+		
 	file(GLOB_RECURSE _clang_rt_library "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}/*/clang/*/lib/linux/libclang_rt.asan-${SANITIZER_ARCH}-android.so")
 	if(_clang_rt_library)
 		list(GET _clang_rt_library 0 _clang_rt_library)
-		file(COPY ${_clang_rt_library} DESTINATION "${CMAKE_INSTALL_PREFIX}/lib") 	
-  	
+		file(COPY ${_clang_rt_library} DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
+		
+    #DO NOT REMOVE NOW  !!!
+    # It SEEMS to be useless as the sanitizer builds without these lines on ndk 20 and sdk 28.
+    # Need to check with others versions.
+
   	#we search for liblog.so in the folder of the ndk, then if it is found we add it to the linker flags
-		find_library(log_library log PATHS "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}/sysroot/")
-		if(NOT DEFINED log_library-NOTFOUND)
-		  set(CMAKE_EXE_LINKER_FLAGS "${_clang_rt_library} ${log_library}")
-		else()
-		  message(fatal_error "LOG LIBRARY NOT FOUND. It is mandatory for the Android Sanitizer")
-		endif()
+		#find_library(log_library log PATHS "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}/sysroot/")
+		#if(NOT DEFINED log_library-NOTFOUND)
+		  #set(CMAKE_EXE_LINKER_FLAGS "${_clang_rt_library} ${log_library} ${CMAKE_EXE_LINKER_FLAGS}")
+		 # message("if find library config android")
+ 		 # message("if find library config android CMAKE_EXE_LINKER_FLAGS = ${CMAKE_EXE_LINKER_FLAGS}")
+		 # message("if find library config android _clang_rt_library = ${_clang_rt_library}")
+ 		 # message("if find library config android log_library = ${log_library}")
+		#else()
+		#  message(fatal_error "LOG LIBRARY NOT FOUND. It is mandatory for the Android Sanitizer")
+		#endif()
 		  
 		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/configs/android/wrap.sh.cmake" "${CMAKE_INSTALL_PREFIX}/lib/wrap.sh" @ONLY)
 	endif()

@@ -337,7 +337,7 @@ macro(linphone_builder_apply_flags)
 	    linphone_builder_apply_flags_for_build_type(${CONFIG_NAME_UPPER})
   	ENDFOREACH(CONFIG_NAME)
 	else()
-	  linphone_builder_apply_flags_for_build_type(${BUILD_TYPE})
+	  linphone_builder_apply_flags_for_build_type(${CMAKE_BUILD_TYPE})
 	endif()
 endmacro()
 

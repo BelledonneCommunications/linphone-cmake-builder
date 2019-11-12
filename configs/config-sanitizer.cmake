@@ -7,6 +7,10 @@
 #Old behaviour does not
 #cmake_policy(SET CMP0056 NEW)
 
+if(NOT CMAKE_C_COMPILER_ID MATCHES "Clang" OR NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  message(AUTHOR_WARNING "The sanitizer isn't currently supported for other compilers than Clang")
+endif()
+
 set(sanitize_flags "-fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls")
 set(sanitize_linker_flags "-fsanitize=address,undefined")
 

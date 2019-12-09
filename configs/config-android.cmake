@@ -107,7 +107,11 @@ if(NOT ENABLE_EMBEDDED_OPENH264)
 endif()
 
 # opus
-lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
+lcb_builder_cmake_options(opus "-DENABLE_FIXED_POINT=YES")
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv5te")
+	lcb_builder_cmake_options(opus "-DENABLE_ASM=NO")
+	lcb_builder_cmake_options(opus "-DENABLE_INTRINSICS=NO")
+endif()
 
 # ortp
 lcb_builder_cmake_options(ortp "-DENABLE_DOC=NO")

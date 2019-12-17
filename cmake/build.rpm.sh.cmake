@@ -13,6 +13,7 @@ export RPM_TOPDIR="@LINPHONE_BUILDER_WORK_DIR@/rpmbuild"
 
 rpmbuild -ta --clean --rmsource --define "_topdir $RPM_TOPDIR" \
 	--define='_localstatedir /var/opt/belledonne-communications' \
+	--define='debian_platform @DEBIAN_PLATFORM@' \
         @LINPHONE_BUILDER_RPMBUILD_GLOBAL_OPTIONS@ \
         @LINPHONE_BUILDER_RPMBUILD_OPTIONS@ \
 	--rmspec @ep_build@/*.tar.gz \

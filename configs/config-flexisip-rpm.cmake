@@ -104,7 +104,7 @@ lcb_builder_cmake_options(soci
 )
 
 # prepare the RPMBUILD options that we need to pass
-set(LINPHONE_BUILDER_RPMBUILD_GLOBAL_OPTIONS "--define '_mandir %{_prefix}'")
+set(LINPHONE_BUILDER_RPMBUILD_GLOBAL_OPTIONS "")
 if(PLATFORM STREQUAL "Debian")
 	# dependencies cannot be checked by rpmbuild in debian
 	set(LINPHONE_BUILDER_RPMBUILD_GLOBAL_OPTIONS "${LINPHONE_BUILDER_RPMBUILD_GLOBAL_OPTIONS} --nodeps")

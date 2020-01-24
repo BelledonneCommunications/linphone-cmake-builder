@@ -143,7 +143,6 @@ foreach(dir
     	INFODIR
     	LOCALEDIR
     	MANDIR
-    	DOCDIR
 )
 	list(APPEND LINPHONE_BUILDER_EP_VARS
 		CMAKE_INSTALL_${dir}:PATH

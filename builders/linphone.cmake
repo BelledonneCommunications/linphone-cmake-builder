@@ -20,10 +20,10 @@
 #
 ############################################################################
 
-lcb_git_repository("https://gitlab.linphone.org/BC/public/linphone.git")
+lcb_git_repository("https://gitlab.linphone.org/BC/public/liblinphone.git")
 lcb_git_tag_latest("master")
-lcb_git_tag("3.10.0")
-lcb_external_source_paths("linphone")
+lcb_git_tag("4.4.0-alpha")
+lcb_external_source_paths("liblinphone")
 lcb_groupable(YES)
 lcb_sanitizable(YES)
 lcb_package_source(YES)

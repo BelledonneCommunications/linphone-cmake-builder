@@ -81,13 +81,13 @@ else()
 			string(REPLACE "\\;" ";" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")	#Remove last \ before end dir
 			string(REPLACE " ;" ";" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")	#Remove space before end dir
 			string(REPLACE "\\" "/" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")	#Change \ into /
+			string(REPLACE "\n" "" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")
 			foreach(P ${VPX_ENV_PATH_LIST})
 				string(REGEX REPLACE "^([a-zA-Z]):(.*)$" "/\\1\\2" P ${P})
-				string(REPLACE "\n" "" P ${P})
-				set(VPX_ENV_PATH "${VPX_ENV_PATH}:'${P}'")						#Embed each path in quote
+				set(VPX_ENV_PATH "${VPX_ENV_PATH}:${P}")
 			endforeach()
-			set(VPX_ENV_PATH "${VPX_ENV_PATH}:${AUTOTOOLS_PROGRAM_PATH}")
 			string(SUBSTRING ${VPX_ENV_PATH} 1 -1 VPX_ENV_PATH)
+			set(VPX_ENV_PATH "${VPX_ENV_PATH}:${AUTOTOOLS_PROGRAM_PATH}")
 			string(STRIP ${VPX_ENV_PATH} VPX_ENV_PATH)
 			file(READ "${CMAKE_CURRENT_BINARY_DIR}/windowsenv_include.txt" VPX_ENV_INCLUDE)
 			string(REPLACE "\n" "" VPX_ENV_INCLUDE "${VPX_ENV_INCLUDE}")

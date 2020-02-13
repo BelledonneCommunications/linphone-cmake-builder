@@ -28,4 +28,4 @@ else()
 	project(autotools LANGUAGES C CXX)
 endif()
 
-configure_file(${CMAKE_SOURCE_DIR}/Autotools.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Autotools.cmake @ONLY)
+configure_file(${PROJECT_SOURCE_DIR}/Autotools.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Autotools.cmake @ONLY)

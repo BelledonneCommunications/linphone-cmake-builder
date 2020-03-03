@@ -101,9 +101,10 @@ lcb_builder_cmake_options(ms2 "-DENABLE_DOC=NO")
 lcb_builder_cmake_options(ms2 "-DENABLE_UNIT_TESTS=NO")
 lcb_builder_linking_type(ms2 "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
 
-# openh264
+# openh264 shared library build disabled for Android as it no longuer work on armv7 with ndk > 19 (see openh274 submodule for details)
 if(NOT ENABLE_EMBEDDED_OPENH264)
-	lcb_builder_linking_type(openh264 "-shared")
+	#lcb_builder_linking_type(openh264 "-shared")
+	message(WARNING "Only static build is available for Android") 
 endif()
 
 # opus

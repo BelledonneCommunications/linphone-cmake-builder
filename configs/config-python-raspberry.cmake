@@ -42,7 +42,7 @@ lcb_builder_cross_compilation_options(ffmpeg
 )
 
 # opus
-lcb_builder_cmake_options(opus "-DENABLE_FIXED_POINT=YES")
+lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
 
 # speex
 lcb_builder_cmake_options(speex "-DENABLE_FLOAT_API=NO")

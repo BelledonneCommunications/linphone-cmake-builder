@@ -125,10 +125,12 @@ if(ENABLE_STATIC_ONLY)
 
 	# polarssl
 	lcb_builder_linking_type(polarssl "-DUSE_SHARED_POLARSSL_LIBRARY=0")
-endif()
-if(NOT ENABLE_STATIC_ONLY AND NOT ENABLE_EMBEDDED_OPENH264)
-	# openh264
-	lcb_builder_linking_type(openh264 "-shared")
+else()
+	if (NOT ENABLE_EMBEDDED_OPENH264)
+		# openh264
+		lcb_builder_linking_type(openh264 "-shared")
+	endif()
+	lcb_builder_linking_type(opus "-DBUILD_SHARED_LIBS=YES")
 endif()
 
 # voamrwbenc

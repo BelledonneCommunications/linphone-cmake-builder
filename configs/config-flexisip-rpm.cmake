@@ -72,6 +72,10 @@ set(DEFAULT_VALUE_ENABLE_UNIT_TESTS OFF)
 set(ENABLE_SRTP NO CACHE BOOL "" FORCE) # Mainly to avoid issues with old libsrtp (sha1_update conflict with polarssl)
 set(DEFAULT_VALUE_ENABLE_ADVANCED_IM ON)
 set(DEFAULT_VALUE_ENABLE_DB_STORAGE ON)
+set(DEFAULT_VALUE_ENABLE_PROTOBUF ON)
+set(DEFAULT_VALUE_ENABLE_JWE_AUTH_PLUGIN ON)
+set(DEFAULT_VAULE_ENABLE_EXTERNAL_AUTH_PLUGIN ON)
+
 
 set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
@@ -101,6 +105,11 @@ lcb_builder_cmake_options(soci
 	"-DWITH_MYSQL=ON"
 	"-DWITH_POSTGRESQL=ON"
 	"-DSOCI_SHARED=ON"
+)
+
+lcb_builder_cmake_options(ms2
+	"-DENABLE_OPUS=ON"
+	"-DENABLE_SPEEX=ON"
 )
 
 # prepare the RPMBUILD options that we need to pass

@@ -9,6 +9,7 @@
 
 :vs15
 :: No more env variable without load VsDevCmd script
+@if not "%DEVENVDIR%" == "" goto printenv
 @call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsDevCmd.bat"
 @goto printenv
 
@@ -33,7 +34,6 @@
 @goto printenv
 
 :printenv
-
 @echo %PATH% > windowsenv_path.txt
 @echo %INCLUDE% > windowsenv_include.txt
 @echo %LIB% > windowsenv_lib.txt

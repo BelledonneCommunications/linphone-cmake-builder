@@ -31,6 +31,10 @@ endif ()
 set(ENABLE_MICROSOFT_STORE_APP YES)
 set(MICROSOFT_STORE_LINK_PATHS "\$(WindowsSDK_LibraryPath_x86);\$(NETFXKitsDir)Lib\\um\\x86;\$(VC_LibraryPath_VC_x86_store);\$(VC_ReferencesPath_ATL_x86);\$(VC_LibraryPath_VC_x86);\$(VC_LibraryPath_x86);\$(VC_VS_LibraryPath_VC_VS_x86);\$(LibraryPath)")
 
+#Using CMAKE_C<>_STANDARD_LIBRARIES in cmake/CMakeFile.txt (LINPHONE_BUILDER_EP_VARS) can lead to disturb Android build. These set below may be rewrite when the disturb will be fixed.
+set(CMAKE_C_STANDARD_LIBRARIES "WindowsApp.lib ${CMAKE_C_STANDARD_LIBRARIES}")
+set(CMAKE_CXX_STANDARD_LIBRARIES "WindowsApp.lib ${CMAKE_CXX_STANDARD_LIBRARIES}")
+
 if(NOT LINPHONE_ADDLIBRARY_DEFINED)
 	set(LINPHONE_ADDLIBRARY_DEFINED 1)#Used to avoid infinite recursion when add_library is already overloaded
 	function(add_library name mode)

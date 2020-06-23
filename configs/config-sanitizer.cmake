@@ -18,8 +18,6 @@ if (LINPHONESDK_PLATFORM STREQUAL "Android" OR DEFINED ANDROID)
   #For some (unknow) reason, when -llog is passed in the linker flags, cmake seems
   #to reset the linker flags. That's why it is actualy passed in compiler flags with -Wl
 	set(sanitize_flags "${sanitize_flags} -Wl,-llog")	
-else()
-	set(sanitize_linker_flags "${sanitize_linker_flags} -lasan -lubsan")		
 endif()
 
 # these link options are prepended by a semicolon if the following quotes are missing.

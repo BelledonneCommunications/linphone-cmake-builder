@@ -29,7 +29,7 @@ if(POLICY CMP0081)
 	cmake_policy(SET CMP0081 OLD)#Needed to set LINK_DIRECTORIES with Visual Studio variables
 endif ()
 set(ENABLE_MICROSOFT_STORE_APP YES)
-set(MICROSOFT_STORE_LINK_PATHS "\$(WindowsSDK_LibraryPath_x86);\$(NETFXKitsDir)Lib\\um\\x86;\$(VC_LibraryPath_VC_x86_store);\$(VC_ReferencesPath_ATL_x86);\$(VC_LibraryPath_VC_x86);\$(VC_LibraryPath_x86);\$(VC_VS_LibraryPath_VC_VS_x86);\$(LibraryPath)")
+set(MICROSOFT_STORE_LINK_PATHS "\$(WindowsSDK_LibraryPath_x86);\$(NETFXKitsDir)Lib\\um\\x86;\$(VC_LibraryPath_VC_x86_store);\$(VC_ReferencesPath_ATL_x86);\$(VC_LibraryPath_VC_x86);\$(VC_LibraryPath_x86);\$(VC_VS_LibraryPath_VC_VS_x86);\$(LibraryPath);\$(VC_LibraryPath_VC_x86_store)\\references")
 
 if(NOT LINPHONE_ADDLIBRARY_DEFINED)
 	set(LINPHONE_ADDLIBRARY_DEFINED 1)#Used to avoid infinite recursion when add_library is already overloaded

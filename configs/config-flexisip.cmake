@@ -49,6 +49,11 @@ set(DEFAULT_VALUE_ENABLE_OPUS ON)
 set(LINPHONE_BUILDER_HOST "")
 set(USE_SYSTEM_XSD YES)
 
+# Set sanitizer flags
+if (ENABLE_SANITIZER)
+	include(configs/config-sanitizer.cmake)
+endif()
+
 # Adjust PKG_CONFIG_PATH to include install directory
 if(UNIX)
 	set(LINPHONE_BUILDER_PKG_CONFIG_PATH "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}:/usr/lib/pkgconfig/:/usr/lib/x86_64-linux-gnu/pkgconfig/:/usr/share/pkgconfig/:/usr/local/lib/pkgconfig/:/opt/local/lib/pkgconfig/")

@@ -27,3 +27,4 @@ lcb_may_be_found_on_system(YES)
 
 lcb_linking_type("-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")
 lcb_extra_cflags("-fPIC")
+lcb_extra_cxxflags("-fPIC")

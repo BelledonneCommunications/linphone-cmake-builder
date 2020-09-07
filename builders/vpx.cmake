@@ -53,6 +53,7 @@ else()
 		"--enable-vp8"
 		"--disable-vp9"
 		"--enable-libs"
+		"--enable-libyuv"
 		"--disable-install-docs"
 		"--disable-debug-libs"
 		"--disable-examples"
@@ -78,15 +79,6 @@ else()
 			)
 			file(READ "${CMAKE_CURRENT_BINARY_DIR}/windowsenv_path.txt" VPX_ENV_PATH_LIST)
 			set(VPX_ENV_PATH "")
-			string(REPLACE "\\;" ";" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")	#Remove last \ before end dir
-			string(REPLACE " ;" ";" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")	#Remove space before end dir
-			string(REPLACE "\\" "/" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")	#Change \ into /
-			string(REPLACE "\n" "" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")
-			foreach(P ${VPX_ENV_PATH_LIST})
-				string(REGEX REPLACE "^([a-zA-Z]):(.*)$" "/\\1\\2" P ${P})
-				set(VPX_ENV_PATH "${VPX_ENV_PATH}:${P}")
-			endforeach()
-			string(SUBSTRING ${VPX_ENV_PATH} 1 -1 VPX_ENV_PATH)
 			set(VPX_ENV_PATH "${VPX_ENV_PATH}:${AUTOTOOLS_PROGRAM_PATH}")
 			string(STRIP ${VPX_ENV_PATH} VPX_ENV_PATH)
 			file(READ "${CMAKE_CURRENT_BINARY_DIR}/windowsenv_include.txt" VPX_ENV_INCLUDE)

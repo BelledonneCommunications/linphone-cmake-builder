@@ -53,7 +53,6 @@ else()
 		"--enable-vp8"
 		"--disable-vp9"
 		"--enable-libs"
-		"--enable-libyuv"
 		"--disable-install-docs"
 		"--disable-debug-libs"
 		"--disable-examples"

@@ -21,9 +21,9 @@
 
 
 lcb_git_repository("https://gitlab.linphone.org/BC/public/external/libyuv.git")
-#lcb_git_tag("f6b57f3521404f587f23d79ecd1b6db0dab6a221")
 lcb_external_source_paths("externals/libyuv" "external/libyuv")
 lcb_may_be_found_on_system(YES)
 
 lcb_linking_type("-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")
 lcb_extra_cflags("-fPIC")
+lcb_extra_cxxflags("-fPIC")

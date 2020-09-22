@@ -66,12 +66,16 @@ else()
 		"--disable-vaapi"
 		"--disable-vdpau"
 		"--ar=\$AR"
-		"--cc=\$CC"
 		"--nm=\$NM"
 		"--extra-cflags=\$CFLAGS -w"
 		"--extra-cxxflags=\$CXXFLAGS"
 		"--extra-ldflags=\$LDFLAGS"
 	)
+	if(NOT WIN32)
+		lcb_configure_options("--cc=\$CC")
+	else()
+		lcb_configure_options("--cc=gcc")
+	endif()
 	if(ENABLE_H263 OR IOS)
 		lcb_configure_options(
 			"--enable-decoder=h263"
@@ -157,16 +161,24 @@ else()
 		endif()
 		lcb_configure_options("--cc=$CC")
 	endif()
-
 	include(GNUInstallDirs)
-
-	lcb_cross_compilation_options(
-		"--prefix=${CMAKE_INSTALL_PREFIX}"
-		"--libdir=${CMAKE_INSTALL_FULL_LIBDIR}"
-		"--shlibdir=${CMAKE_INSTALL_FULL_LIBDIR}"
-		"--arch=${FFMPEG_ARCH}"
-		"--target-os=${FFMPEG_TARGET_OS}"
-	)
+	if(WIN32)
+		lcb_cross_compilation_options(
+			"--prefix=${CMAKE_INSTALL_PREFIX}"
+			"--libdir=${CMAKE_INSTALL_FULL_LIBDIR}"
+			"--shlibdir=${CMAKE_INSTALL_FULL_BINLIBDIR}"
+			"--arch=${FFMPEG_ARCH}"
+			"--target-os=${FFMPEG_TARGET_OS}"
+		)
+	else()
+		lcb_cross_compilation_options(
+			"--prefix=${CMAKE_INSTALL_PREFIX}"
+			"--libdir=${CMAKE_INSTALL_FULL_LIBDIR}"
+			"--shlibdir=${CMAKE_INSTALL_FULL_LIBDIR}"
+			"--arch=${FFMPEG_ARCH}"
+			"--target-os=${FFMPEG_TARGET_OS}"
+		)
+	endif()
 
 	if(ENABLE_X264)
 		lcb_configure_options("--enable-decoder=h264")

@@ -5,7 +5,8 @@
 @if "%1" == "11" goto vs11
 @if "%1" == "10" goto vs10
 @if "%1" == "9" goto vs9
-@goto end
+
+@goto printenv
 
 :vs15
 :: No more env variable without load VsDevCmd script

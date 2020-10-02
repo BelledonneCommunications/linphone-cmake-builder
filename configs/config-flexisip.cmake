@@ -47,7 +47,6 @@ set(DEFAULT_VALUE_ENABLE_OPUS ON)
 
 # Global configuration
 set(LINPHONE_BUILDER_HOST "")
-set(USE_SYSTEM_XSD YES)
 
 # Set sanitizer flags
 if (ENABLE_SANITIZER)

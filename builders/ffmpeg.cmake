@@ -166,7 +166,7 @@ else()
 		lcb_cross_compilation_options(
 			"--prefix=${CMAKE_INSTALL_PREFIX}"
 			"--libdir=${CMAKE_INSTALL_FULL_LIBDIR}"
-			"--shlibdir=${CMAKE_INSTALL_FULL_BINLIBDIR}"
+			"--shlibdir=${CMAKE_INSTALL_FULL_BINDIR}"
 			"--arch=${FFMPEG_ARCH}"
 			"--target-os=${FFMPEG_TARGET_OS}"
 		)

@@ -25,4 +25,5 @@
 lcb_add_option("Tunnel" "Secure tunnel for SIP/RTP (require license)." "${DEFAULT_VALUE_ENABLE_TUNNEL}")
 lcb_add_option("RTP Map always in SDP" "Always include rtpmap in SDP." OFF)
 lcb_add_option("mDNS" "Multicast DNS support" "${DEFAULT_VALUE_ENABLE_MDNS}")
+lcb_add_dependent_option("DNS_SERVICE" "Enable Apple DNS Service. Available on Mac and iOS. Incompatible with ENABLE_MDNS." "${DEFAULT_VALUE_ENABLE_DNS_SERVICE}" "APPLE" OFF)
 

@@ -63,6 +63,7 @@ lcb_builder_cmake_options(bellesip "-DENABLE_TESTS=NO")
 lcb_builder_cmake_options(belr "-DENABLE_TESTS=NO")
 
 # bzrtp
+lcb_builder_cmake_options(bzrtp "-DENABLE_DOC=NO")
 lcb_builder_cmake_options(bzrtp "-DENABLE_TESTS=NO")
 
 # codec2
@@ -72,6 +73,7 @@ lcb_builder_extra_cflags(codec2 "-ffast-math")
 lcb_builder_linking_type(ffmpeg "--enable-static" "--disable-shared" "--enable-pic")
 
 # lime
+lcb_builder_cmake_options(lime "-DENABLE_DOC=NO")
 lcb_builder_cmake_options(lime "-DENABLE_UNIT_TESTS=NO" "-DENABLE_JNI=YES")
 
 # linphone

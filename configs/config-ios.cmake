@@ -64,10 +64,14 @@ lcb_builder_linking_type(belcard "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 # belr
 lcb_builder_linking_type(belr "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
+# bzrtp
+lcb_builder_cmake_options(bzrtp "-DENABLE_DOC=NO")
+
 # ffmpeg
 lcb_builder_linking_type(ffmpeg "--enable-static" "--disable-shared" "--enable-pic")
 
 # lime
+lcb_builder_cmake_options(lime "-DENABLE_DOC=NO")
 lcb_builder_linking_type(lime "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 # linphone

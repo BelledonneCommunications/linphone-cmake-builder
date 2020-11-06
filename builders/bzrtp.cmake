@@ -46,4 +46,7 @@ if(MINGW)
 	lcb_extra_cppflags("-D__USE_MINGW_ANSI_STDIO")
 endif()
 
-lcb_cmake_options("-DENABLE_TESTS=${ENABLE_UNIT_TESTS}")
+lcb_cmake_options(
+	"-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
+	"-DENABLE_DOC=${ENABLE_DOC}"
+)

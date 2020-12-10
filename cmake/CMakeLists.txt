@@ -131,7 +131,6 @@ list(APPEND LINPHONE_BUILDER_EP_VARS
 	MSVC_C_ARCHITECTURE_ID:STRING
 	MSVC_CXX_ARCHITECTURE_ID:STRING
 	MSVC_VERSION:STRING
-	_WIN32_WINNT:STRING
 )
 if(WIN32 AND ENABLE_MICROSOFT_STORE_APP)#Passing these varianles to External projects can disturb other platforms
 	list(APPEND LINPHONE_BUILDER_EP_VARS
@@ -887,7 +886,6 @@ macro(linphone_builder_add_external_project PROJNAME)
 	endif()
 
 	linphone_builder_filter_out_inexistent_dependencies(${PROJNAME})
-	message("TOTOPROJ : ${PROJNAME}")
 	ExternalProject_Add(EP_${PROJNAME}
 		DEPENDS ${EP_${PROJNAME}_DEPENDENCIES}
 		BINARY_DIR "${ep_build}"

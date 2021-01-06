@@ -44,7 +44,6 @@ lcb_builder_cmake_options(linphone "-DENABLE_DAEMON=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_NOTIFY=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_TUTORIALS=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_UPNP=NO")
-lcb_builder_cmake_options(linphone "-DENABLE_SOCI=NO")
 
 # ms2
 lcb_builder_cmake_options(ms2 "-DENABLE_RELATIVE_PREFIX=YES")
@@ -54,6 +53,6 @@ lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
 
 lcb_builder_linking_type(mbedtls "-DUSE_STATIC_MBEDTLS_LIBRARY=NO" "-DUSE_SHARED_MBEDTLS_LIBRARY=YES")
 add_definitions("-DWINDOWS_UNIVERSAL=1 -D_WIN32_WINNT=0x0A00")
-lcb_builder_cmake_options(soci "-DWINDOWS_UNIVERSAL=1")
-lcb_builder_linking_type(soci "-DWINDOWS_UNIVERSAL=1")
-lcb_builder_extra_cflags(soci "-DWINDOWS_UNIVERSAL=1")
+
+# soci
+lcb_builder_linking_type(soci "-DSOCI_STATIC=NO" "-DSOCI_SHARED=YES")

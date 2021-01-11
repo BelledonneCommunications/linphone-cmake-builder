@@ -23,6 +23,7 @@
 include(GNUInstallDirs)
 include(ExternalProject)
 include(${CMAKE_CURRENT_LIST_DIR}/LinphoneOptions.cmake)
+include(FetchContent)
 
 set(ep_base "${LINPHONE_BUILDER_WORK_DIR}/${CONFIG_NAME}")
 set_property(DIRECTORY PROPERTY EP_BASE ${ep_base})
@@ -124,6 +125,8 @@ list(APPEND LINPHONE_BUILDER_EP_VARS
 	CMAKE_SKIP_INSTALL_RPATH:BOOL
 	CMAKE_SKIP_RPATH:BOOL
 	CMAKE_SKIP_BUILD_RPATH:BOOL
+	CMAKE_SYSTEM_VERSION:STRING
+	CMAKE_SYSTEM_PROCESSOR:STRING
 	CMAKE_VERBOSE_MAKEFILE:BOOL
 	LINPHONE_IOS_DEPLOYMENT_TARGET:STRING
 	MSVC_C_ARCHITECTURE_ID:STRING
@@ -884,7 +887,6 @@ macro(linphone_builder_add_external_project PROJNAME)
 	endif()
 
 	linphone_builder_filter_out_inexistent_dependencies(${PROJNAME})
-
 	ExternalProject_Add(EP_${PROJNAME}
 		DEPENDS ${EP_${PROJNAME}_DEPENDENCIES}
 		BINARY_DIR "${ep_build}"

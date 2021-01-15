@@ -34,12 +34,6 @@ set(MICROSOFT_STORE_LINK_PATHS "\$(WindowsSDK_LibraryPath_x86);\$(NETFXKitsDir)L
 
 set(_WIN32_WINNT 0x0A00)
 add_definitions("-D_WIN32_WINNT=0x0A00")
-if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
-    set(CMAKE_SYSTEM_PROCESSOR "x86")
-endif()
-
-
-
 
 if(NOT LINPHONE_ADDLIBRARY_DEFINED)
 	set(LINPHONE_ADDLIBRARY_DEFINED 1)#Used to avoid infinite recursion when add_library is already overloaded

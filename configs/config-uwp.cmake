@@ -33,6 +33,8 @@ set(LINPHONE_BUILDER_CPPFLAGS "-D_ALLOW_KEYWORD_MACROS -D_CRT_SECURE_NO_WARNINGS
 # Include builders
 include(builders/CMakeLists.txt)
 
+#decaf
+lcb_builder_cmake_options(decaf "-DENABLE_STRICT=NO")
 
 # linphone
 lcb_builder_cmake_options(linphone "-DENABLE_CSHARP_WRAPPER=YES")

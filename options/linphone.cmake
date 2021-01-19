@@ -37,6 +37,7 @@ lcb_add_option("VCARD" "Enable vCard 4 support in Linphone and Liblinphone." "${
 lcb_add_option("Assets" "Enable packaging of assets (ringtones) when building the SDK." "${DEFAULT_VALUE_ENABLE_ASSETS}")
 lcb_add_option("Advanced IM" "Enable advanced instant messaging such as group chat." "${DEFAULT_VALUE_ENABLE_ADVANCED_IM}")
 lcb_add_option("DB Storage" "Enable the database storage." "${DEFAULT_VALUE_ENABLE_DB_STORAGE}")
+lcb_add_option("Qt GL" "Enable Qt OpenGL rendering support." "${DEFAULT_VALUE_ENABLE_QT_GL}")
 
 if(UNIX AND NOT IOS)
 	lcb_add_option("Relative prefix" "liblinphone and mediastreamer will look for their respective ressources relatively to their location." OFF)

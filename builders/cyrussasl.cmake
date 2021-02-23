@@ -18,34 +18,24 @@
 #
 ############################################################################
 
-set(OPENLDAP_VERSION "2_4")
-lcb_git_repository("https://git.openldap.org/openldap/openldap")
-lcb_git_tag("OPENLDAP_REL_ENG_${OPENLDAP_VERSION}")
-lcb_external_source_paths("externals/openldap" "external/openldap")
+set(CYRUSSASL_VERSION "2.1")
+lcb_git_repository("https://github.com/cyrusimap/cyrus-sasl")
+lcb_git_tag("cyrus-sasl-${CYRUSSASL_VERSION}")
+lcb_external_source_paths("externals/cyrus-sasl" "external/cyrus-sasl")
 
 lcb_may_be_found_on_system(YES)
 lcb_ignore_warnings(YES)
 
 lcb_build_method("autotools")
+lcb_use_autogen(YES)
 lcb_do_not_use_cmake_flags(YES)
 #lcb_config_h_file("vpx_config.h")
-lcb_dependencies("cyrussasl")
-lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd")
-
-#by default, Target=HOST
-if(WIN32)
-#target=pc-windows	
-elseif(APPLE)
-# target=pc-macos
-else()
-# target=pc-linux
-endif()
-#lcb_configure_options("--CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
-lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+#lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd")
+lcb_configure_options("--disable-sample")
+#lcb_configure_command_source(${CMAKE_CURRENT_SOURCE_DIR}/builders/cyrussasl/sasl_configure.sh.cmake)
 lcb_configure_options(
 	"--prefix=${CMAKE_INSTALL_PREFIX}"
 	"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
-	"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
+	"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}"
 )
-#"--target=${OPENLDAP_TARGET}"
 

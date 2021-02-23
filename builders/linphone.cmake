@@ -74,6 +74,7 @@ if(ENABLE_LIME_X3DH)
 endif()
 
 if(ENABLE_OPENLDAP)
+	lcb_dependencies("cyrussasl")
 	lcb_dependencies("openldap")
 endif()
 

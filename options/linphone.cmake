@@ -25,6 +25,7 @@
 lcb_add_option("GTK UI" "Enable the GTK user interface of Linphone." "${DEFAULT_VALUE_ENABLE_GTK_UI}")
 lcb_add_option("CXX wrapper" "Build the C++ wrapper for Liblinphone." "${DEFAULT_VALUE_ENABLE_CXX_WRAPPER}")
 lcb_add_option("CSharp wrapper" "Build the C# wrapper from Liblinphone." "${DEFAULT_VALUE_ENABLE_CSHARP_WRAPPER}")
+lcb_add_option("FlexiAPI" "Enable the FlexiAPI support in Liblinphone." "${DEFAULT_VALUE_ENABLE_FLEXIAPI}")
 lcb_add_option("Swift wrapper" "Build the Swift wrapper sources from Liblinphone." "${DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER}")
 lcb_add_option("Swift wrapper compilation" "Compile and package the swift wrapper framework. Require at least cmake 3.16.3." "${DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER_COMPILATION}")
 lcb_add_option("Jazzy doc" "Build the Swift doc from Liblinphone." "${DEFAULT_VALUE_ENABLE_JAZZY_DOC}")

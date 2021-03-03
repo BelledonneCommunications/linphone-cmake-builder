@@ -30,7 +30,7 @@ lcb_package_source(YES)
 lcb_spec_file("liblinphone.spec")
 lcb_rpmbuild_name("liblinphone")
 
-lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr")
+lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr" "jsoncpp")
 
 if(ENABLE_DB_STORAGE)
 	lcb_dependencies("soci")
@@ -80,6 +80,7 @@ lcb_cmake_options(
 	"-DENABLE_DOC=${ENABLE_DOC}"
 	"-DENABLE_TOOLS=${ENABLE_TOOLS}"
 	"-DENABLE_NLS=${ENABLE_NLS}"
+	"-DENABLE_FLEXIAPI=${ENABLE_FLEXIAPI}"
 	"-DENABLE_LIME=${ENABLE_LIME}"
 	"-DENABLE_LIME_X3DH=${ENABLE_LIME_X3DH}"
 	"-DENABLE_UNIT_TESTS=${ENABLE_UNIT_TESTS}"

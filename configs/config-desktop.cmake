@@ -59,6 +59,9 @@ if(NOT LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS)
 	set(LINPHONE_BUILDER_ADDITIONAL_CONFIG_STEPS "${CMAKE_CURRENT_LIST_DIR}/desktop/additional_steps.cmake")
 endif()
 
+#decaf
+lcb_builder_cmake_options(decaf "-DENABLE_STRICT=NO")
+
 if (MSVC)
 	lcb_builder_linking_type(mbedtls "-DUSE_STATIC_MBEDTLS_LIBRARY=YES" "-DUSE_SHARED_MBEDTLS_LIBRARY=NO")
 endif()

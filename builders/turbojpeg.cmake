@@ -25,7 +25,11 @@ lcb_git_repository("https://gitlab.linphone.org/BC/public/external/libjpeg-turbo
 lcb_external_source_paths("externals/libjpeg-turbo" "external/libjpeg-turbo")
 lcb_may_be_found_on_system(YES)
 
-lcb_linking_type("-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")
+if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
+	lcb_linking_type("-DWITH_SIMD=OFF -DENABLE_STATIC=OFF -DENABLE_SHARED=ON -DWITH_CRT_DLL=ON")
+else()
+	lcb_linking_type("-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")
+endif()
 if(NOT WIN32)
 	lcb_extra_cflags("-fPIC")
 	lcb_extra_cxxflags("-fPIC")

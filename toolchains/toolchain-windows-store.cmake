@@ -31,6 +31,9 @@ endif ()
 set(ENABLE_MICROSOFT_STORE_APP YES)
 add_definitions(-DENABLE_MICROSOFT_STORE_APP)
 set(MICROSOFT_STORE_LINK_PATHS "\$(WindowsSDK_LibraryPath_x86);\$(NETFXKitsDir)Lib\\um\\x86;\$(VC_LibraryPath_VC_x86_store);\$(VC_ReferencesPath_ATL_x86);\$(VC_LibraryPath_VC_x86);\$(VC_LibraryPath_x86);\$(VC_VS_LibraryPath_VC_VS_x86);\$(LibraryPath);\$(VC_LibraryPath_VC_x86_store)\\references")
+set(CMAKE_SYSTEM_PROCESSOR "x86")
+set(_WIN32_WINNT 0x0A00)
+add_definitions("-D_WIN32_WINNT=0x0A00")
 
 if(NOT LINPHONE_ADDLIBRARY_DEFINED)
 	set(LINPHONE_ADDLIBRARY_DEFINED 1)#Used to avoid infinite recursion when add_library is already overloaded

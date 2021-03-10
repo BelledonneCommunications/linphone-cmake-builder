@@ -27,12 +27,14 @@ set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
 
 # Global configuration
-set(LINPHONE_BUILDER_CPPFLAGS "-D_ALLOW_KEYWORD_MACROS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS")
+set(LINPHONE_BUILDER_CPPFLAGS "-D_ALLOW_KEYWORD_MACROS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_WIN32_WINNT=0x0A00")
 
 
 # Include builders
 include(builders/CMakeLists.txt)
 
+#decaf
+lcb_builder_cmake_options(decaf "-DENABLE_STRICT=NO")
 
 # linphone
 lcb_builder_cmake_options(linphone "-DENABLE_CSHARP_WRAPPER=YES")
@@ -44,10 +46,21 @@ lcb_builder_cmake_options(linphone "-DENABLE_DAEMON=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_NOTIFY=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_TUTORIALS=NO")
 lcb_builder_cmake_options(linphone "-DENABLE_UPNP=NO")
-lcb_builder_cmake_options(linphone "-DENABLE_SOCI=NO")
+
+#libjpeg-turbo
+lcb_builder_cmake_options(turbojpeg "-DWITH_SIMD=FALSE")
+lcb_builder_cmake_options(turbojpeg "-DENABLE_STATIC=NO")
+lcb_builder_cmake_options(turbojpeg "-DENABLE_SHARED=YES")
+lcb_builder_cmake_options(turbojpeg "-DWITH_CRT_DLL=TRUE")
 
 # ms2
 lcb_builder_cmake_options(ms2 "-DENABLE_RELATIVE_PREFIX=YES")
 
 # opus
 lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
+
+lcb_builder_linking_type(mbedtls "-DUSE_STATIC_MBEDTLS_LIBRARY=NO" "-DUSE_SHARED_MBEDTLS_LIBRARY=YES")
+add_definitions("-DWINDOWS_UNIVERSAL=1 -D_WIN32_WINNT=0x0A00")
+
+# soci
+lcb_builder_linking_type(soci "-DSOCI_STATIC=NO" "-DSOCI_SHARED=YES")

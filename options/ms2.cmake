@@ -52,6 +52,8 @@ lcb_add_option("Video" "Ability to capture and display video." "${DEFAULT_VALUE_
 lcb_add_option("V4L" "Ability to capture and display video using libv4l2 ." "${DEFAULT_VALUE_ENABLE_V4L}")
 lcb_add_option("jpeg"  "JPEG support with libjpeg-turbo." "${DEFAULT_VALUE_ENABLE_JPEG}")
 lcb_add_option("qrcode" "QRCode support with zxing." "${DEFAULT_VALUE_ENABLE_QRCODE}")
+lcb_add_option("Qt GL" "Enable Qt OpenGL rendering support." "${DEFAULT_VALUE_ENABLE_QT_GL}")
+
 # FFMpeg is LGPL which is an issue only for iOS applications; otherwise it can be used in proprietary software as well
 if (IOS)
 	lcb_add_strict_dependent_option("FFmpeg" "Some video processing features via FFmpeg: JPEG encoding/decoding, video scaling, H264 decoding..." "${DEFAULT_VALUE_ENABLE_FFMPEG}" "ENABLE_VIDEO" OFF "ENABLE_GPL_THIRD_PARTIES" "GPL third parties not enabled (ENABLE_GPL_THIRD_PARTIES).")
@@ -64,7 +66,6 @@ lcb_add_option("MKV" "MKV playing and recording support." "${DEFAULT_VALUE_ENABL
 lcb_add_strict_dependent_option("MPEG4" "MPEG4 video encoding/decoding support (require license)." OFF "ENABLE_FFMPEG" OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
 lcb_add_strict_dependent_option("OpenH264" "H.264 video encoding/decoding support with the openh264 library (require license)." OFF "ENABLE_VIDEO" OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
 lcb_add_dependent_option("VPX" "VPX (VP8) video encoding/decoding support." "${DEFAULT_VALUE_ENABLE_VPX}" "ENABLE_VIDEO" OFF)
-lcb_add_dependent_option("LibYUV" "Enable LibYUV support" "${DEFAULT_VALUE_ENABLE_LIBYUV}" "ENABLE_VIDEO" OFF)
 lcb_add_strict_dependent_option("X264" "H.264 video encoding support with the x264 library (require license)." OFF "ENABLE_VIDEO;ENABLE_GPL_THIRD_PARTIES;ENABLE_UNMAINTAINED" OFF "ENABLE_NON_FREE_CODECS" "non free codecs option not enabled (ENABLE_NON_FREE_CODECS).")
 
 set(CMAKE_ABOVE_16 False)

@@ -47,11 +47,10 @@ endif()
 if(ENABLE_VIDEO AND (CMAKE_SYSTEM_NAME STREQUAL "WindowsPhone"))
 	lcb_dependencies("mswp8vid")
 endif()
-if(ENABLE_VIDEO AND WIN32)
-	if(NOT CMAKE_MAKE_PROGRAM MATCHES  "ninja.exe")## remove mswinrtvid from ninja build. This module will be deprecated.
+if(ENABLE_VIDEO AND WIN32 AND ENABLE_MSWINRTVIDEO)
 		lcb_dependencies("mswinrtvid")
-	endif()
 endif()
+
 if (ENABLE_AAUDIO)
 	lcb_dependencies("msaaudio")
 endif()

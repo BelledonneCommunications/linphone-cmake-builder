@@ -92,9 +92,9 @@ set(IOS True)
 # The following variables are needed to build correctly with Xcode
 if(CMAKE_GENERATOR STREQUAL "Xcode")
 	set(CMAKE_MACOSX_BUNDLE YES)
+	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO)
 	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED NO)
 	set(CMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE "bitcode")
-	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "")
 endif()
 
 # Define the compiler

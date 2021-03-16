@@ -30,7 +30,7 @@ lcb_package_source(YES)
 lcb_spec_file("liblinphone.spec")
 lcb_rpmbuild_name("liblinphone")
 
-lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr")
+lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr" "jsoncpp")
 
 if(ENABLE_DB_STORAGE)
 	lcb_dependencies("soci")

@@ -157,10 +157,10 @@ else()
 		else()
 			set(VPX_TARGET "x86-android-gcc")
 		endif()
-		lcb_configure_options(
-			"--sdk-path=${CMAKE_ANDROID_NDK}/"
-			"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
-		)
+#		lcb_configure_options(
+#			"--sdk-path=${CMAKE_ANDROID_NDK}/"
+#			"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
+#		)
 		lcb_linking_type("--enable-static" "--disable-shared" "--enable-pic")
 	elseif(QNX)
 		set(VPX_TARGET "armv7-qnx-gcc")
@@ -185,6 +185,8 @@ else()
 			endif()
 		endif()
 		lcb_linking_type("--disable-static" "--enable-shared")
+		lcb_extra_cflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/vpx")
+		lcb_extra_asflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/vpx")
 	endif()
 
 	if(USE_TARGET)

@@ -157,10 +157,10 @@ else()
 		else()
 			set(VPX_TARGET "x86-android-gcc")
 		endif()
-#		lcb_configure_options(
-#			"--sdk-path=${CMAKE_ANDROID_NDK}/"
-#			"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
-#		)
+		lcb_configure_options(
+			"--sdk-path=${CMAKE_ANDROID_NDK}/"
+			"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
+		)
 		lcb_linking_type("--enable-static" "--disable-shared" "--enable-pic")
 		list(APPEND CROSS_COMPILATION_OPTIONS "--extra-cflags=-fPIC" "--extra-cxxflags=-fPIC")
 	elseif(QNX)

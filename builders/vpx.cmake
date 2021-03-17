@@ -192,8 +192,8 @@ else()
 		list(APPEND CROSS_COMPILATION_OPTIONS "--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 			"--target=${VPX_TARGET}"
 		)
-	lcb_cross_compilation_options(${CROSS_COMPILATION_OPTIONS})
 	endif()
+	lcb_cross_compilation_options(${CROSS_COMPILATION_OPTIONS})
 	if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS "4.0")
 		lcb_configure_options("--disable-avx512")
 	endif()

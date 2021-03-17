@@ -23,7 +23,6 @@
 include(GNUInstallDirs)
 include(ExternalProject)
 include(${CMAKE_CURRENT_LIST_DIR}/LinphoneOptions.cmake)
-include(FetchContent)
 
 set(ep_base "${LINPHONE_BUILDER_WORK_DIR}/${CONFIG_NAME}")
 set_property(DIRECTORY PROPERTY EP_BASE ${ep_base})

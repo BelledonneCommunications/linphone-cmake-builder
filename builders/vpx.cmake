@@ -28,7 +28,7 @@ if(LINPHONE_BUILDER_PREBUILT_URL)
 		set(VPX_PREBUILT 1)
 	endif()
 endif()
-
+set(CROSS_COMPILATION_OPTIONS "")
 if(VPX_PREBUILT)
 	lcb_url("${CMAKE_CURRENT_BINARY_DIR}/${VPX_FILENAME}")
 	lcb_build_method("prebuilt")
@@ -162,6 +162,7 @@ else()
 			"--android_ndk_api=${ANDROID_NATIVE_API_LEVEL}"
 		)
 		lcb_linking_type("--enable-static" "--disable-shared" "--enable-pic")
+		list(APPEND CROSS_COMPILATION_OPTIONS "--extra-cflags=-fPIC" "--extra-cxxflags=-fPIC")
 	elseif(QNX)
 		set(VPX_TARGET "armv7-qnx-gcc")
 		lcb_configure_options(
@@ -170,7 +171,7 @@ else()
 			"--disable-runtime-cpu-detect"
 		)
 		list(REMOVE_ITEM EP_vpx_CONFIGURE_OPTIONS "--enable-multithread")
-      else()
+	else()
 		lcb_use_c_compiler_for_assembler(NO)
 		if(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
 			set(VPX_TARGET "armv7-linux-gcc")
@@ -186,18 +187,13 @@ else()
 		endif()
 		lcb_linking_type("--disable-static" "--enable-shared")
 	endif()
-
+	list(APPEND CROSS_COMPILATION_OPTIONS "--prefix=${CMAKE_INSTALL_PREFIX}")
 	if(USE_TARGET)
-		lcb_cross_compilation_options(
-			"--prefix=${CMAKE_INSTALL_PREFIX}"
-			"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+		list(APPEND CROSS_COMPILATION_OPTIONS "--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 			"--target=${VPX_TARGET}"
 		)
-	else()
-		lcb_cross_compilation_options(
-                	"--prefix=${CMAKE_INSTALL_PREFIX}"
-        	)
 	endif()
+	lcb_cross_compilation_options(${CROSS_COMPILATION_OPTIONS})
 	if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS "4.0")
 		lcb_configure_options("--disable-avx512")
 	endif()

@@ -31,6 +31,7 @@ lcb_spec_file("belle-sip.spec")
 lcb_rpmbuild_name("belle-sip")
 
 lcb_dependencies("bctoolbox")
+lcb_dependencies("belr")
 if(ENABLE_TUNNEL)
 	lcb_dependencies("tunnel")
 endif()

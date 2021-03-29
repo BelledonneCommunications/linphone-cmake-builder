@@ -24,7 +24,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(PYLINPHONE C CXX) # Dummy project
 
 set(Python_ADDITIONAL_VERSIONS ${LINPHONE_BUILDER_PYTHON_VERSION})
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterp 3 REQUIRED)
 find_package(PythonLibs ${LINPHONE_BUILDER_PYTHON_VERSION} REQUIRED)
 find_package(Git)
 

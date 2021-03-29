@@ -32,5 +32,5 @@ lcb_dependencies("ms2")
 lcb_cmake_options(
         "-DENABLE_AAUDIO=${ENABLE_AAUDIO}"
         "-DENABLE_SANITIZER=${ENABLE_SANITIZER}"
-        "-ENABLE_HW_SANITIZER=${ENABLE_HW_SANITIZER}"
+        "-DENABLE_HW_SANITIZER=${ENABLE_HW_SANITIZER}"
 )

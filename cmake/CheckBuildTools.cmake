@@ -20,10 +20,7 @@
 #
 ############################################################################
 
-find_package(PythonInterp)
-if(NOT PYTHONINTERP_FOUND)
-	message(FATAL_ERROR "Could not find python!")
-endif()
+find_package(PythonInterp 3 REQUIRED)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "WindowsPhone" OR CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
 	set(WINDOWS_UNIVERSAL TRUE)

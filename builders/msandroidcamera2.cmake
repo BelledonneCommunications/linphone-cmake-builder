@@ -32,5 +32,5 @@ lcb_dependencies("ms2")
 lcb_cmake_options(
         "-DENABLE_CAMERA2=${ENABLE_CAMERA2}"
         "-DENABLE_SANITIZER=${ENABLE_SANITIZER}"
-        "-ENABLE_HW_SANITIZER=${ENABLE_HW_SANITIZER}"
+        "-DENABLE_HW_SANITIZER=${ENABLE_HW_SANITIZER}"
 )

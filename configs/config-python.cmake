@@ -48,7 +48,7 @@ set(DEFAULT_VALUE_CMAKE_LINKING_TYPE "-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")
 set(LINPHONE_BUILDER_PYTHON_VERSION "2.7" CACHE STRING "Python version to target")
 
 find_package(Doxygen REQUIRED)
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterp 3 REQUIRED)
 
 
 # Global configuration

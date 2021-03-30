@@ -89,6 +89,7 @@ else()
 				endif()
 			endif()
 			set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+			string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
 			if(${MSVC_ARCH} MATCHES "X64")
 			    set(VPX_TARGET "x86_64-win64-vs${VS_VERSION}")
 			else()

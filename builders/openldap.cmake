@@ -29,7 +29,6 @@ lcb_ignore_warnings(YES)
 lcb_build_method("autotools")
 lcb_do_not_use_cmake_flags(YES)
 #lcb_config_h_file("vpx_config.h")
-lcb_dependencies("cyrussasl")
 lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd")
 
 #by default, Target=HOST

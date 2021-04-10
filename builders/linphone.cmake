@@ -73,6 +73,10 @@ if(ENABLE_LIME_X3DH)
 	lcb_dependencies("lime")
 endif()
 
+if(ENABLE_OPENLDAP)
+	lcb_dependencies("openldap")
+endif()
+
 lcb_cmake_options(
 	"-DENABLE_GTK_UI=${ENABLE_GTK_UI}"
 	"-DENABLE_VIDEO=${ENABLE_VIDEO}"
@@ -102,4 +106,5 @@ lcb_cmake_options(
 	"-DENABLE_CONSOLE_UI=${ENABLE_CONSOLE_UI}"
 	"-DENABLE_DAEMON=${ENABLE_DAEMON}"
 	"-DENABLE_QT_GL=${ENABLE_QT_GL}"
+	"-DENABLE_OPENLDAP=${ENABLE_OPENLDAP}"
 )

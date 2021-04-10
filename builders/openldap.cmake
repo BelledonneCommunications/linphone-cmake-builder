@@ -19,8 +19,8 @@
 ############################################################################
 
 set(OPENLDAP_VERSION "2_4")
-lcb_git_repository("https://git.openldap.org/openldap/openldap")
-lcb_git_tag("OPENLDAP_REL_ENG_${OPENLDAP_VERSION}")
+#lcb_git_repository("https://git.openldap.org/openldap/openldap")
+#lcb_git_tag("OPENLDAP_REL_ENG_${OPENLDAP_VERSION}")
 lcb_external_source_paths("externals/openldap" "external/openldap")
 
 lcb_may_be_found_on_system(YES)
@@ -41,11 +41,12 @@ else()
 # target=pc-linux
 endif()
 #lcb_configure_options("--CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+if(WIN32)
+else()
 lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 lcb_configure_options(
 	"--prefix=${CMAKE_INSTALL_PREFIX}"
 	"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 	"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
 )
-#"--target=${OPENLDAP_TARGET}"
-
+endif()

@@ -74,9 +74,9 @@ if(ENABLE_LIME_X3DH)
 endif()
 
 if(ENABLE_LDAP)
-	if(NOT WIN32)
+#	if(NOT WIN32)
 		lcb_dependencies("openldap")
-	endif()
+#	endif()
 endif()
 
 lcb_cmake_options(

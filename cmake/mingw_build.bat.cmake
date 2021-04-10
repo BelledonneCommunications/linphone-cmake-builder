@@ -4,7 +4,8 @@ rem Script based on msys.bat from the MinGW32 project
 rem ember value of GOTO: is used to know recursion has happened.
 if "%1" == "GOTO:" goto %2
 
-set WD=C:\MinGW\msys\1.0\bin\
+rem set WD=C:\MinGW\msys\1.0\bin\
+set WD=C:\msys64\
 
 rem ember command.com only uses the first eight characters of the label.
 goto _WindowsNT
@@ -19,7 +20,7 @@ goto EOF
 rem ember that we execute here if we recursed.
 :_Resume
 for %%F in (1 2 3) do shift
-if NOT EXIST %WD%msys-1.0.dll set WD=.\bin\
+rem if NOT EXIST %WD%msys-1.0.dll set WD=.\bin\
 
 rem ember that we get here even in command.com.
 :_WindowsNT
@@ -32,7 +33,7 @@ set COMSPEC=%WINDIR%\SysWOW64\cmd.exe
 goto EOF
 :_NotX64
 
-if NOT EXIST %WD%msys-1.0.dll set WD=%~dp0\bin\
+rem if NOT EXIST %WD%msys-1.0.dll set WD=%~dp0\bin\
 
 rem ember Set up option to use rxvt based on value of %1
 set MSYSCON=unknown
@@ -88,7 +89,9 @@ start %WD%rxvt -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Cour
 exit
 
 :startsh
+echo %WD%sh.exe
 if NOT EXIST %WD%sh.exe goto notfound
-start /W %WD%sh --login -i @CMAKE_CURRENT_BINARY_DIR@/EP_@MSVC_PROJNAME@_build.sh
+%WD%msys2_shell.cmd -mingw32 -shell bash -l @CMAKE_CURRENT_BINARY_DIR@/EP_@MSVC_PROJNAME@_build.sh
+rem cmd /k %WD%sh.exe --login -i @CMAKE_CURRENT_BINARY_DIR@/EP_@MSVC_PROJNAME@_build.sh
 
 :EOF

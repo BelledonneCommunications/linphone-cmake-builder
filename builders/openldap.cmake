@@ -40,7 +40,17 @@ else()
 # target=pc-linux
 endif()
 #lcb_configure_options("--CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+#-static-libgcc
 if(WIN32)
+	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=\"-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\" ")
+	#lcb_extra_ldflags("-static-libgcc -L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+	#lcb_extra_cflags("-include regex.h")
+	lcb_configure_options(
+		"--prefix=${CMAKE_INSTALL_PREFIX}"
+		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
+		"--target=i686-pc-mingw32"
+	)
 else()
 lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 lcb_configure_options(

@@ -30,23 +30,26 @@ endif()
 
 if(MSVC AND NOT WINDOWS_UNIVERSAL)
 	find_program(SH_PROGRAM
-		NAMES sh.exe
-		HINTS "C:/MinGW/msys/1.0/bin"
+		NAMES mingw32.exe
+		HINTS "C:/msys64/"
 	)
+
+#sh.exe
+#"C:/MinGW/msys/1.0/bin"
 	if(NOT SH_PROGRAM)
 		message(FATAL_ERROR "Could not find MinGW!")
 	endif()
 
-	find_file(GCC_LIBRARY
-		NAMES libgcc.a
-		HINTS "C:/MinGW/lib/gcc/mingw32/*"
-	)
-	execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${GCC_LIBRARY}" "${CMAKE_INSTALL_PREFIX}/lib/gcc.lib")
-	find_file(MINGWEX_LIBRARY
-		NAMES libmingwex.a
-		HINTS "C:/MinGW/lib"
-	)
-	execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${MINGWEX_LIBRARY}" "${CMAKE_INSTALL_PREFIX}/lib/mingwex.lib")
+#find_file(GCC_LIBRARY
+#		NAMES libgcc.a
+#		HINTS "C:/MinGW/lib/gcc/mingw32/*"
+#	)
+#	execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${GCC_LIBRARY}" "${CMAKE_INSTALL_PREFIX}/lib/gcc.lib")
+#find_file(MINGWEX_LIBRARY
+#	NAMES libmingwex.a
+#		HINTS "C:/MinGW/lib"
+#)
+#execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${MINGWEX_LIBRARY}" "${CMAKE_INSTALL_PREFIX}/lib/mingwex.lib")
 endif()
 
 set(CMAKE_PROGRAM_PATH "${CMAKE_BINARY_DIR}/programs")
@@ -100,7 +103,8 @@ endif()
 
 find_program(PKG_CONFIG_PROGRAM
 	NAMES pkg-config pkg-config.exe
-	HINTS "C:/MinGW/bin"
+	HINTS "C:/msys64/mingw32/bin"
+	#"C:/MinGW/bin"
 )
 
 if(NOT WINDOWS_UNIVERSAL)
@@ -149,12 +153,12 @@ if(NOT WINDOWS_UNIVERSAL)
 	if(ENABLE_NLS)
 		find_program(INTLTOOLIZE_PROGRAM
 			NAMES intltoolize
-			HINTS "C:/MinGW/msys/1.0/bin"
+			HINTS "C:/msys64/mingw32/bin"
 		)
 
 		if(NOT INTLTOOLIZE_PROGRAM)
 			if(WIN32)
-				message(STATUS "Installing intltoolize to C:/MinGW/bin")
+				message(STATUS "Installing intltoolize to C:/msys64/mingw32/bin")
 				set(_intltoolize_dir ${CMAKE_BINARY_DIR}/intltoolize)
 				file(MAKE_DIRECTORY ${_intltoolize_dir})
 				file(DOWNLOAD http://ftp.gnome.org/pub/gnome/binaries/win32/intltool/0.40/intltool_0.40.4-1_win32.zip "${CMAKE_BINARY_DIR}/intltoolize.zip")

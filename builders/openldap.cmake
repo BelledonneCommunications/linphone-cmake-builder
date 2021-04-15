@@ -72,17 +72,19 @@ if(WIN32)
 # Need 8 '\' to get one '\' in final configure_file (that comes from double escaping and regex)
 	lcb_configure_env("LIBS=\"-lssl -lcrypto -lws2_32\" CFLAGS=\"-D__USE_MINGW_ANSI_STDIO ${BUILD_FLAGS}\" CPPFLAGS=\"${BUILD_FLAGS}\" LDFLAGS=\"-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} -Wl,--output-def,.libs/\\\\\\\\$@.def\" ")
 	lcb_configure_options(
-		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap/"
+		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
 		"${OPENLDAP_TARGET}"
 	)
+elseif(APPLE)
+	
 else()
 	lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd" "--disable-static")
 	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 	lcb_configure_options(
-		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap/"
+		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"

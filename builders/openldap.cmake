@@ -86,6 +86,8 @@ elseif(APPLE)
 		lcb_extra_asflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/openldap")
 	endif()
 	lcb_extra_cflags("-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+#Letting cmake to select compiler can lead to not use the right framework. Let it decide on the build of OpenLDAP by not using full path
+	lcb_configure_env("CC=cc LD=ld AR=ar RANLIB=ranlib STRIP=strip ASFLAGS=$ASFLAGS CFLAGS=$CFLAGS LDFLAGS=$LDFLAGS")
 	lcb_configure_options(
 		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
 		"--prefix=${CMAKE_INSTALL_PREFIX}"

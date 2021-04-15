@@ -19,8 +19,6 @@
 ############################################################################
 
 set(OPENLDAP_VERSION "2_4")
-#lcb_git_repository("https://git.openldap.org/openldap/openldap")
-#lcb_git_tag("OPENLDAP_REL_ENG_${OPENLDAP_VERSION}")
 lcb_external_source_paths("externals/openldap" "external/openldap")
 
 lcb_may_be_found_on_system(YES)
@@ -28,8 +26,7 @@ lcb_ignore_warnings(YES)
 
 lcb_build_method("autotools")
 lcb_do_not_use_cmake_flags(YES)
-#lcb_config_h_file("vpx_config.h")
-lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd")
+lcb_config_h_file("openldap_config.h")
 
 #by default, Target=HOST
 if(WIN32)
@@ -42,9 +39,23 @@ endif()
 #lcb_configure_options("--CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
 #-static-libgcc
 if(WIN32)
-	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=\"-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\" ")
-	#lcb_extra_ldflags("-static-libgcc -L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-	#lcb_extra_cflags("-include regex.h")
+	if(CMAKE_BUILD_PARALLEL_LEVEL)
+		lcb_make_options("-j${CMAKE_BUILD_PARALLEL_LEVEL}")
+	else()
+		lcb_make_options("-j4")
+	endif()
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+		set(BUILD_FLAG "-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} -g3 -w")
+	else()
+		set(BUILD_FLAG "-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} -w")
+	endif()
+	lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld")# No need to build SASL as it is not yet supported by Linphone
+#Enable
+	lcb_configure_options("--enable-shared")
+#Disable
+	lcb_configure_options("--disable-backends" "--disable-slapd" "--disable-static" "--disable-slurpd")
+# Need 8 '\' to get one '\' in final configure_file (that comes from double escaping and regex)
+	lcb_configure_env("LIBS=\"-lssl -lcrypto -lws2_32\" CFLAGS=\"-D__USE_MINGW_ANSI_STDIO ${BUILD_FLAGS}\" CPPFLAGS=\"${BUILD_FLAGS}\" LDFLAGS=\"-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} -Wl,--output-def,.libs/\\\\\\\\$@.def\" ")
 	lcb_configure_options(
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
@@ -52,10 +63,11 @@ if(WIN32)
 		"--target=i686-pc-mingw32"
 	)
 else()
-lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-lcb_configure_options(
-	"--prefix=${CMAKE_INSTALL_PREFIX}"
-	"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
-	"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
-)
+	lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd" "--disable-static")
+	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+	lcb_configure_options(
+		"--prefix=${CMAKE_INSTALL_PREFIX}"
+		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
+	)
 endif()

@@ -1,13 +1,15 @@
 ############################################################################
 # vpx.cmake
-# Copyright (C) 2014  Belledonne Communications, Grenoble France
+# Copyright (C) 2014-2021  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# This file is part of cmake-builder.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ############################################################################
 
@@ -29,6 +30,10 @@ if(LINPHONE_BUILDER_PREBUILT_URL)
 	endif()
 endif()
 set(CROSS_COMPILATION_OPTIONS "")
+# BUILD_ROOT is set by Xcode, but we still need the current build root.
+# See https://gitlab.linphone.org/BC/public/external/libvpx/blob/v1.7.0-linphone/build/make/Makefile
+set(VPX_MAKE_OPTIONS "BUILD_ROOT=.")
+
 if(VPX_PREBUILT)
 	lcb_url("${CMAKE_CURRENT_BINARY_DIR}/${VPX_FILENAME}")
 	lcb_build_method("prebuilt")
@@ -66,6 +71,9 @@ else()
 	if(WIN32)
 		if(MSVC)
 			lcb_build_method("custom")
+			if(CMAKE_BUILD_PARALLEL_LEVEL)
+				set(VPX_MAKE_OPTIONS "${VPX_MAKE_OPTIONS} -j${CMAKE_BUILD_PARALLEL_LEVEL}")
+			endif()
 			if(CMAKE_GENERATOR MATCHES "^Visual Studio")
 				string(REPLACE " " ";" GENERATOR_LIST "${CMAKE_GENERATOR}")
 				list(GET GENERATOR_LIST 2 VS_VERSION)
@@ -99,10 +107,15 @@ else()
 			execute_process(COMMAND "cmd.exe" "/c" "${CMAKE_CURRENT_SOURCE_DIR}/builders/vpx/windows_env.bat" "${VS_VERSION}"
 				WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 			)
-			file(READ "${CMAKE_CURRENT_BINARY_DIR}/windowsenv_path.txt" VPX_ENV_PATH_LIST)
-			set(VPX_ENV_PATH "")
-			set(VPX_ENV_PATH "${VPX_ENV_PATH}:/C\\MinGW\\msys\\1.0\\bin:${AUTOTOOLS_PROGRAM_PATH}")
-			string(STRIP ${VPX_ENV_PATH} VPX_ENV_PATH)
+			if(NOT SH_PROGRAM)#Just in case if this builder is execute before CheckBuildTools
+				find_program(SH_PROGRAM sh.exe HINTS "C:/msys64/user/bin")
+			endif()
+			get_filename_component(SH_DIR ${SH_PROGRAM} DIRECTORY )# No need to test if sh is found as it is a pre-required module in SDK CheckBuildTools
+			set(VPX_ENV_PATH_LIST "")
+			list(APPEND VPX_ENV_PATH_LIST ${SH_DIR} ${AUTOTOOLS_PROGRAM_PATH})
+			string(REPLACE "\n" "" VPX_ENV_PATH_LIST "${VPX_ENV_PATH_LIST}")
+			set(VPX_ENV_PATH "${VPX_ENV_PATH_LIST}")
+			string(STRIP "${VPX_ENV_PATH}" VPX_ENV_PATH)
 			file(READ "${CMAKE_CURRENT_BINARY_DIR}/windowsenv_include.txt" VPX_ENV_INCLUDE)
 			string(REPLACE "\n" "" VPX_ENV_INCLUDE "${VPX_ENV_INCLUDE}")
 			file(READ "${CMAKE_CURRENT_BINARY_DIR}/windowsenv_lib.txt" VPX_ENV_LIB)
@@ -200,7 +213,5 @@ else()
 		lcb_configure_options("--disable-avx512")
 	endif()
 	lcb_configure_env("CC=$CC_NO_LAUNCHER LD=$CC_NO_LAUNCHER ASFLAGS=$ASFLAGS CFLAGS=$CFLAGS LDFLAGS=$LDFLAGS")
-	# BUILD_ROOT is set by Xcode, but we still need the current build root.
-	# See https://gitlab.linphone.org/BC/public/external/libvpx/blob/v1.7.0-linphone/build/make/Makefile
-	lcb_make_options("BUILD_ROOT=.")
+	lcb_make_options("${VPX_MAKE_OPTIONS}")
 endif()

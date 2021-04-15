@@ -76,7 +76,7 @@ if(WIN32)
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
-		"--target=${OPENLDAP_TARGET}"
+		"${OPENLDAP_TARGET}"
 	)
 else()
 	lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd" "--disable-static")

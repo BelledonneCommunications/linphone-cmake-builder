@@ -30,6 +30,21 @@ lcb_config_h_file("openldap_config.h")
 
 #by default, Target=HOST
 if(WIN32)
+	if(MSVC)
+		set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+		string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
+		if(${MSVC_ARCH} MATCHES "X64")
+			set(OPENLDAP_TARGET "--target=x86_64-pc-mingw64")
+		else()
+			set(OPENLDAP_TARGET "--target=i686-pc-mingw32")
+		endif()
+	else()
+		if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
+			set(OPENLDAP_TARGET "--target=x86_64-pc-mingw64")
+		else()
+			set(OPENLDAP_TARGET "--target=i686-pc-mingw32")
+		endif()
+	endif()
 #target=pc-windows	
 elseif(APPLE)
 # target=pc-macos
@@ -61,7 +76,7 @@ if(WIN32)
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
-		"--target=i686-pc-mingw32"
+		"--target=${OPENLDAP_TARGET}"
 	)
 else()
 	lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd" "--disable-static")

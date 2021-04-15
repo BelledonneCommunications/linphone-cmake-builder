@@ -51,8 +51,13 @@ elseif(APPLE)
 else()
 # target=pc-linux
 endif()
-#lcb_configure_options("--CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
-#-static-libgcc
+
+lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld")# No need to build SASL as it is not yet supported by Linphone
+#Enable
+lcb_configure_options("--enable-shared")
+#Disable
+lcb_configure_options("--disable-backends" "--disable-slapd" "--disable-static" "--disable-slurpd")
+
 if(WIN32)
 	if(CMAKE_BUILD_PARALLEL_LEVEL)
 		lcb_make_options("-j${CMAKE_BUILD_PARALLEL_LEVEL}")
@@ -64,11 +69,7 @@ if(WIN32)
 	else()
 		set(BUILD_FLAG "-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} -w")
 	endif()
-	lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld")# No need to build SASL as it is not yet supported by Linphone
-#Enable
-	lcb_configure_options("--enable-shared")
-#Disable
-	lcb_configure_options("--disable-backends" "--disable-slapd" "--disable-static" "--disable-slurpd")
+	
 # Need 8 '\' to get one '\' in final configure_file (that comes from double escaping and regex)
 	lcb_configure_env("LIBS=\"-lssl -lcrypto -lws2_32\" CFLAGS=\"-D__USE_MINGW_ANSI_STDIO ${BUILD_FLAGS}\" CPPFLAGS=\"${BUILD_FLAGS}\" LDFLAGS=\"-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} -Wl,--output-def,.libs/\\\\\\\\$@.def\" ")
 	lcb_configure_options(
@@ -79,9 +80,19 @@ if(WIN32)
 		"${OPENLDAP_TARGET}"
 	)
 elseif(APPLE)
-	
+	if(CMAKE_GENERATOR STREQUAL "Xcode")
+		# It appears that the build occurs in the cmake directory instead of the Build/vpx one with Xcode, so these flags are needed for include files to be found...
+		lcb_extra_cflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/openldap")
+		lcb_extra_asflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/openldap")
+	endif()
+	lcb_extra_cflags("-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+	lcb_configure_options(
+		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
+		"--prefix=${CMAKE_INSTALL_PREFIX}"
+		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
+	)
 else()
-	lcb_configure_options("--enable-shared" "--disable-backends" "--disable-slapd" "--disable-static")
 	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 	lcb_configure_options(
 		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"

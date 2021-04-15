@@ -38,7 +38,7 @@ if(WIN32)
 		HINTS "C:/msys64/"
 	)
 	if(NOT MSYS2_PROGRAM)
-		message(FATAL_ERROR "Could not find MSYS2 for MinGW! Make sure to have msys2_shell.cmd in your PATH. The default folder is '${_DEFAULT_MSYS2_BIN_PATH}'")
+		message(FATAL_ERROR "Could not find MSYS2 for MinGW! Make sure to have msys2_shell.cmd in your PATH. The default folder is 'C:/msys64/'")
 	endif()
 endif()
 

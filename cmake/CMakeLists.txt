@@ -191,11 +191,18 @@ endif()
 
 macro(linphone_builder_get_autotools_configuration)
 	if(MSVC)
-		set(_generator "MinGW Makefiles")
+		set(_generator "MSYS Makefiles")
+		#on some environnements, MSVC compilers are still used. Force them to gcc and let cmake to find them in PATH
+		set(_autotools_command ${CMAKE_COMMAND} -G "${_generator}"
+			"-DCMAKE_MAKE_PROGRAM=mingw32-make.exe"
+			"-DCMAKE_C_COMPILER=gcc"
+			"-DCMAKE_CXX_COMPILER=gcc"
+			"-DCMAKE_RC_COMPILER=rc")
 	else()
 		set(_generator "${CMAKE_GENERATOR}")
+		set(_autotools_command ${CMAKE_COMMAND} -G "${_generator}")
 	endif()
-	set(_autotools_command ${CMAKE_COMMAND} -G "${_generator}")
+	
 	if(CMAKE_TOOLCHAIN_FILE)
 		list(APPEND _autotools_command "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
 	endif()
@@ -898,7 +905,7 @@ macro(linphone_builder_add_external_project PROJNAME)
 
 	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/builders/${PROJNAME}/postinstall.cmake)
 		ExternalProject_Add_Step(EP_${PROJNAME} postinstall
-			COMMAND ${CMAKE_COMMAND} -DTOOLCHAIN_RANLIB=${TOOLCHAIN_RANLIB} -DCMAKE_RANLIB=${CMAKE_RANLIB} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DINSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_CURRENT_SOURCE_DIR}/builders/${PROJNAME}/postinstall.cmake
+			COMMAND ${CMAKE_COMMAND} -DTOOLCHAIN_RANLIB=${TOOLCHAIN_RANLIB} -DCMAKE_RANLIB=${CMAKE_RANLIB} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DINSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBINARY_DIR=${ep_build} -P ${CMAKE_CURRENT_SOURCE_DIR}/builders/${PROJNAME}/postinstall.cmake
 			COMMENT "Performing post-installation for 'EP_${PROJNAME}'"
 			DEPENDEES install
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

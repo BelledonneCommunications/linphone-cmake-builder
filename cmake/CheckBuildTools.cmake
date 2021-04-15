@@ -58,10 +58,10 @@ string(REPLACE "\\" "/" AUTOTOOLS_PROGRAM_PATH ${AUTOTOOLS_PROGRAM_PATH})
 file(MAKE_DIRECTORY ${CMAKE_PROGRAM_PATH})
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/../scripts/gas-preprocessor.pl" DESTINATION "${CMAKE_PROGRAM_PATH}")
 if(WIN32)
-	message(STATUS "Installing windows tools : yasm, gawk, bzip2, nasm, sed, patch")
+	message(STATUS "Installing windows tools : perl, yasm, gawk, bzip2, nasm, sed, patch")
 	execute_process(
 		COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-		"pacman -Sy yasm gawk bzip2 nasm sed patch --no-confirm"
+		"pacman -Sy perl yasm gawk bzip2 nasm sed patch --noconfirm"
 	)
 endif()
 

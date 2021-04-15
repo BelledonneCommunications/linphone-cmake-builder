@@ -61,7 +61,7 @@ if(WIN32)
 	message(STATUS "Installing windows tools : perl, yasm, gawk, bzip2, nasm, sed, patch")
 	execute_process(
 		COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-		"pacman -Sy perl yasm gawk bzip2 nasm sed patch --noconfirm"
+		"pacman -Sy perl yasm gawk bzip2 nasm sed patch --noconfirm  --needed"
 	)
 endif()
 
@@ -122,7 +122,7 @@ if(NOT WINDOWS_UNIVERSAL)
 			message(STATUS "Installing pkg-config, gettext, glib2 to MSYS2")
 			execute_process(
 				COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-				"pacman -Sy pkg-config gettext glib2 --noconfirm"
+				"pacman -Sy pkg-config gettext glib2 --noconfirm  --needed"
 			)
 			find_program(PKG_CONFIG_PROGRAM
 				NAMES pkg-config pkg-config.exe
@@ -143,7 +143,7 @@ if(NOT WINDOWS_UNIVERSAL)
 				message(STATUS "Installing intltoolize to MSYS2")
 				execute_process(
 					COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-					"pacman -Sy intltool --noconfirm"
+					"pacman -Sy intltool --noconfirm --needed"
 				)
 			endif()
 			find_program(INTLTOOLIZE_PROGRAM

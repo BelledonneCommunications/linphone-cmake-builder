@@ -30,7 +30,7 @@ lcb_package_source(YES)
 lcb_spec_file("liblinphone.spec")
 lcb_rpmbuild_name("liblinphone")
 
-lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr" "jsoncpp")
+lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr")
 
 if(ENABLE_DB_STORAGE)
 	lcb_dependencies("soci")
@@ -74,9 +74,11 @@ if(ENABLE_LIME_X3DH)
 endif()
 
 if(ENABLE_LDAP)
-#	if(NOT WIN32)
-		lcb_dependencies("openldap")
-#	endif()
+	lcb_dependencies("openldap")
+endif()
+
+if(ENABLE_FLEXIAPI)
+	lcb_dependencies("jsoncpp")
 endif()
 
 lcb_cmake_options(

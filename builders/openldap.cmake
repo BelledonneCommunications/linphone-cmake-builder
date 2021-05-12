@@ -48,6 +48,13 @@ if(WIN32)
 #target=pc-windows	
 elseif(APPLE)
 # target=pc-macos
+	if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+		set(OPENLDAP_TARGET "--host=x86_64-apple-darwin")# --target=x86_64-apple-darwin")
+		lcb_extra_cflags("-arch x86_64")
+	else()
+		set(OPENLDAP_TARGET "--host=arm-apple-darwin")
+		lcb_extra_cflags("-arch arm64")
+	endif()
 else()
 # target=pc-linux
 endif()
@@ -93,6 +100,7 @@ elseif(APPLE)
 		"--prefix=${CMAKE_INSTALL_PREFIX}"
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
+		"${OPENLDAP_TARGET}"
 	)
 else()
 	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")

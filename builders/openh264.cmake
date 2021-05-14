@@ -1,13 +1,12 @@
 ############################################################################
-# openh264.cmake
-# Copyright (C) 2014  Belledonne Communications, Grenoble France
+# Copyright (c) 2014-2021 Belledonne Communications SARL.
 #
-############################################################################
+# This file is part of cmake-builder.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,8 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ############################################################################
 
@@ -95,12 +93,19 @@ else()
 				lcb_additional_options("OS=\"ios\" ARCH=\"i386\"")
 			endif()
 		else()
-			lcb_extra_cflags("-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-			if(CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64")
+			set(MAC_ARCH "")
+			if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
 				lcb_additional_options("ARCH=\"x86_64\"")
+				set(MAC_ARCH "-arch=${CMAKE_SYSTEM_PROCESSOR}")
+			elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+				lcb_additional_options("ARCH=\"arm64\"")
+				set(MAC_ARCH "-arch=${CMAKE_SYSTEM_PROCESSOR}")
 			else()
 				lcb_additional_options("ARCH=\"x86\"")
 			endif()
+			lcb_extra_cflags("${MAC_ARCH} -isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+			lcb_extra_cxxflags("${MAC_ARCH} -isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+			lcb_extra_ldflags("${MAC_ARCH} -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/")# -L: Hack for clang to find libc++ on "Macos Big Sur"
 		endif()
 	endif()
 endif()

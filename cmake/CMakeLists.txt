@@ -1243,7 +1243,7 @@ macro(lcb_builder_extra_cxxflags BUILDER CXXFLAGS)
 	set(EP_${BUILDER}_EXTRA_CXXFLAGS "${EP_${BUILDER}_EXTRA_CXXFLAGS} ${CXXFLAGS}")
 endmacro()
 
-macro(lcb_extra_cxxflags CPPFLAGS)
+macro(lcb_extra_cxxflags CXXFLAGS)
 	lcb_check_current_builder()
 	lcb_builder_extra_cxxflags("${LINPHONE_BUILDER_CURRENT_BUILDER}" "${CXXFLAGS}")
 endmacro()

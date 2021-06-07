@@ -25,14 +25,13 @@ set(LINPHONE_BUILDER_OSX_ARCHITECTURES "armv7")
 set(COMPILER_PREFIX "armv7-apple-darwin")
 set(CLANG_TARGET "armv7-apple-darwin")
 set(PLATFORM "OS")
-if (CMAKE_GENERATOR STREQUAL "Xcode" AND NOT ${XCODE_VERSION} VERSION_LESS 12.0)
-	#workaround to avoid compiler checking to try compile with current sdk version as armv7 is limited to target < ios10. Introduced with Xcode12/cmake 3.18.2
-	set(CMAKE_CXX_COMPILER_FORCED TRUE)
-	set(CMAKE_CXX_COMPILER_FORCED TRUE)
-	set(CMAKE_C_COMPILER_WORKS TRUE)
-	set(CMAKE_C_COMPILER_WORKS TRUE)
-	#for jsoncpp	
-	list(APPEND CMAKE_CXX_COMPILE_FEATURES
+#workaround to avoid compiler checking to try compile with current sdk version as armv7 is limited to target < ios10. Introduced with Xcode12/cmake 3.18.2
+set(CMAKE_CXX_COMPILER_FORCED TRUE)
+set(CMAKE_CXX_COMPILER_FORCED TRUE)
+set(CMAKE_C_COMPILER_WORKS TRUE)
+set(CMAKE_C_COMPILER_WORKS TRUE)
+#for jsoncpp	
+list(APPEND CMAKE_CXX_COMPILE_FEATURES
        	 cxx_std_11 # Compiler mode is aware of C++ 11.
        	 #MSVC 1900 cxx_alignas # Alignment control alignas, as defined in N2341.
        	 #MSVC 1900 cxx_alignof # Alignment control alignof, as defined in N2341.
@@ -77,6 +76,5 @@ if (CMAKE_GENERATOR STREQUAL "Xcode" AND NOT ${XCODE_VERSION} VERSION_LESS 12.0)
        	 #MSVC 1900 cxx_user_literals # User-defined literals, as defined in N2765.
        	 cxx_variadic_macros # Variadic macros, as defined in N1653.
        	 cxx_variadic_templates # Variadic templates, as defined in N2242.
-	)
-endif()
+)
 include("${CMAKE_CURRENT_LIST_DIR}/ios/toolchain-ios.cmake")

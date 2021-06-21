@@ -22,7 +22,6 @@
 if(NOT APPLE)
 	message(FATAL_ERROR "You need to build using a Mac OS X system")
 endif()
-
 execute_process(COMMAND xcode-select -print-path
 	RESULT_VARIABLE XCODE_SELECT_RESULT
 	OUTPUT_VARIABLE XCODE_PATH
@@ -78,7 +77,7 @@ STRING(REGEX REPLACE "Xcode ([^\n]*).*" "\\1" XCODE_VERSION "${XCODE_VERSION_RAW
 
 include(CMakeForceCompiler)
 
-set(CMAKE_CROSSCOMPILING TRUE)
+set(CMAKE_CROSSCOMPILING FALSE)
 
 # Define name of the target system
 set(CMAKE_SYSTEM_NAME "Darwin")
@@ -87,7 +86,7 @@ set(CMAKE_SYSTEM_VERSION ${MACOS_SDK_VERSION})
 
 # The following variables are needed to build correctly with Xcode
 if(CMAKE_GENERATOR STREQUAL "Xcode")
-	set(CMAKE_MACOSX_BUNDLE YES)
+	set(CMAKE_MACOSX_BUNDLE NO)#if YES, cmake try_compile will not be able to test executable.app and then API info will fail.
 	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO)
 	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED NO)
 	set(CMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE "bitcode")

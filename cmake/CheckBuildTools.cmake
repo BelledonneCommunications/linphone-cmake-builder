@@ -58,11 +58,18 @@ string(REPLACE "\\" "/" AUTOTOOLS_PROGRAM_PATH ${AUTOTOOLS_PROGRAM_PATH})
 file(MAKE_DIRECTORY ${CMAKE_PROGRAM_PATH})
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/../scripts/gas-preprocessor.pl" DESTINATION "${CMAKE_PROGRAM_PATH}")
 if(WIN32)
-	message(STATUS "Installing windows tools : perl, yasm, gawk, bzip2, nasm, sed, patch")
+	message(STATUS "Installing windows tools : make, perl, yasm, gawk, bzip2, nasm, sed, patch")
 	execute_process(
-		COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-		"pacman -Sy perl yasm gawk bzip2 nasm sed patch --noconfirm  --needed"
+		COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-stpacman -Sy make perl yasm gawk bzip2 nasm sed patch --noconfirm  --neededart" "-defterm" "-shell" "sh" "-l" "-c"
+		""
 	)
+	if(ENABLE_LDAP)
+		message(STATUS "Installing windows tools for LDAP : openssl and posix regex (libsystre)")
+		execute_process(
+			COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-stpacman -Sy openssl libsystre --noconfirm  --neededart" "-defterm" "-shell" "sh" 	"-l" "-c"
+			""
+		)
+	endif()
 endif()
 
 if(WIN32)

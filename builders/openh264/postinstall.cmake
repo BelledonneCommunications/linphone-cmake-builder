@@ -20,8 +20,12 @@
 #
 ############################################################################
 
+
 if(EXISTS ${INSTALL_PREFIX}/bin/openh264.dll AND NOT EXISTS ${INSTALL_PREFIX}/lib/openh264_dll.lib)
-	execute_process(COMMAND "${PYTHON_EXECUTABLE}" "${SOURCE_DIR}/cmake/importlib.py" "${INSTALL_PREFIX}/bin/openh264.dll" "${INSTALL_PREFIX}/lib/openh264.lib")
+	set(OPENH264_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
+	string(TOUPPER ${OPENH264_ARCH} OPENH264_ARCH)
+	message(STATUS "Linking OpenH264 to ${OPENH264_ARCH} arch")
+	execute_process(COMMAND "${PYTHON_EXECUTABLE}" "${SOURCE_DIR}/cmake/importlib.py" "${INSTALL_PREFIX}/bin/openh264.dll" "${INSTALL_PREFIX}/lib/openh264.lib" "${OPENH264_ARCH}")
 endif()
 
 if(EXISTS ${INSTALL_PREFIX}/lib/libopenh264.5.dylib)

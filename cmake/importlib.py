@@ -14,6 +14,10 @@ def main(argv=None):
     dllpath, dllextension = os.path.splitext(dllfile)
     dllname = os.path.basename(dllpath)
     libfile = argv[2]
+    if len(argv) >= 4:
+      libarch = argv[3]
+    else
+      libarch = "X86"
     deffile = os.path.join(tempfile.gettempdir(), dllname + ".def")
     ret = subprocess.check_output(["dumpbin", "/exports", dllfile, "/out:" + deffile], stderr=subprocess.STDOUT)
     fin = open(deffile, "r")
@@ -30,7 +34,7 @@ def main(argv=None):
     for export in exports:
       fin.write("\t" + export + "\n")
     fin.close()
-    ret = subprocess.check_output(["lib", "/def:" + deffile, "/out:" + libfile, "/machine:X86"], stderr=subprocess.STDOUT)
+    ret = subprocess.check_output(["lib", "/def:" + deffile, "/out:" + libfile, "/machine:"+libarch], stderr=subprocess.STDOUT)
     print(ret)
 
 if __name__ == "__main__":

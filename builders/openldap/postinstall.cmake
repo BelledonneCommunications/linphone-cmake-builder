@@ -28,6 +28,48 @@ if(WIN32)
 	if(EXISTS ${BINARY_DIR}/libraries/liblber/.libs/liblber.la.def)
 		execute_process(COMMAND "lib" "/def:${BINARY_DIR}/libraries/liblber/.libs/liblber.la.def" "/name:liblber.dll" "/out:${INSTALL_PREFIX}/lib/liblber.lib" "/machine:${LDAP_ARCH}")
 	endif()
+#On Windows, OpenLDAP couldn't be build with static libraries. Add them in installation for deployment.
+	find_program(MSYS2_PROGRAM
+		NAMES msys2_shell.cmd
+		HINTS "C:/msys64/"
+	)
+	get_filename_component(MSYS2_PATH ${MSYS2_PROGRAM} PATH )
+	set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+	string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
+	if(${MSVC_ARCH} MATCHES "X64")
+		set(MSYS2_MINGW "mingw64")
+		set(SEARCH_PATH "${MSYS2_PATH}/${MSYS2_MINGW}/bin")
+		message(STATUS "Search libs in ${SEARCH_PATH}")
+		find_file (LDAP_SSL_DLL NAMES "libssl-1_1-x64.dll" "libssl.dll" HINTS  NO_DEFAULT_PATH)
+		find_file (LDAP_CRYPTO_DLL NAMES "libcrypto-1_1-x64.dll" "libcrypto.dll"  HINTS ${SEARCH_PATH} NO_DEFAULT_PATH)
+		find_file (LDAP_GCC_DLL NAMES "libgcc_s_seh-1.dll" "libgcc.dll"  HINTS ${SEARCH_PATH}  NO_DEFAULT_PATH)
+		find_file (LDAP_WINTHREAD_DLL NAMES "libwinpthread-1.dll" "libwinpthread.dll" HINTS ${SEARCH_PATH} NO_DEFAULT_PATH)
+	#Try in default path if didn't find	
+		find_file (LDAP_SSL_DLL NAMES "libssl-1_1-x64.dll" "libssl.dll" HINTS ${SEARCH_PATH})
+		find_file (LDAP_CRYPTO_DLL NAMES "libcrypto-1_1-x64.dll" "libcrypto.dll"  HINTS ${SEARCH_PATH})
+		find_file (LDAP_GCC_DLL NAMES "libgcc_s_seh-1.dll" "libgcc.dll"  HINTS ${SEARCH_PATH})
+		find_file (LDAP_WINTHREAD_DLL NAMES "libwinpthread-1.dll" "libwinpthread.dll" HINTS ${SEARCH_PATH})
+	else()
+		set(MSYS2_MINGW "mingw32")
+		set(SEARCH_PATH "${MSYS2_PATH}/${MSYS2_MINGW}/bin")
+		message(STATUS "Search libs in ${SEARCH_PATH}")
+		find_file (LDAP_SSL_DLL NAMES "libssl-1_1.dll" "libssl.dll" HINTS ${SEARCH_PATH} NO_DEFAULT_PATH)
+		find_file (LDAP_CRYPTO_DLL NAMES "libcrypto-1_1.dll" "libcrypto.dll"  HINTS ${SEARCH_PATH} NO_DEFAULT_PATH)
+		find_file (LDAP_GCC_DLL NAMES "libgcc_s_dw2-1.dll" "libgcc.dll"  HINTS ${SEARCH_PATH} NO_DEFAULT_PATH)
+		find_file (LDAP_WINTHREAD_DLL NAMES "libwinpthread-1.dll" "libwinpthread.dll" HINTS ${SEARCH_PATH} NO_DEFAULT_PATH)
+	#Try in default path if didn't find	
+		find_file (LDAP_SSL_DLL NAMES "libssl-1_1.dll" "libssl.dll" HINTS ${SEARCH_PATH})
+		find_file (LDAP_CRYPTO_DLL NAMES "libcrypto-1_1.dll" "libcrypto.dll"  HINTS ${SEARCH_PATH})
+		find_file (LDAP_GCC_DLL NAMES "libgcc_s_dw2-1.dll" "libgcc.dll"  HINTS ${SEARCH_PATH})
+		find_file (LDAP_WINTHREAD_DLL NAMES "libwinpthread-1.dll" "libwinpthread.dll" HINTS ${SEARCH_PATH})
+	endif()
+	
+
+	file(COPY ${LDAP_SSL_DLL} DESTINATION "${INSTALL_PREFIX}/bin")
+	file(COPY ${LDAP_CRYPTO_DLL} DESTINATION "${INSTALL_PREFIX}/bin")
+	file(COPY ${LDAP_GCC_DLL} DESTINATION "${INSTALL_PREFIX}/bin")
+	file(COPY ${LDAP_WINTHREAD_DLL} DESTINATION "${INSTALL_PREFIX}/bin")
+	
 endif()
 
 

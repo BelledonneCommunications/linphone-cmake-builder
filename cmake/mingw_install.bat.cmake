@@ -8,6 +8,6 @@ pause
 exit 1
 
 :startmsys2
-cmd /C msys2_shell.cmd -mingw32 -here -full-path -no-start -defterm -shell sh -l @CMAKE_CURRENT_BINARY_DIR@/EP_@MSVC_PROJNAME@_install.sh
+cmd /C msys2_shell.cmd -@MINGW_SHELL_TYPE@ -here -full-path -no-start -defterm -shell sh -l @CMAKE_CURRENT_BINARY_DIR@/EP_@MSVC_PROJNAME@_install.sh
 
 :EOF

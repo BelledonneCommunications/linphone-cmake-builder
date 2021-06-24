@@ -20,7 +20,7 @@
 
 set(OPENLDAP_VERSION "2_4")
 lcb_external_source_paths("externals/openldap" "external/openldap")
-
+lcb_dependencies("openssl")
 lcb_may_be_found_on_system(YES)
 lcb_ignore_warnings(YES)
 
@@ -55,11 +55,18 @@ elseif(APPLE)
 		set(OPENLDAP_TARGET "--host=arm-apple-darwin")
 		lcb_extra_cflags("-arch arm64")
 	endif()
+	set(CMAKE_FIND_ROOT_PATH "/") #find_* of cmake prepend this path to all searchs. Let cmake to find in OPENSSL_ROOT_PATH and not in CMAKE_FIND_ROOT_PATH/OPENSSL_ROOT_PATH
+	find_package(OpenSSL REQUIRED)
+	lcb_extra_cflags("-I${OPENSSL_INCLUDE_DIR}")
+	lcb_extra_cppflags("-I${OPENSSL_INCLUDE_DIR}")
+	lcb_extra_cxxflags("-I${OPENSSL_INCLUDE_DIR}")
+	get_filename_component(OPENSSL_LIB_PATH ${OPENSSL_SSL_LIBRARY} DIRECTORY)
+	lcb_extra_ldflags("-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} -L${OPENSSL_LIB_PATH}")
 else()
 # target=pc-linux
 endif()
 
-lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld")# No need to build SASL as it is not yet supported by Linphone
+lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld" "--with-tls")# No need to build SASL as it is not yet supported by Linphone
 #Enable
 lcb_configure_options("--enable-shared")
 #Disable
@@ -94,7 +101,7 @@ elseif(APPLE)
 	endif()
 	lcb_extra_cflags("-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
 #Letting cmake to select compiler can lead to not use the right framework. Let it decide on the build of OpenLDAP by not using full path
-	lcb_configure_env("CC=cc LD=ld AR=ar RANLIB=ranlib STRIP=strip ASFLAGS=$ASFLAGS CFLAGS=$CFLAGS LDFLAGS=$LDFLAGS")
+	lcb_configure_env("CC=cc LD=ld AR=ar RANLIB=ranlib STRIP=strip ASFLAGS=$ASFLAGS CFLAGS=$CFLAGS CPPFLAGS=$CPPFLAGS CXXFLAGS=$CXXFLAGS LDFLAGS=$LDFLAGS")
 	lcb_configure_options(
 		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
 		"--prefix=${CMAKE_INSTALL_PREFIX}"

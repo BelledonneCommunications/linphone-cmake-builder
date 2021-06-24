@@ -20,7 +20,7 @@
 
 set(OPENLDAP_VERSION "2_4")
 lcb_external_source_paths("externals/openldap" "external/openldap")
-
+lcb_dependencies("openssl")
 lcb_may_be_found_on_system(YES)
 lcb_ignore_warnings(YES)
 
@@ -55,11 +55,15 @@ elseif(APPLE)
 		set(OPENLDAP_TARGET "--host=arm-apple-darwin")
 		lcb_extra_cflags("-arch arm64")
 	endif()
+	set(CMAKE_FIND_ROOT_PATH "/") #find_* of cmake prepend this path to all searchs. Let cmake to find in OPENSSL_ROOT_PATH and not in CMAKE_FIND_ROOT_PATH/OPENSSL_ROOT_PATH
+	find_package(OpenSSL REQUIRED)
+	lcb_extra_cflags("-I${OPENSSL_INCLUDE_DIR}")
+	lcb_extra_ldflags("-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 else()
 # target=pc-linux
 endif()
 
-lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld")# No need to build SASL as it is not yet supported by Linphone
+lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld" "--with-tls")# No need to build SASL as it is not yet supported by Linphone
 #Enable
 lcb_configure_options("--enable-shared")
 #Disable

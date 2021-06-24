@@ -26,7 +26,7 @@ lcb_ignore_warnings(YES)
 
 lcb_build_method("autotools")
 lcb_do_not_use_cmake_flags(YES)
-lcb_config_h_file("openldap_config.h")
+lcb_config_h_file("stamp-h")#stamp-h is generated at the end of configure
 
 #by default, Target=HOST
 if(WIN32)

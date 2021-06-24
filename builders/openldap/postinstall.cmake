@@ -18,6 +18,17 @@
 #
 ############################################################################
 
+#Replace a LC_LOAD_DYLIB rapth for a library with @rpath/<library>
+macro(rewrite_rpath LIBRARY_TO_CHANGE LINK_NAME)
+	execute_process(COMMAND bash "-c" "otool -l ${LIBRARY_TO_CHANGE} | grep ${LINK_NAME}" OUTPUT_VARIABLE BAD_LC_LOAD_DYLIB)
+	if(BAD_LC_LOAD_DYLIB)
+		string(STRIP ${BAD_LC_LOAD_DYLIB} BAD_LC_LOAD_DYLIB)
+		string(REPLACE " " ";" BAD_LC_LOAD_DYLIB ${BAD_LC_LOAD_DYLIB})
+		list(GET BAD_LC_LOAD_DYLIB 1 BAD_LC_LOAD_DYLIB)
+		execute_process(COMMAND install_name_tool -change ${BAD_LC_LOAD_DYLIB} "@rpath/${LINK_NAME}.dylib" ${LIBRARY_TO_CHANGE})
+	endif()
+endmacro()
+
 if(WIN32)
 	set(LDAP_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
 	string(TOUPPER ${LDAP_ARCH} LDAP_ARCH)
@@ -28,26 +39,57 @@ if(WIN32)
 	if(EXISTS ${BINARY_DIR}/libraries/liblber/.libs/liblber.la.def)
 		execute_process(COMMAND "lib" "/def:${BINARY_DIR}/libraries/liblber/.libs/liblber.la.def" "/name:liblber.dll" "/out:${INSTALL_PREFIX}/lib/liblber.lib" "/machine:${LDAP_ARCH}")
 	endif()
+#On Windows, OpenLDAP couldn't be build with static libraries. Add them in installation for deployment.
+	find_program(MSYS2_PROGRAM
+		NAMES msys2_shell.cmd
+		HINTS "C:/msys64/"
+	)
+	get_filename_component(MSYS2_PATH ${MSYS2_PROGRAM} PATH )
+	set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+	string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
+	if(${MSVC_ARCH} MATCHES "X64")
+		set(MSYS2_MINGW "mingw64")
+		set(SEARCH_PATH "${MSYS2_PATH}/${MSYS2_MINGW}/bin")
+		message(STATUS "Search libs in ${SEARCH_PATH}")
+	else()
+		set(MSYS2_MINGW "mingw32")
+		set(SEARCH_PATH "${MSYS2_PATH}/${MSYS2_MINGW}/bin")
+		message(STATUS "Search libs in ${SEARCH_PATH}")
+	endif()
+	file(GLOB LDAP_GCC_DLL LIST_DIRECTORIES false "${SEARCH_PATH}/libgcc_s*.dll")#available names are libgcc_s_seh-1 or libgcc_s_dw2-1
+	file(GLOB LDAP_WINTHREAD_DLL LIST_DIRECTORIES false "${SEARCH_PATH}/libwinpthread*.dll")
+	
+	file(COPY ${LDAP_GCC_DLL} DESTINATION "${INSTALL_PREFIX}/bin")
+	file(COPY ${LDAP_WINTHREAD_DLL} DESTINATION "${INSTALL_PREFIX}/bin")
+	
 endif()
 
 
-file(GLOB OPENLDAP_LDAP_LIBS "${INSTALL_PREFIX}/lib/libldap*.dylib")
-file(GLOB OPENLDAP_LBER_LIBS "${INSTALL_PREFIX}/lib/liblber*.dylib")
+if(APPLE)
+	file(GLOB OPENLDAP_LDAP_LIBS "${INSTALL_PREFIX}/lib/libldap*.dylib")
+	file(GLOB OPENLDAP_LBER_LIBS "${INSTALL_PREFIX}/lib/liblber*.dylib")
 
-foreach(OPENLDAP_LIB IN LISTS OPENLDAP_LDAP_LIBS)
-	get_filename_component(OPENLDAP_LIB_ID ${OPENLDAP_LIB} NAME )
-	execute_process(COMMAND install_name_tool -id "@rpath/${OPENLDAP_LIB_ID}" ${OPENLDAP_LIB})
-	foreach(OPENLDAP_LIB_A IN LISTS OPENLDAP_LBER_LIBS)
-	get_filename_component(OPENLDAP_LIB_ID_A ${OPENLDAP_LIB_A} NAME )
-		execute_process(COMMAND install_name_tool -change ${OPENLDAP_LIB_A} "@rpath/${OPENLDAP_LIB_ID_A}" ${OPENLDAP_LIB})
-	endforeach()
-endforeach()
+	foreach(OPENLDAP_LIB IN LISTS OPENLDAP_LDAP_LIBS)
+		get_filename_component(OPENLDAP_LIB_ID ${OPENLDAP_LIB} NAME )
+		execute_process(COMMAND install_name_tool -id "@rpath/${OPENLDAP_LIB_ID}" ${OPENLDAP_LIB})
+		foreach(OPENLDAP_LIB_A IN LISTS OPENLDAP_LBER_LIBS)
+		get_filename_component(OPENLDAP_LIB_ID_A ${OPENLDAP_LIB_A} NAME )
+			execute_process(COMMAND install_name_tool -change ${OPENLDAP_LIB_A} "@rpath/${OPENLDAP_LIB_ID_A}" ${OPENLDAP_LIB})
 
-foreach(OPENLDAP_LIB IN LISTS OPENLDAP_LBER_LIBS)
-	get_filename_component(OPENLDAP_LIB_ID ${OPENLDAP_LIB} NAME )
-	execute_process(COMMAND install_name_tool -id "@rpath/${OPENLDAP_LIB_ID}" ${OPENLDAP_LIB})
-	foreach(OPENLDAP_LIB_A IN LISTS OPENLDAP_LDAP_LIBS)
-	get_filename_component(OPENLDAP_LIB_ID_A ${OPENLDAP_LIB_A} NAME )
-		execute_process(COMMAND install_name_tool -change ${OPENLDAP_LIB_A} "@rpath/${OPENLDAP_LIB_ID_A}" ${OPENLDAP_LIB})
+			rewrite_rpath(${OPENLDAP_LIB} "libssl")
+			rewrite_rpath(${OPENLDAP_LIB} "libcrypto")
+		endforeach()
 	endforeach()
-endforeach()
+
+	foreach(OPENLDAP_LIB IN LISTS OPENLDAP_LBER_LIBS)
+		get_filename_component(OPENLDAP_LIB_ID ${OPENLDAP_LIB} NAME )
+		execute_process(COMMAND install_name_tool -id "@rpath/${OPENLDAP_LIB_ID}" ${OPENLDAP_LIB})
+		foreach(OPENLDAP_LIB_A IN LISTS OPENLDAP_LDAP_LIBS)
+		get_filename_component(OPENLDAP_LIB_ID_A ${OPENLDAP_LIB_A} NAME )
+			execute_process(COMMAND install_name_tool -change ${OPENLDAP_LIB_A} "@rpath/${OPENLDAP_LIB_ID_A}" ${OPENLDAP_LIB})
+
+			rewrite_rpath(${OPENLDAP_LIB} "libssl")
+			rewrite_rpath(${OPENLDAP_LIB} "libcrypto")
+		endforeach()
+	endforeach()
+endif()

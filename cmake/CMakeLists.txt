@@ -195,9 +195,18 @@ endif()
 macro(linphone_builder_get_autotools_configuration)
 	if(MSVC)
 		set(_generator "MSYS Makefiles")
+		set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+		string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
+		if(${MSVC_ARCH} MATCHES "X64")
+		    set(MAKE_PROGRAM "make")
+		    set(MINGW_SHELL_TYPE "mingw64")
+		else()
+		    set(MAKE_PROGRAM "mingw32-make")
+		    set(MINGW_SHELL_TYPE "mingw32")
+		endif()
 		#on some environnements, MSVC compilers are still used. Force them to gcc and let cmake to find them in PATH
 		set(_autotools_command ${CMAKE_COMMAND} -G "${_generator}"
-			"-DCMAKE_MAKE_PROGRAM=mingw32-make.exe"
+			"-DCMAKE_MAKE_PROGRAM=${MAKE_PROGRAM}.exe"
 			"-DCMAKE_C_COMPILER=gcc"
 			"-DCMAKE_CXX_COMPILER=gcc"
 			"-DCMAKE_RC_COMPILER=rc")

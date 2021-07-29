@@ -33,6 +33,23 @@ endif()
 	
 
 if(WIN32)
+	if(MSVC)
+		set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+		string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
+		if(${MSVC_ARCH} MATCHES "X64")
+			set(MINGW_PACKAGE_PREFIX "mingw-w64-x86_64-")
+			set(MINGW_TYPE "mingw64")
+		else()
+			set(MINGW_PACKAGE_PREFIX "mingw-w64-i686-")
+			set(MINGW_TYPE "mingw32")
+		endif()
+	elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
+		set(MINGW_PACKAGE_PREFIX "mingw-w64-x86_64-")
+		set(MINGW_TYPE "mingw64")
+	else()
+		set(MINGW_PACKAGE_PREFIX "mingw-w64-i686-")
+		set(MINGW_TYPE "mingw32")
+	endif()
 	find_program(MSYS2_PROGRAM
 		NAMES msys2_shell.cmd
 		HINTS "C:/msys64/"
@@ -58,11 +75,17 @@ string(REPLACE "\\" "/" AUTOTOOLS_PROGRAM_PATH ${AUTOTOOLS_PROGRAM_PATH})
 file(MAKE_DIRECTORY ${CMAKE_PROGRAM_PATH})
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/../scripts/gas-preprocessor.pl" DESTINATION "${CMAKE_PROGRAM_PATH}")
 if(WIN32)
-	message(STATUS "Installing windows tools : perl, yasm, gawk, bzip2, nasm, sed, patch")
+	find_program(7Z_PROGRAM 7z.exe REQUIRED)
+	message(STATUS "Installing windows tools : make, perl, yasm, gawk, bzip2, nasm, sed, patch")
 	execute_process(
-		COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-		"pacman -Sy perl yasm gawk bzip2 nasm sed patch --noconfirm  --needed"
+		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy python-pip make perl yasm bzip2 nasm doxygen gawk sed patch --noconfirm  --needed"
 	)
+	if(ENABLE_LDAP)
+		message(STATUS "Installing windows tools for LDAP : openssl and posix regex (libsystre)")
+		execute_process(
+			COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy openssl ${MINGW_PACKAGE_PREFIX}libsystre --noconfirm  --needed"
+		)
+		endif()
 endif()
 
 if(WIN32)
@@ -121,8 +144,8 @@ if(NOT WINDOWS_UNIVERSAL)
 		if(WIN32)
 			message(STATUS "Installing pkg-config, gettext, glib2 to MSYS2")
 			execute_process(
-				COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-				"pacman -Sy pkg-config gettext glib2 --noconfirm  --needed"
+				COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
+								"pacman -Sy pkg-config gettext glib2 --noconfirm  --needed"
 			)
 			find_program(PKG_CONFIG_PROGRAM
 				NAMES pkg-config pkg-config.exe
@@ -142,7 +165,7 @@ if(NOT WINDOWS_UNIVERSAL)
 			if(WIN32)
 				message(STATUS "Installing intltoolize to MSYS2")
 				execute_process(
-					COMMAND "${MSYS2_PROGRAM}" "-msys2" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
+					COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
 					"pacman -Sy intltool --noconfirm --needed"
 				)
 			endif()

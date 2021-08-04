@@ -18,13 +18,41 @@
 #
 ############################################################################
 
-cmake_minimum_required(VERSION 3.15)#FOLLOW_SYMLINK_CHAIN of file(COPY)
+cmake_minimum_required(VERSION 3.0)
 project(openssl)
-
 include(GNUInstallDirs)
-
-set(CMAKE_FIND_ROOT_PATH "/") #find_* of cmake prepend this path to all searchs. Let cmake to find in OPENSSL_ROOT_PATH and not in CMAKE_FIND_ROOT_PATH/OPENSSL_ROOT_PATH
-find_package(OpenSSL REQUIRED)
+if(APPLE)
+	set(CMAKE_FIND_ROOT_PATH "/") #find_* of cmake prepend this path to all searchs. Let cmake to find in OPENSSL_ROOT_PATH and not in CMAKE_FIND_ROOT_PATH/OPENSSL_ROOT_PATH
+elseif(WIN32)
+#find_package retrieve from MSVC. Do not use it. The goal is to deploy MINGW dll.
+#find_library and find_file cannot work because of versionning.
+	find_program(MSYS2_PROGRAM
+		NAMES msys2_shell.cmd
+		HINTS "C:/msys64/"
+	)
+	get_filename_component(MSYS2_PATH ${MSYS2_PROGRAM} PATH )
+	set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
+	string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
+	if(${MSVC_ARCH} MATCHES "X64")
+		set(MSYS2_MINGW "mingw64")
+		set(SEARCH_PATH "${MSYS2_PATH}/${MSYS2_MINGW}/bin")
+	else()
+		set(MSYS2_MINGW "mingw32")
+		set(SEARCH_PATH "${MSYS2_PATH}/${MSYS2_MINGW}/bin")
+	endif()
+	message(STATUS "Search libs in ${SEARCH_PATH}")
+	file(GLOB SSL_FILES LIST_DIRECTORIES false "${SEARCH_PATH}/libssl*.dll")
+	file(GLOB CRYPTO_FILES LIST_DIRECTORIES false "${SEARCH_PATH}/libcrypto*.dll")
+	list(LENGTH SSL_FILES SSL_FILES_LENGTH)
+	list(LENGTH CRYPTO_FILES CRYPTO_FILES_LENGTH)
+	if( ${SSL_FILES_LENGTH} EQUAL 0 OR ${CRYPTO_FILES_LENGTH} EQUAL 0)
+		message(FATAL_ERROR "OpenSSL for MinGW : libssl and libcrypto cannot be found.")
+	else()
+		set(OPENSSL_LIBRARIES ${SSL_FILES} ${CRYPTO_FILES})
+	endif()
+else()
+	find_package(OpenSSL REQUIRED)
+endif()
 
 if(ENABLE_OPENSSL_EXPORT)
 	set(INSTALL_FOLDER ${CMAKE_INSTALL_LIBDIR})

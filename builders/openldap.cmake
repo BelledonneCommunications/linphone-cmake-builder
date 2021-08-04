@@ -26,7 +26,7 @@ lcb_ignore_warnings(YES)
 
 lcb_build_method("autotools")
 lcb_do_not_use_cmake_flags(YES)
-lcb_config_h_file("openldap_config.h")
+lcb_config_h_file("stamp-h")#stamp-h is generated at the end of configure
 
 #by default, Target=HOST
 if(WIN32)
@@ -66,7 +66,7 @@ else()
 # target=pc-linux
 endif()
 
-lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld" "--with-tls")# No need to build SASL as it is not yet supported by Linphone
+lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld" "--with-tls" "--without-yielding-select")# No need to build SASL as it is not yet supported by Linphone
 #Enable
 lcb_configure_options("--enable-shared")
 #Disable

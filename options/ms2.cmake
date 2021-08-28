@@ -73,6 +73,7 @@ if (CMAKE_ANDROID_NDK_VERSION VERSION_GREATER 16)
 	set(CMAKE_ABOVE_16 True)
 endif()
 lcb_add_dependent_option("AAudio" "AAudio Android sound card for Android 8+." "${DEFAULT_VALUE_ENABLE_AAUDIO}" "CMAKE_ABOVE_16" OFF)
+lcb_add_dependent_option("Oboe" "Oboe Android sound card for Android 8+." "${DEFAULT_VALUE_ENABLE_OBOE}" "CMAKE_ABOVE_16" OFF)
 lcb_add_dependent_option("Camera2" "Android capture filter using Camera2 API for Android 8+" "${DEFAULT_VALUE_ENABLE_CAMERA2}" "ENABLE_VIDEO" OFF)
 
 # Other options

@@ -87,6 +87,7 @@ if(ENABLE_VIDEO)
 		"-DENABLE_FFMPEG=${ENABLE_FFMPEG}"
 		"-DENABLE_VPX=${ENABLE_VPX}"
 		"-DENABLE_QT_GL=${ENABLE_QT_GL}"
+		"-DENABLE_LIBYUV=${ENABLE_LIBYUV}"
 	)
 	if(ENABLE_FFMPEG)
 		if(ANDROID)
@@ -97,6 +98,9 @@ if(ENABLE_VIDEO)
 	endif()
 	if(ENABLE_VPX)
 		lcb_dependencies("vpx")
+	endif()
+	if(ENABLE_LIBYUV)
+		lcb_dependencies("yuv")
 	endif()
 	lcb_cmake_options("-DENABLE_V4L=${ENABLE_V4L}")
 endif()
@@ -119,4 +123,3 @@ endif()
 if(ENABLE_ZRTP)
 	lcb_dependencies("bzrtp")
 endif()
-

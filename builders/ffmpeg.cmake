@@ -114,8 +114,8 @@ else()
 		endif()
 	else()
 		if(APPLE)
-			set(FFMPEG_TARGET_OS "darwin")
 			if(IOS)
+				set(FFMPEG_TARGET_OS "darwin")
 				lcb_configure_options(
 					"--enable-decoder=h264"
 					"--disable-iconv"
@@ -134,6 +134,17 @@ else()
 					lcb_configure_options("--enable-neon" "--cpu=cortex-a8" "--disable-armv5te" "--enable-armv6" "--enable-armv6t2")
 				endif()
 			else()
+				set(FFMPEG_TARGET_OS "macos")
+				lcb_extra_cflags("--target=${CMAKE_C_COMPILER_TARGET}")
+				lcb_extra_cppflags("--target=${CMAKE_C_COMPILER_TARGET}")
+				lcb_extra_cxxflags("--target=${CMAKE_C_COMPILER_TARGET}")
+				lcb_extra_ldflags("--target=${CMAKE_C_COMPILER_TARGET}")
+				if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
+					set(FFMPEG_TARGET_OS "macos11")
+					lcb_configure_options("--disable-asm")#because of gas-preprocessor error
+					lcb_configure_options("--cc=$CC")
+				else()
+				endif()
 				lcb_configure_options(
 					"--enable-runtime-cpudetect"
 					"--sysroot=${CMAKE_OSX_SYSROOT}"

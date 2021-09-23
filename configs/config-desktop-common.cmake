@@ -1,13 +1,12 @@
 ############################################################################
-# config-desktop.cmake
-# Copyright (C) 2014  Belledonne Communications, Grenoble France
+# Copyright (c) 2014-2021 Belledonne Communications SARL.
 #
-############################################################################
+# This file is part of cmake-builder.
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,8 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ############################################################################
 
@@ -52,8 +50,8 @@ if(APPLE)
 	endif()
 
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(CMAKE_OSX_ARCHITECTURES "x86_64")
-		set(LINPHONE_BUILDER_HOST "x86_64-apple-darwin")
+		set(CMAKE_OSX_ARCHITECTURES ${CMAKE_SYSTEM_PROCESSOR})
+		set(LINPHONE_BUILDER_HOST "${CMAKE_SYSTEM_PROCESSOR}-apple-darwin")
 	else()
 		set(CMAKE_OSX_ARCHITECTURES "i386")
 		set(LINPHONE_BUILDER_HOST "i686-apple-darwin")

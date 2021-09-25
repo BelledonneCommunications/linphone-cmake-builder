@@ -123,4 +123,3 @@ endif()
 if(ENABLE_ZRTP)
 	lcb_dependencies("bzrtp")
 endif()
-

@@ -82,9 +82,7 @@ class Target:
         cmd += ['-DCMAKE_PREFIX_PATH=' + self.output_dir(), '-DCMAKE_INSTALL_PREFIX=' + self.output_dir()]
         cmd += ['-DCMAKE_NO_SYSTEM_FROM_IMPORTED=YES']
         cmd += ['-DLINPHONE_BUILDER_WORK_DIR=' + self.abs_work_dir]
-        if args.ccache:
-            cmd += ['-DCMAKE_C_COMPILER_LAUNCHER=ccache']
-            cmd += ['-DCMAKE_CXX_COMPILER_LAUNCHER=ccache']
+
         if self.toolchain_file is not None:
             cmd += ['-DCMAKE_TOOLCHAIN_FILE=' + self.toolchain_file]
         if self.lazy_install_message:

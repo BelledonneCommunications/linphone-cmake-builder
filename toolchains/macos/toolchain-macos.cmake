@@ -40,7 +40,7 @@ if(NOT ${XCRUN_SHOW_SDK_VERSION_RESULT} EQUAL 0)
 	message(FATAL_ERROR "xcrun failed: ${XCRUN_SHOW_SDK_VERSION_RESULT}. You may need to install Xcode.")
 endif()
 
-execute_process(COMMAND xcrun --sdk macosx --show-sdk-path
+execute_process(COMMAND xcrun --sdk macosx --show-sdk-platform-path
 	RESULT_VARIABLE XCRUN_SHOW_SDK_PATH_RESULT
 	OUTPUT_VARIABLE CMAKE_OSX_SYSROOT
 	OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -48,6 +48,7 @@ execute_process(COMMAND xcrun --sdk macosx --show-sdk-path
 if(NOT ${XCRUN_SHOW_SDK_PATH_RESULT} EQUAL 0)
 	message(FATAL_ERROR "xcrun failed: ${XCRUN_SHOW_SDK_PATH_RESULT}. You may need to install Xcode.")
 endif()
+set(CMAKE_OSX_SYSROOT "${CMAKE_OSX_SYSROOT}/Developer/SDKs/MacOSX.sdk")
 
 execute_process(COMMAND xcrun --sdk macosx --find clang
 	RESULT_VARIABLE XCRUN_FIND_CLANG_RESULT

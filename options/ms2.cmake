@@ -49,7 +49,11 @@ lcb_add_option("WebRTC VAD"  "WebRTC voice activation detector support." "${DEFA
 lcb_add_option("BV16"  "BroadVoice 16 audio encoding/decoding support." "${DEFAULT_VALUE_ENABLE_BV16}")
 #video options and codecs
 lcb_add_option("Video" "Ability to capture and display video." "${DEFAULT_VALUE_ENABLE_VIDEO}")
-lcb_add_option("V4L" "Ability to capture and display video using libv4l2 ." "${DEFAULT_VALUE_ENABLE_V4L}")
+if( DEFINED DEFAULT_VALUE_ENABLE_V4L)
+	lcb_add_option("V4L" "Ability to capture and display video using libv4l2 ." "${DEFAULT_VALUE_ENABLE_V4L}")
+else()# default from submodule
+	lcb_add_dependent_option("V4L" "Ability to capture and display video using libv4l2 ." YES "ENABLE_VIDEO;LINUX_OR_BSD" NO)
+endif()
 lcb_add_option("jpeg"  "JPEG support with libjpeg-turbo." "${DEFAULT_VALUE_ENABLE_JPEG}")
 lcb_add_option("qrcode" "QRCode support with zxing." "${DEFAULT_VALUE_ENABLE_QRCODE}")
 lcb_add_option("Qt GL" "Enable Qt OpenGL rendering support." "${DEFAULT_VALUE_ENABLE_QT_GL}")

@@ -20,7 +20,7 @@
 #
 ############################################################################
 
-lcb_git_repository("gitosis@git.linphone.org:tunnel.git")
+lcb_git_repository("git@gitlab.linphone.org:BC/private/tunnel.git")
 lcb_git_tag_latest("master")
 lcb_git_tag("5d8582208f37174ded18280c7c1f8feefb1c4c55")
 lcb_external_source_paths("tunnel")

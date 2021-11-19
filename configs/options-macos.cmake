@@ -18,3 +18,6 @@
 #
 ############################################################################
 include (${CMAKE_CURRENT_LIST_DIR}/options-desktop.cmake)
+
+set(DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER ON)
+set(DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER_COMPILATION OFF)

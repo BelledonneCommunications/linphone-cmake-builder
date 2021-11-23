@@ -23,6 +23,7 @@ project(openssl)
 include(GNUInstallDirs)
 if(APPLE)
 	set(CMAKE_FIND_ROOT_PATH "/") #find_* of cmake prepend this path to all searchs. Let cmake to find in OPENSSL_ROOT_PATH and not in CMAKE_FIND_ROOT_PATH/OPENSSL_ROOT_PATH
+	find_package(OpenSSL REQUIRED)
 elseif(WIN32)
 #find_package retrieve from MSVC. Do not use it. The goal is to deploy MINGW dll.
 #find_library and find_file cannot work because of versionning.

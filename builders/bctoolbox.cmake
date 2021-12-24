@@ -40,6 +40,9 @@ endif()
 if(ENABLE_LIME_X3DH)
 	lcb_dependencies("decaf")
 endif()
+if(ENABLE_SIDH)
+        lcb_dependencies("sidh")
+endif()
 
 lcb_cmake_options(
 	"-DENABLE_MBEDTLS=${ENABLE_MBEDTLS}"

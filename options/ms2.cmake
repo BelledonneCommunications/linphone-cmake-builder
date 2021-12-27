@@ -20,6 +20,10 @@
 #
 ############################################################################
 
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+	set(LINUX_OR_BSD 1)
+endif()
+
 # Mediastreamer2 build options
 
 lcb_add_option("GPL third parties" "Usage of GPL third-party code (FFmpeg and x264)." "${DEFAULT_VALUE_ENABLE_GPL_THIRD_PARTIES}")

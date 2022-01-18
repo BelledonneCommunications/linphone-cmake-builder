@@ -40,8 +40,8 @@ endif()
 if(ENABLE_LIME_X3DH)
 	lcb_dependencies("decaf")
 endif()
-if(ENABLE_SIDH)
-        lcb_dependencies("sidh")
+if(ENABLE_LIBOQS)
+        lcb_dependencies("liboqs")
 endif()
 
 lcb_cmake_options(

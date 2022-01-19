@@ -40,7 +40,7 @@ endif()
 if(ENABLE_LIME_X3DH)
 	lcb_dependencies("decaf")
 endif()
-if(ENABLE_LIBOQS)
+if(ENABLE_OQS)
         lcb_dependencies("liboqs")
 endif()
 

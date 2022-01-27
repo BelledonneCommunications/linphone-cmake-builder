@@ -19,17 +19,21 @@
 ############################################################################
 
 set(OPENLDAP_VERSION "2_4")
+lcb_git_repository("https://gitlab.linphone.org/BC/public/external/openldap.git")
 lcb_external_source_paths("externals/openldap" "external/openldap")
-lcb_dependencies("openssl")
 lcb_may_be_found_on_system(YES)
-lcb_ignore_warnings(YES)
 
-lcb_build_method("autotools")
-lcb_do_not_use_cmake_flags(YES)
-lcb_config_h_file("stamp-h")#stamp-h is generated at the end of configure
 
-#by default, Target=HOST
-if(WIN32)
+if(NOT WIN32)
+	lcb_dependencies("mbedtls")
+else()
+	lcb_dependencies("openssl")
+	# Use Autotools on windows
+	lcb_ignore_warnings(YES)
+	lcb_build_method("autotools")
+	lcb_do_not_use_cmake_flags(YES)
+	lcb_config_h_file("stamp-h")#stamp-h is generated at the end of configure
+
 	if(MSVC)
 		set(MSVC_ARCH ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})# ${MSVC_ARCH} MATCHES "X64"
 		string(TOUPPER ${MSVC_ARCH} MSVC_ARCH)
@@ -45,34 +49,13 @@ if(WIN32)
 			set(OPENLDAP_TARGET "--target=i686-pc-mingw32")
 		endif()
 	endif()
-#target=pc-windows	
-elseif(APPLE)
-# target=pc-macos
-	if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-		set(OPENLDAP_TARGET "--host=x86_64-apple-darwin")# --target=x86_64-apple-darwin")
-		lcb_extra_cflags("-arch x86_64")
-	else()
-		set(OPENLDAP_TARGET "--host=arm-apple-darwin")
-		lcb_extra_cflags("-arch arm64")
-	endif()
-	set(CMAKE_FIND_ROOT_PATH "/") #find_* of cmake prepend this path to all searchs. Let cmake to find in OPENSSL_ROOT_PATH and not in CMAKE_FIND_ROOT_PATH/OPENSSL_ROOT_PATH
-	find_package(OpenSSL REQUIRED)
-	lcb_extra_cflags("-I${OPENSSL_INCLUDE_DIR}")
-	lcb_extra_cppflags("-I${OPENSSL_INCLUDE_DIR}")
-	lcb_extra_cxxflags("-I${OPENSSL_INCLUDE_DIR}")
-	get_filename_component(OPENSSL_LIB_PATH ${OPENSSL_SSL_LIBRARY} DIRECTORY)
-	lcb_extra_ldflags("-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} -L${OPENSSL_LIB_PATH}")
-else()
-# target=pc-linux
-endif()
 
-lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld" "--with-tls" "--without-yielding-select")# No need to build SASL as it is not yet supported by Linphone
-#Enable
-lcb_configure_options("--enable-shared")
-#Disable
-lcb_configure_options("--disable-backends" "--disable-slapd" "--disable-static" "--disable-slurpd")
+	lcb_configure_options("--without-cyrus-sasl" "--with-gnu-ld" "--with-tls" "--without-yielding-select")# No need to build SASL as it is not yet supported by Linphone
+	#Enable
+	lcb_configure_options("--enable-shared")
+	#Disable
+	lcb_configure_options("--disable-backends" "--disable-slapd" "--disable-static" "--disable-slurpd")
 
-if(WIN32)
 	if(CMAKE_BUILD_PARALLEL_LEVEL)
 		lcb_make_options("-j${CMAKE_BUILD_PARALLEL_LEVEL}")
 	else()
@@ -92,29 +75,5 @@ if(WIN32)
 		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
 		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
 		"${OPENLDAP_TARGET}"
-	)
-elseif(APPLE)
-	if(CMAKE_GENERATOR STREQUAL "Xcode")
-		# It appears that the build occurs in the cmake directory instead of the Build/vpx one with Xcode, so these flags are needed for include files to be found...
-		lcb_extra_cflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/openldap")
-		lcb_extra_asflags("-I${LINPHONE_BUILDER_WORK_DIR}/Build/openldap")
-	endif()
-	lcb_extra_cflags("-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-#Letting cmake to select compiler can lead to not use the right framework. Let it decide on the build of OpenLDAP by not using full path
-	lcb_configure_env("CC=cc LD=ld AR=ar RANLIB=ranlib STRIP=strip ASFLAGS=$ASFLAGS CFLAGS=$CFLAGS CPPFLAGS=$CPPFLAGS CXXFLAGS=$CXXFLAGS LDFLAGS=$LDFLAGS")
-	lcb_configure_options(
-		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
-		"--prefix=${CMAKE_INSTALL_PREFIX}"
-		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
-		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
-		"${OPENLDAP_TARGET}"
-	)
-else()
-	lcb_configure_env("CPPFLAGS=-I${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-	lcb_configure_options(
-		"--srcdir=${CMAKE_CURRENT_SOURCE_DIR}/../external/openldap"
-		"--prefix=${CMAKE_INSTALL_PREFIX}"
-		"--libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
-		"--includedir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openldap"
 	)
 endif()

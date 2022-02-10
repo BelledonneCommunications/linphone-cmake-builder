@@ -56,7 +56,12 @@ set(ANDROID_STL "c++_shared")
 #IF ANDROID_PLATFORM != the default one (official toolchain , cached values, or default values)
 #: delete the -D__ANDROID_API__ and replace it in the cached CFLAGS flags
 
+
+if(CMAKE_ANDROID_NDK_VERSION GREATER_EQUAL 23)
+include("${CMAKE_ANDROID_NDK}/build/cmake/android-legacy.toolchain.cmake")
+else()
 include("${CMAKE_ANDROID_NDK}/build/cmake/android.toolchain.cmake")
+endif()
 
 if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS 19)
 	set(CMAKE_FIND_ROOT_PATH "${CMAKE_SYSROOT}" "${ANDROID_SYSTEM_LIBRARY_PATH}" "${CMAKE_INSTALL_PREFIX}")

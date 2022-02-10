@@ -27,4 +27,6 @@ lcb_external_source_paths("bcmatroska2")
 lcb_package_source(YES)
 lcb_spec_file("matroska2.spec")
 
+lcb_dependencies("bctoolbox")
+
 lcb_linking_type("-DENABLE_STATIC=YES" "-DENABLE_SHARED=NO")

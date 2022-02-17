@@ -19,8 +19,6 @@
 #
 ################################################################################
 
-find_package(PythonInterp 3 REQUIRED)
-
 if(CMAKE_SYSTEM_NAME STREQUAL "WindowsPhone" OR CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
 	set(WINDOWS_UNIVERSAL TRUE)
 else()
@@ -76,17 +74,24 @@ file(MAKE_DIRECTORY ${CMAKE_PROGRAM_PATH})
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/../scripts/gas-preprocessor.pl" DESTINATION "${CMAKE_PROGRAM_PATH}")
 if(WIN32)
 	find_program(7Z_PROGRAM 7z.exe REQUIRED)
-	message(STATUS "Installing windows tools : make, perl, yasm, gawk, bzip2, nasm, sed, patch")
+	message(STATUS "Installing windows tools : toolchains, make, perl, yasm, gawk, bzip2, nasm, sed, patch, python, doxygen")
 	execute_process(
-		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy python-pip make perl yasm bzip2 nasm doxygen gawk sed patch --noconfirm  --needed"
+		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy base-devel ${MINGW_PACKAGE_PREFIX}toolchain ${MINGW_PACKAGE_PREFIX}python make perl yasm bzip2 nasm ${MINGW_PACKAGE_PREFIX}doxygen gawk sed patch --noconfirm  --needed"
 	)
+	message(STATUS "Installing windows tools : python modules")
+	execute_process(
+		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "python -m ensurepip ; python -m pip install six pystache"
+	)
+	
 	if(ENABLE_LDAP)
 		message(STATUS "Installing windows tools for LDAP : openssl and posix regex (libsystre)")
 		execute_process(
 			COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy openssl ${MINGW_PACKAGE_PREFIX}libsystre --noconfirm  --needed"
 		)
-		endif()
+	endif()
 endif()
+
+find_package(PythonInterp 3 REQUIRED)
 
 if(WIN32)
 	#Should be already installed from MSYS2

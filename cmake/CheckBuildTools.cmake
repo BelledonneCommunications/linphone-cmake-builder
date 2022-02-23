@@ -81,9 +81,9 @@ if(WIN32)
 		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy python-pip make perl yasm bzip2 nasm doxygen gawk sed patch --noconfirm  --needed"
 	)
 	if(ENABLE_LDAP)
-		message(STATUS "Installing windows tools for LDAP : openssl and posix regex (libsystre)")
+		message(STATUS "Installing windows tools for LDAP : posix regex (libsystre)")
 		execute_process(
-			COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy openssl ${MINGW_PACKAGE_PREFIX}libsystre --noconfirm  --needed"
+			COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -S ${MINGW_PACKAGE_PREFIX}libsystre --noconfirm  --needed"
 		)
 		endif()
 endif()

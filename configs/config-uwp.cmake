@@ -56,6 +56,11 @@ lcb_builder_cmake_options(turbojpeg "-DWITH_CRT_DLL=TRUE")
 # ms2
 lcb_builder_cmake_options(ms2 "-DENABLE_RELATIVE_PREFIX=YES")
 
+#OpenH264
+if(NOT ENABLE_EMBEDDED_OPENH264)
+	lcb_builder_linking_type(openh264 "-shared")
+endif()
+
 # opus
 lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
 

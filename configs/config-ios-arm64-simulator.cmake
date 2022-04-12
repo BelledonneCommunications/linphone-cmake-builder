@@ -1,6 +1,6 @@
 ############################################################################
 # config-ios-i386.cmake
-# Copyright (C) 2014  Belledonne Communications, Grenoble France
+# Copyright (C) 2022  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #

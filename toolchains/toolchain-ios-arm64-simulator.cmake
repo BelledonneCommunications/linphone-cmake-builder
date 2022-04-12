@@ -1,6 +1,6 @@
 ############################################################################
 # toolchain-ios-i386.cmake
-# Copyright (C) 2014  Belledonne Communications, Grenoble France
+# Copyright (C) 2022  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,10 +20,10 @@
 #
 ############################################################################
 
-set(CMAKE_SYSTEM_PROCESSOR "i386")
-set(LINPHONE_BUILDER_OSX_ARCHITECTURES "i386")
-set(COMPILER_PREFIX "i386-apple-darwin")
-set(CLANG_TARGET "i386-apple-darwin")
+set(CMAKE_SYSTEM_PROCESSOR "aarch64")
+set(LINPHONE_BUILDER_OSX_ARCHITECTURES "arm64")
+set(COMPILER_PREFIX "arm64-apple-ios${LINPHONE_IOS_DEPLOYMENT_TARGET}-simulator")
+set(CLANG_TARGET "arm64-apple-ios${LINPHONE_IOS_DEPLOYMENT_TARGET}-simulator")
 set(PLATFORM "Simulator")
 include("${CMAKE_CURRENT_LIST_DIR}/ios/toolchain-ios.cmake")
 

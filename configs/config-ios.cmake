@@ -126,7 +126,7 @@ lcb_builder_cmake_options(speex "-DENABLE_FLOAT_API=NO")
 lcb_builder_cmake_options(speex "-DENABLE_FIXED_POINT=YES")
 
 # srtp
-lcb_builder_linking_type(srtp "-DENABLE_STATIC=YES")
+lcb_builder_linking_type(srtp "-DBUILD_SHARED_LIBS=NO")
 
 # vpx
 lcb_builder_linking_type(vpx "--enable-static" "--disable-shared")

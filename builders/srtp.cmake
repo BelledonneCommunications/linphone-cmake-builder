@@ -26,3 +26,6 @@ lcb_git_tag("befc23777e07efba36ffd7bda73f22c92d4e2475")
 lcb_external_source_paths("srtp" "externals/srtp" "external/srtp")
 lcb_may_be_found_on_system(YES)
 lcb_ignore_warnings(YES)
+
+lcb_linking_type("-DBUILD_SHARED_LIBS=YES")
+lcb_cmake_options("-DTEST_APPS=NO")

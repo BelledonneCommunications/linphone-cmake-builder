@@ -1,6 +1,6 @@
 ############################################################################
-# bctoolbox.cmake
-# Copyright (C) 2014-2018  Belledonne Communications, Grenoble France
+# bzrtp.cmake
+# Copyright (C) 2016  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,32 +20,5 @@
 #
 ############################################################################
 
-lcb_git_repository("https://gitlab.linphone.org/BC/public/bctoolbox.git")
-lcb_git_tag_latest("master")
-lcb_git_tag("master")
-lcb_external_source_paths("bctoolbox")
-lcb_groupable(YES)
-lcb_sanitizable(YES)
-lcb_package_source(YES)
-lcb_spec_file("bctoolbox.spec")
-
-if(ENABLE_MBEDTLS)
-	lcb_dependencies("mbedtls")
-elseif(ENABLE_POLARSSL)
-	lcb_dependencies("polarssl")
-endif()
-if(ENABLE_UNIT_TESTS)
-	lcb_dependencies("bcunit")
-endif()
-if(ENABLE_LIME_X3DH)
-	lcb_dependencies("decaf")
-endif()
-
-lcb_cmake_options(
-	"-DENABLE_MBEDTLS=${ENABLE_MBEDTLS}"
-	"-DENABLE_POLARSSL=${ENABLE_POLARSSL}"
-	"-DENABLE_DECAF=${ENABLE_LIME_X3DH}"
-	"-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
-	"-DENABLE_TESTS_COMPONENT=${ENABLE_UNIT_TESTS}"
-)
-
+# bzrtp build options
+lcb_add_option("PQCrypto" "Post Quantum Cryptography (require license)." "${DEFAULT_VALUE_ENABLE_PQCRYPTO}")

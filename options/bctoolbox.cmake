@@ -21,7 +21,5 @@
 ############################################################################
 
 # bctoolbox build options
-
 lcb_add_option("Polarssl" "Crypto stack implementation based on polarssl." "${DEFAULT_VALUE_ENABLE_POLARSSL}")
 lcb_add_option("Mbedtls" "Crypto stack implementation based on mbeddtls." "${DEFAULT_VALUE_ENABLE_MBEDTLS}")
-lcb_add_option("Oqs" "Post-Quantum Crypto implementation based on OQS." "${DEFAULT_VALUE_ENABLE_OQS}")

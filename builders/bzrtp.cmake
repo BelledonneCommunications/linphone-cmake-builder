@@ -46,7 +46,12 @@ if(MINGW)
 	lcb_extra_cppflags("-D__USE_MINGW_ANSI_STDIO")
 endif()
 
+if(ENABLE_PQCRYPTO)
+lcb_dependencies("postquantumcryptoengine")
+endif()
+
 lcb_cmake_options(
+	"-DENABLE_PQCRYPTO=${ENABLE_PQCRYPTO}"
 	"-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
 	"-DENABLE_DOC=${ENABLE_DOC}"
 )

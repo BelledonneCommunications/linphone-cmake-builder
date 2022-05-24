@@ -1,6 +1,6 @@
 ############################################################################
-# bctoolbox.cmake
-# Copyright (C) 2014-2018  Belledonne Communications, Grenoble France
+# postquantumcryptoengine.cmake
+# Copyright (C) 2022  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -20,32 +20,17 @@
 #
 ############################################################################
 
-lcb_git_repository("https://gitlab.linphone.org/BC/public/bctoolbox.git")
+lcb_git_repository("git@gitlab.linphone.org:BC/private/postquantumcryptoengine.git")
 lcb_git_tag_latest("master")
-lcb_git_tag("master")
-lcb_external_source_paths("bctoolbox")
+lcb_git_tag("9569b213fc935584d7e1b45b51756a6fc7ebdb75")
+lcb_external_source_paths("postquantumcryptoengine")
 lcb_groupable(YES)
 lcb_sanitizable(YES)
-lcb_package_source(YES)
-lcb_spec_file("bctoolbox.spec")
 
-if(ENABLE_MBEDTLS)
-	lcb_dependencies("mbedtls")
-elseif(ENABLE_POLARSSL)
-	lcb_dependencies("polarssl")
-endif()
-if(ENABLE_UNIT_TESTS)
-	lcb_dependencies("bcunit")
-endif()
-if(ENABLE_LIME_X3DH)
-	lcb_dependencies("decaf")
-endif()
+lcb_dependencies("bctoolbox")
+lcb_dependencies("liboqs")
 
 lcb_cmake_options(
-	"-DENABLE_MBEDTLS=${ENABLE_MBEDTLS}"
-	"-DENABLE_POLARSSL=${ENABLE_POLARSSL}"
-	"-DENABLE_DECAF=${ENABLE_LIME_X3DH}"
 	"-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
-	"-DENABLE_TESTS_COMPONENT=${ENABLE_UNIT_TESTS}"
 )
 

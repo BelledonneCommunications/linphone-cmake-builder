@@ -22,7 +22,7 @@
 
 lcb_git_repository("git@gitlab.linphone.org:BC/private/postquantumcryptoengine.git")
 lcb_git_tag_latest("master")
-lcb_git_tag("9569b213fc935584d7e1b45b51756a6fc7ebdb75")
+lcb_git_tag("8f877fc35b644df48e6442ec3dc04ab4717de989")
 lcb_external_source_paths("postquantumcryptoengine")
 lcb_groupable(YES)
 lcb_sanitizable(YES)
@@ -33,4 +33,3 @@ lcb_dependencies("liboqs")
 lcb_cmake_options(
 	"-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
 )
-

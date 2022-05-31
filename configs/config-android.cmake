@@ -52,6 +52,9 @@ include(builders/CMakeLists.txt)
 lcb_builder_linking_type(bctoolbox "-DENABLE_STATIC=NO" "-DENABLE_SHARED=YES")
 lcb_builder_cmake_options(bctoolbox "-DENABLE_TESTS=NO")
 
+#postquantumcryptoengine
+lcb_builder_cmake_options(postquantumcryptoengine "-DENABLE_TESTS=NO")
+
 # belcard
 lcb_builder_cmake_options(belcard "-DENABLE_TOOLS=NO")
 lcb_builder_cmake_options(belcard "-DENABLE_UNIT_TESTS=NO")

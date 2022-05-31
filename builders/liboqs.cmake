@@ -28,7 +28,7 @@ lcb_groupable(YES)
 lcb_sanitizable(YES)
 lcb_package_source(YES)
 lcb_spec_file("liboqs.spec")
-lcb_cmake_options("-DOQS_DIST_BUILD=ON" "-DOQS_USE_OPENSSL=OFF")
+lcb_cmake_options("-DOQS_DIST_BUILD=ON" "-DOQS_USE_OPENSSL=OFF" "-DOQS_BUILD_ONLY_LIB=ON")
 lcb_cmake_options("-DBUILD_SHARED_LIBS=Off") # TODO: this force the generation of static lib while we should translate the ENABLE_SHARED/ENABLE_STATIC
 # Note: -DOQS_MINIMAL_BUILD is what we want to use but a ; separated list cannot go through cmake-builder
 # so use the -DOQS_ENABLE_<family> and turn them all Off except the one we want. Sike and Kyber are explicitely turned on but it is useless

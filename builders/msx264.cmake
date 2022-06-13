@@ -21,8 +21,7 @@
 ############################################################################
 
 lcb_git_repository("https://gitlab.linphone.org/BC/public/msx264.git")
-lcb_git_tag_latest("master")
-lcb_git_tag("3a9b5a9ff79ea45b9f8f03d03d4a4a9213dc2c5d")
+lcb_git_tag_latest("d61977cbe453869cec28d32b71fe25c2cd965dcf")
 lcb_external_source_paths("msx264")
 lcb_groupable(YES)
 lcb_plugin(YES)

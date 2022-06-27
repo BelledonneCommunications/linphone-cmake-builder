@@ -29,3 +29,6 @@ lcb_ignore_warnings(YES)
 
 lcb_linking_type("-DBUILD_SHARED_LIBS=YES")
 lcb_cmake_options("-DTEST_APPS=NO")
+# We must use mbedtls as crypto backend to enable AEAD crypto suites
+lcb_dependencies("mbedtls")
+lcb_cmake_options("-DENABLE_MBEDTLS=YES")

@@ -141,7 +141,22 @@ lcb_builder_install_target(x264 "install-lib-static")
 
 #Copy c++ library to install prefix
 #The library has to be present for cmake dependencies and before the install target
-file(COPY "${CMAKE_ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/${CMAKE_ANDROID_ARCH_ABI}/libc++_shared.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/")
+if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS 25)
+	file(COPY "${CMAKE_ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/${CMAKE_ANDROID_ARCH_ABI}/libc++_shared.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/")
+else()
+	if(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7-a")
+		set(_ndk_sysroot "arm-linux-androideabi")
+	elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+		set(_ndk_sysroot "aarch64-linux-android")
+	elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "i686")
+		set(_ndk_sysroot "i686-linux-android")
+	elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+		set(_ndk_sysroot "x86_64-linux-android")
+	else()
+		set(_ndk_sysroot "${CMAKE_SYSTEM_PROCESSOR}")
+	endif()
+	file(COPY "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${_ndk_sysroot}/libc++_shared.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/")
+endif()
 
 if(ENABLE_SANITIZER)
 	set(SANITIZER_ARCH ${CMAKE_SYSTEM_PROCESSOR})

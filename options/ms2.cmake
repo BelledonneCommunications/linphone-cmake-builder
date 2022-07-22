@@ -29,10 +29,6 @@ endif()
 lcb_add_option("GPL third parties" "Usage of GPL third-party code (FFmpeg and x264)." "${DEFAULT_VALUE_ENABLE_GPL_THIRD_PARTIES}")
 lcb_add_option("Non free codecs" "Allow inclusion of non-free codecs in the build." OFF)
 
-#security options
-lcb_add_option("SRTP" "SRTP media encryption support." "${DEFAULT_VALUE_ENABLE_SRTP}")
-lcb_add_dependent_option("ZRTP" "ZRTP media encryption support." "${DEFAULT_VALUE_ENABLE_ZRTP}" "ENABLE_SRTP" OFF)
-
 #audio options and codecs
 lcb_add_option("WebRTC AEC" "WebRTC echo canceller support." "${DEFAULT_VALUE_ENABLE_WEBRTC_AEC}")
 lcb_add_option("WebRTC AECM" "WebRTC echo canceller for mobile support." "${DEFAULT_VALUE_ENABLE_WEBRTC_AECM}")

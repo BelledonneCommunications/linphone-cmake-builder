@@ -123,5 +123,6 @@ if(ENABLE_SRTP)
 endif()
 if(ENABLE_ZRTP)
 	lcb_dependencies("bzrtp")
+	lcb_cmake_options("-DENABLE_GOCLEAR=${ENABLE_GOCLEAR}")
 endif()
 

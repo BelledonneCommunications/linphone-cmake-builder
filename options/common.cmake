@@ -37,3 +37,8 @@ lcb_add_option("Soci mysql" "Enable mysql support of SOCI" OFF)
 #endif()
 lcb_add_option("HW Sanitizer" "Enable Android HW sanitizer" NO)
 lcb_add_option("OpenSSL Export" "Enable OpenSSL deployment" "${DEFAULT_VALUE_ENABLE_OPENSSL_EXPORT}")
+
+#security options
+lcb_add_option("SRTP" "SRTP media encryption support." "${DEFAULT_VALUE_ENABLE_SRTP}")
+lcb_add_dependent_option("ZRTP" "ZRTP media encryption support." "${DEFAULT_VALUE_ENABLE_ZRTP}" "ENABLE_SRTP" OFF)
+lcb_add_dependent_option("GOCLEAR" "ZRTP GoClear message support." "${DEFAULT_VALUE_ENABLE_GOCLEAR}" "ENABLE_ZRTP" ON)

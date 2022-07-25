@@ -64,9 +64,9 @@ file(MAKE_DIRECTORY ${CMAKE_PROGRAM_PATH})
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/../scripts/gas-preprocessor.pl" DESTINATION "${CMAKE_PROGRAM_PATH}")
 if(WIN32)
 	find_program(7Z_PROGRAM 7z.exe REQUIRED)
-	message(STATUS "Installing windows tools : toolchains, make, perl, yasm, gawk, bzip2, nasm, sed, patch, python, doxygen")
+	message(STATUS "Installing windows tools : toolchains, make, perl, yasm, gawk, bzip2, nasm, sed, patch, python, doxygen, graphviz")
 	execute_process(
-		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy base-devel ${MINGW_PACKAGE_PREFIX}toolchain ${MINGW_PACKAGE_PREFIX}python make perl yasm bzip2 nasm ${MINGW_PACKAGE_PREFIX}doxygen gawk sed patch --noconfirm  --needed"
+		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy base-devel ${MINGW_PACKAGE_PREFIX}toolchain ${MINGW_PACKAGE_PREFIX}python make perl yasm bzip2 nasm ${MINGW_PACKAGE_PREFIX}doxygen gawk sed patch ${MINGW_PACKAGE_PREFIX}graphviz --noconfirm  --needed"
 	)
 	message(STATUS "Installing windows tools : python modules")
 	execute_process(

@@ -22,7 +22,7 @@
 
 lcb_git_repository("git@gitlab.linphone.org:BC/private/postquantumcryptoengine.git")
 lcb_git_tag_latest("master")
-lcb_git_tag("1e6f17cafc8195356a07cdbf68eeb28dd1d18a24")
+lcb_git_tag("9023b392f5e91c05e809efa218f4c1917a3f2618")
 lcb_external_source_paths("postquantumcryptoengine")
 lcb_groupable(YES)
 lcb_sanitizable(YES)

@@ -69,6 +69,14 @@ if(${CMAKE_VERSION} VERSION_LESS ${CMAKE_MIN_VERSION})
 else()
 	set(DEFAULT_VALUE_ENABLE_FLEXIAPI ON)
 endif()
+# disable ZXing for old CMAKE version
+if (CMAKE_VERSION VERSION_LESS 3.14.0)
+	message(STATUS "ZXing doesn't support CMAKE below 3.14 [" ${CMAKE_VERSION} "]. Deactivate it for default.")
+	set(DEFAULT_VALUE_ENABLE_QRCODE OFF)
+else()
+	set(DEFAULT_VALUE_ENABLE_QRCODE ${DEFAULT_VALUE_ENABLE_VIDEO})
+endif()
+
 
 if ((NOT DEFINED CMAKE_INSTALL_PREFIX) OR CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk/desktop" CACHE PATH "Default linphone-sdk installation prefix" FORCE)

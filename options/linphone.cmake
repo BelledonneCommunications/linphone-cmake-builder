@@ -45,6 +45,9 @@ lcb_add_option("Assets" "Enable packaging of assets (ringtones) when building th
 lcb_add_option("Advanced IM" "Enable advanced instant messaging such as group chat." "${DEFAULT_VALUE_ENABLE_ADVANCED_IM}")
 lcb_add_option("DB Storage" "Enable the database storage." "${DEFAULT_VALUE_ENABLE_DB_STORAGE}")
 
+lcb_add_option("jpeg"  "JPEG support with libjpeg-turbo." "${DEFAULT_VALUE_ENABLE_JPEG}")
+lcb_add_option("qrcode" "QRCode support with zxing." "${DEFAULT_VALUE_ENABLE_QRCODE}")
+
 if(UNIX AND NOT IOS)
 	lcb_add_option("Relative prefix" "liblinphone and mediastreamer will look for their respective ressources relatively to their location." OFF)
 endif()

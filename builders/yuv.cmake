@@ -29,3 +29,9 @@ if(NOT WIN32)
 	lcb_extra_cflags("-fPIC")
 	lcb_extra_cxxflags("-fPIC")
 endif()
+
+if(ENABLE_JPEG)
+	#yuv use the cmake FindJPEG without allowing to switch it off. Make sure to point to the internal library.
+	lcb_dependencies("turbojpeg")
+	lcb_cmake_options("-DJPEG_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/turbojpeg")
+endif()

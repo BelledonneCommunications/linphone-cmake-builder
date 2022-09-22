@@ -20,7 +20,7 @@
 #
 ############################################################################
 lcb_add_dependent_option("Embedded OpenH264" "Embed the openh264 library instead of downloading it from Cisco." "${DEFAULT_VALUE_ENABLE_EMBEDDED_OPENH264}" "ENABLE_OPENH264" OFF)
-project(options-desktop LANGUAGES CXX)#Set CXX language to get compiler type while configuring
+enable_language(CXX)#Set CXX language to get compiler type while configuring
 
 # Define default values for the linphone builder options
 set(DEFAULT_VALUE_ENABLE_ADVANCED_IM ON)
@@ -88,7 +88,6 @@ if(DEFAULT_VALUE_ENABLE_QRCODE)
 		set(DEFAULT_VALUE_ENABLE_QRCODE OFF)
 	endif()
 endif()
-
 if ((NOT DEFINED CMAKE_INSTALL_PREFIX) OR CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk/desktop" CACHE PATH "Default linphone-sdk installation prefix" FORCE)
 endif()

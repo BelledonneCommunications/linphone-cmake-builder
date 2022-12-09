@@ -155,7 +155,7 @@ else()
 	else()
 		set(_ndk_sysroot "${CMAKE_SYSTEM_PROCESSOR}")
 	endif()
-	file(COPY "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${_ndk_sysroot}/libc++_shared.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/")
+	file(COPY "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}/sysroot/usr/lib/${_ndk_sysroot}/libc++_shared.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/")
 endif()
 
 if(ENABLE_SANITIZER)

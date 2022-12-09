@@ -7,8 +7,13 @@
 #Old behaviour does not
 #cmake_policy(SET CMP0056 NEW)
 
-set(sanitize_flags "-fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls")
-set(sanitize_linker_flags "-fsanitize=address,undefined")
+if(MSVC)
+	set(sanitize_flags "/fsanitize=address /Oy-")
+	set(sanitize_linker_flags "")
+else()
+	set(sanitize_flags "-fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+	set(sanitize_linker_flags "-fsanitize=address,undefined")
+endif()
 
 if (LINPHONESDK_PLATFORM STREQUAL "Android" OR DEFINED ANDROID)
   #For some (unknow) reason, when -llog is passed in the linker flags, cmake seems

@@ -136,9 +136,6 @@ list(APPEND LINPHONE_BUILDER_EP_VARS
 	LINPHONESDK_STATE:STRING
 	LINPHONESDK_BRANCH:STRING
 	LINPHONESDK_VERSION:STRING
-	LINPHONESDK_OPENSSL_ROOT_DIR_ARM64:STRING
-	LINPHONESDK_OPENSSL_ROOT_DIR_X86_64:STRING
-	OPENSSL_ROOT_DIR:STRING
 	Qt5_DIR:STRING
 )
 if(WIN32 AND ENABLE_MICROSOFT_STORE_APP)#Passing these varianles to External projects can disturb other platforms
@@ -627,12 +624,20 @@ macro(linphone_builder_create_configure_command PROJNAME)
 			set(ep_configure_options "${ep_configure_options} \"${OPTION}\"")
 		endforeach()
 		set(ep_configure_env "${EP_${PROJNAME}_CONFIGURE_ENV}")
+		if( APPLE AND NOT IOS AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+			set(ep_configure_env "${ep_configure_env} arch -x86_64")
+		endif()
 		set(ep_configure_command "\"${ep_source}/configure\" ${ep_configure_options}")
 	endif()
 endmacro()
 
 
 macro(linphone_builder_create_build_command PROJNAME)
+	if( APPLE AND NOT IOS AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+		set(ep_make_env "arch -x86_64")
+	else()
+		set(ep_make_env "")
+	endif()
 	set(ep_make_options "${EP_${PROJNAME}_MAKE_OPTIONS}")
 endmacro()
 

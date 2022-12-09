@@ -38,11 +38,19 @@ lcb_external_source_paths("externals/openh264" "external/openh264")
 lcb_ignore_warnings(YES)
 
 lcb_build_method("custom")
-lcb_linking_type("-static")
+
 set(OPENH264_BUILD_TYPE "Release")	# Always use Release build type, otherwise the codec is too slow...
 lcb_configure_command_source(${CMAKE_CURRENT_SOURCE_DIR}/builders/openh264/configure.sh.cmake)
 lcb_build_command_source(${CMAKE_CURRENT_SOURCE_DIR}/builders/openh264/build.sh.cmake)
 lcb_install_command_source(${CMAKE_CURRENT_SOURCE_DIR}/builders/openh264/install.sh.cmake)
+
+#Linking libraries
+if(WIN32)
+	lcb_linking_type("-shared")
+else()
+	lcb_linking_type("-static")
+endif()
+
 if(WIN32)
 	if(MSVC)
 		if( CMAKE_SIZEOF_VOID_P EQUAL 8 )

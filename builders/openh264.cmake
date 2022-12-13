@@ -37,6 +37,10 @@ lcb_git_tag("openh264v${OPENH264_VERSION}")
 lcb_external_source_paths("externals/openh264" "external/openh264")
 lcb_ignore_warnings(YES)
 
+if(LINPHONE_BUILDER_CONFIG_FILE MATCHES "configs/config-yocto\.cmake$")
+	lcb_may_be_found_on_system(YES)
+endif()
+
 lcb_build_method("custom")
 
 set(OPENH264_BUILD_TYPE "Release")	# Always use Release build type, otherwise the codec is too slow...

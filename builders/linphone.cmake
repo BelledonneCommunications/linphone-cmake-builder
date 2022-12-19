@@ -30,7 +30,7 @@ lcb_package_source(YES)
 lcb_spec_file("liblinphone.spec")
 lcb_rpmbuild_name("liblinphone")
 
-lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr" "jsoncpp")
+lcb_dependencies("bctoolbox" "bellesip" "ortp" "ms2" "ms2plugins" "belr")
 
 if(ENABLE_DB_STORAGE)
 	lcb_dependencies("soci")
@@ -61,6 +61,10 @@ if(NOT APPLE)
 	endif()
 endif()
 
+if(ENABLE_FLEXIAPI)
+	lcb_dependencies("jsoncpp")
+endif()
+
 if(ENABLE_TUNNEL)
 	lcb_dependencies("tunnel")
 endif()
@@ -80,6 +84,7 @@ endif()
 if(ENABLE_QRCODE)
 	lcb_dependencies("zxing")
 endif()
+
 if(ENABLE_JPEG)
 	lcb_dependencies("turbojpeg")
 endif()

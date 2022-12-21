@@ -23,3 +23,7 @@ lcb_git_repository("https://gitlab.linphone.org/BC/public/external/openldap.git"
 lcb_external_source_paths("externals/openldap" "external/openldap")
 lcb_may_be_found_on_system(YES)
 lcb_dependencies("mbedtls")
+
+if(WIN32)
+	lcb_extra_cflags("/sdl-")
+endif()

@@ -61,8 +61,6 @@ set(DEFAULT_VALUE_ENABLE_DNS_SERVICE ON)
 # dependent options
 set(DEFAULT_VALUE_ENABLE_G729 ${DEFAULT_VALUE_ENABLE_GPL_THIRD_PARTIES})
 
-lcb_add_dependent_option("Fat binary" "Enable fat binary generation using lipo." "${DEFAULT_VALUE_ENABLE_FAT_BINARY}" "ENABLE_FAT_BINARY" OFF)
-
 if ((NOT DEFINED CMAKE_INSTALL_PREFIX) OR CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/linphone-sdk" CACHE PATH "Default linphone-sdk installation prefix" FORCE)
 endif()

@@ -19,8 +19,7 @@
 ############################################################################
 include (${CMAKE_CURRENT_LIST_DIR}/options-desktop.cmake)
 
-set(DEFAULT_VALUE_ENABLE_FAT_BINARY OFF)
+#On macos fat binary is required as XFrameworks are designed to bundle multiple platforms but not multiple architecture. macos x86_64 and arm64 are for the same platform, so fat archive is required even in case of XCFramework. So for know FAT binary is prefered until we decide to have a single XCFramework for macos and IOS
+set(DEFAULT_VALUE_ENABLE_FAT_BINARY ON)
 set(DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER ON)
 set(DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER_COMPILATION OFF)
-
-lcb_add_dependent_option("Fat binary" "Enable fat binary generation using lipo." "${DEFAULT_VALUE_ENABLE_FAT_BINARY}" "ENABLE_FAT_BINARY" OFF)

@@ -1,6 +1,6 @@
 ############################################################################
 # linphone.cmake
-# Copyright (C) 2015  Belledonne Communications, Grenoble France
+# Copyright (C) 2023  Belledonne Communications, Grenoble France
 #
 ############################################################################
 #
@@ -51,3 +51,7 @@ lcb_add_option("qrcode" "QRCode support with zxing." "${DEFAULT_VALUE_ENABLE_QRC
 if(UNIX AND NOT IOS)
 	lcb_add_option("Relative prefix" "liblinphone and mediastreamer will look for their respective ressources relatively to their location." OFF)
 endif()
+if (APPLE)
+	lcb_add_option("Fat binary" "Enable fat binary generation using lipo." "${DEFAULT_VALUE_ENABLE_FAT_BINARY}")
+endif()
+

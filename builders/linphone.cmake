@@ -89,6 +89,10 @@ if(ENABLE_JPEG)
 	lcb_dependencies("turbojpeg")
 endif()
 
+if(ENABLE_OPENSSL_EXPORT)
+	lcb_dependencies("openssl")
+endif()
+
 lcb_cmake_options(
 	"-DENABLE_GTK_UI=${ENABLE_GTK_UI}"
 	"-DENABLE_VIDEO=${ENABLE_VIDEO}"

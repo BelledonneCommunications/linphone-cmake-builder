@@ -64,20 +64,45 @@ file(MAKE_DIRECTORY ${CMAKE_PROGRAM_PATH})
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/../scripts/gas-preprocessor.pl" DESTINATION "${CMAKE_PROGRAM_PATH}")
 if(WIN32)
 	find_program(7Z_PROGRAM 7z.exe REQUIRED)
-	message(STATUS "Installing windows tools : toolchains, make, perl, yasm, gawk, bzip2, nasm, sed, patch, python, doxygen, graphviz")
-	execute_process(
-		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy base-devel ${MINGW_PACKAGE_PREFIX}toolchain ${MINGW_PACKAGE_PREFIX}python make perl yasm bzip2 nasm ${MINGW_PACKAGE_PREFIX}doxygen gawk sed patch ${MINGW_PACKAGE_PREFIX}graphviz --noconfirm  --needed"
-	)
-	message(STATUS "Installing windows tools : python modules")
-	execute_process(
-		COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "python -m ensurepip ; python -m pip install six pystache"
-	)
 	
-	if(ENABLE_LDAP)
-		message(STATUS "Installing windows tools for LDAP : posix regex (libsystre)")
-		execute_process(
-			COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -S ${MINGW_PACKAGE_PREFIX}libsystre --noconfirm  --needed"
-		)
+	if(LINPHONE_BUILDER_WINDOWS_TOOLS_CHECK)
+		set(CHECK_WINDOWS_TOOLS_STATUS "1" CACHE INTERNAL "for internal use only; do not modify" PARENT_SCOPE)
+		if (NOT CHECK_WINDOWS_TOOLS_STATUS EQUAL 0)
+			message(STATUS "Installing windows tools : toolchains, make, perl, yasm, gawk, bzip2, nasm, sed, patch, python, doxygen, graphviz")
+			execute_process(
+				COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -Sy base-devel ${MINGW_PACKAGE_PREFIX}toolchain ${MINGW_PACKAGE_PREFIX}python make perl yasm bzip2 nasm ${MINGW_PACKAGE_PREFIX}doxygen gawk sed patch ${MINGW_PACKAGE_PREFIX}graphviz --noconfirm  --needed"
+				RESULT_VARIABLE EXECUTE_STATUS
+			)
+			set(CHECK_WINDOWS_TOOLS_STATUS ${EXECUTE_STATUS} CACHE INTERNAL "for internal use only; do not modify" FORCE)
+		else()
+			message(STATUS "Windows tools already checked: toolchains, make, perl, yasm, gawk, bzip2, nasm, sed, patch, python, doxygen, graphviz")
+		endif()
+	
+		set(CHECK_WINDOWS_TOOLS_PYTHON_STATUS "1" CACHE INTERNAL "for internal use only; do not modify" PARENT_SCOPE)
+		if (NOT CHECK_WINDOWS_TOOLS_PYTHON_STATUS EQUAL 0)
+			message(STATUS "Installing windows tools : python modules")
+			execute_process(
+				COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "python -m ensurepip ; python -m pip install six pystache"
+				RESULT_VARIABLE EXECUTE_STATUS
+			)
+			set(CHECK_WINDOWS_TOOLS_PYTHON_STATUS ${EXECUTE_STATUS} CACHE INTERNAL "for internal use only; do not modify" FORCE)
+		else()
+			message(STATUS "Windows tools already checked : python modules")
+		endif()
+	
+		if(ENABLE_LDAP)
+			set(CHECK_WINDOWS_TOOLS_LDAP_STATUS "1" CACHE INTERNAL "for internal use only; do not modify" PARENT_SCOPE)
+			if (NOT CHECK_WINDOWS_TOOLS_LDAP_STATUS EQUAL 0)
+				message(STATUS "Installing windows tools for LDAP : posix regex (libsystre)")
+				execute_process(
+					COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-defterm" "-shell" "sh" "-l" "-c" "pacman -S ${MINGW_PACKAGE_PREFIX}libsystre --noconfirm  --needed"
+					RESULT_VARIABLE EXECUTE_STATUS
+				)
+				set(CHECK_WINDOWS_TOOLS_LDAP_STATUS ${EXECUTE_STATUS} CACHE INTERNAL "for internal use only; do not modify" FORCE)
+			else()
+				message(STATUS "Windows tools for LDAP already checked: posix regex (libsystre)")
+			endif()
+		endif()
 	endif()
 endif()
 
@@ -137,11 +162,20 @@ endif()
 if(NOT WINDOWS_UNIVERSAL)
 	if(NOT PKG_CONFIG_PROGRAM)
 		if(WIN32)
-			message(STATUS "Installing pkg-config, gettext, glib2 to MSYS2")
-			execute_process(
-				COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-								"pacman -Sy pkg-config gettext glib2 --noconfirm  --needed"
-			)
+			if(LINPHONE_BUILDER_WINDOWS_TOOLS_CHECK)
+				set(CHECK_WINDOWS_TOOLS_PKG_STATUS "1" CACHE INTERNAL "for internal use only; do not modify" PARENT_SCOPE)
+				if (NOT CHECK_WINDOWS_TOOLS_PKG_STATUS EQUAL 0)
+					message(STATUS "Installing pkg-config, gettext, glib2 to MSYS2")
+					execute_process(
+						COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
+									"pacman -Sy pkg-config gettext glib2 --noconfirm  --needed"
+						RESULT_VARIABLE EXECUTE_STATUS
+					)
+					set(CHECK_WINDOWS_TOOLS_PKG_STATUS ${EXECUTE_STATUS} CACHE INTERNAL "for internal use only; do not modify" FORCE)
+				else()
+					message(STATUS "pkg-config, gettext, glib2 to MSYS2 already checked")
+				endif()
+			endif()
 			find_program(PKG_CONFIG_PROGRAM
 				NAMES pkg-config pkg-config.exe
 				HINTS ${_DEFAULT_MSYS2_BIN_PATH}
@@ -157,12 +191,19 @@ if(NOT WINDOWS_UNIVERSAL)
 			HINTS ${_DEFAULT_MSYS2_BIN_PATH}
 		)
 		if(NOT INTLTOOLIZE_PROGRAM)
-			if(WIN32)
-				message(STATUS "Installing intltoolize to MSYS2")
-				execute_process(
-					COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
-					"pacman -Sy intltool --noconfirm --needed"
-				)
+			if(WIN32 AND LINPHONE_BUILDER_WINDOWS_TOOLS_CHECK)
+				set(CHECK_WINDOWS_TOOLS_INTLTOOLIZE_STATUS "1" CACHE INTERNAL "for internal use only; do not modify" PARENT_SCOPE)
+				if (NOT CHECK_WINDOWS_TOOLS_INTLTOOLIZE_STATUS EQUAL 0)
+					message(STATUS "Installing intltoolize to MSYS2")
+					execute_process(
+						COMMAND "${MSYS2_PROGRAM}" "-${MINGW_TYPE}" "-here" "-full-path" "-no-start" "-defterm" "-shell" "sh" "-l" "-c"
+						"pacman -Sy intltool --noconfirm --needed"
+						RESULT_VARIABLE EXECUTE_STATUS
+					)
+					set(CHECK_WINDOWS_TOOLS_INTLTOOLIZE_STATUS ${EXECUTE_STATUS} CACHE INTERNAL "for internal use only; do not modify" FORCE)
+				else()
+					message(STATUS "intltoolize to MSYS2 already checked")
+				endif()
 			endif()
 			find_program(INTLTOOLIZE_PROGRAM
 				NAMES intltoolize

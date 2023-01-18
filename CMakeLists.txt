@@ -37,6 +37,7 @@ option(LINPHONE_BUILDER_GROUP_EXTERNAL_SOURCE_PATH_BUILDERS "Group external sour
 set(LINPHONE_BUILDER_EXTERNAL_BUILDERS_PATH "" CACHE PATH "Path to external builders.")
 set(LINPHONE_BUILDER_SIGNING_IDENTITY "" CACHE STRING "Signing identity used for code signing on Mac OS X")
 option(LINPHONE_BUILDER_ENABLE_RPM_PACKAGING "Enable RPM packaging." NO)
+option(LINPHONE_BUILDER_WINDOWS_TOOLS_CHECK "Enable windows tools checking" NO)
 
 
 # Include macros definition to be used by builders

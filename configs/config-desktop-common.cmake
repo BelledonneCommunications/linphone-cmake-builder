@@ -159,3 +159,10 @@ endif()
 lcb_builder_linking_type(zlib "-DENABLE_SHARED=NO" "-DENABLE_STATIC=YES")
 lcb_builder_extra_cflags(zlib "-fPIC")
 
+# srtp 
+if(APPLE)
+# As libsrtp does not provide Framework on Macos 
+	lcb_builder_linking_type(srtp "-DBUILD_SHARED_LIBS=NO")
+	lcb_builder_extra_cflags(srtp "-fPIC")
+endif()
+

@@ -46,3 +46,7 @@ lcb_cmake_options("-DOQS_ENABLE_SIG_SPHINCS=Off"
 	"-DOQS_ENABLE_KEM_BIKE=Off"
 	"-DOQS_ENABLE_KEM_KYBER=On"
         )
+
+if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER "14.0")
+	lcb_extra_cflags(" -Wno-error=strict-prototypes ")
+endif()

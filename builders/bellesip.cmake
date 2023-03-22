@@ -47,3 +47,7 @@ lcb_cmake_options(
 	"-DENABLE_MDNS=${ENABLE_MDNS}"
 	"-DENABLE_DNS_SERVICE=${ENABLE_DNS_SERVICE}"
 )
+
+if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER "14.0")
+	lcb_extra_cflags(" -Wno-error=deprecated-non-prototype ")
+endif()

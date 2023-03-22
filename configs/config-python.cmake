@@ -120,9 +120,6 @@ if(UNIX AND NOT APPLE)
 	lcb_builder_cmake_options(ms2 "-DENABLE_XV=YES")
 endif()
 
-# polarssl
-lcb_builder_linking_type(polarssl "-DUSE_SHARED_POLARSSL_LIBRARY=NO")
-
 # vpx
 lcb_builder_linking_type(vpx "--enable-static" "--disable-shared" "--enable-pic")
 

@@ -115,9 +115,6 @@ lcb_builder_cmake_options(opus "-DOPUS_FIXED_POINT=YES")
 lcb_builder_cmake_options(ortp "-DENABLE_DOC=NO")
 lcb_builder_linking_type(ortp "-DENABLE_SHARED=YES" "-DENABLE_STATIC=NO")
 
-# polarssl
-lcb_builder_linking_type(polarssl "-DUSE_SHARED_POLARSSL_LIBRARY=0")
-
 # soci
 lcb_builder_linking_type(soci "-DSOCI_STATIC=YES" "-DSOCI_SHARED=NO")
 

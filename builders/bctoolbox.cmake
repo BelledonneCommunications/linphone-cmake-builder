@@ -31,8 +31,6 @@ lcb_spec_file("bctoolbox.spec")
 
 if(ENABLE_MBEDTLS)
 	lcb_dependencies("mbedtls")
-elseif(ENABLE_POLARSSL)
-	lcb_dependencies("polarssl")
 endif()
 if(ENABLE_UNIT_TESTS)
 	lcb_dependencies("bcunit")
@@ -43,7 +41,6 @@ endif()
 
 lcb_cmake_options(
 	"-DENABLE_MBEDTLS=${ENABLE_MBEDTLS}"
-	"-DENABLE_POLARSSL=${ENABLE_POLARSSL}"
 	"-DENABLE_DECAF=${ENABLE_LIME_X3DH}"
 	"-DENABLE_TESTS=${ENABLE_UNIT_TESTS}"
 	"-DENABLE_TESTS_COMPONENT=${ENABLE_UNIT_TESTS}"

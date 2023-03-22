@@ -128,9 +128,6 @@ if(ENABLE_STATIC_ONLY)
 
 	# mbedtls
 	lcb_builder_linking_type(mbedtls "-DUSE_STATIC_MBEDTLS_LIBRARY=YES" "-DUSE_SHARED_MBEDTLS_LIBRARY=NO")
-
-	# polarssl
-	lcb_builder_linking_type(polarssl "-DUSE_SHARED_POLARSSL_LIBRARY=0")
 else()
 	if (NOT ENABLE_EMBEDDED_OPENH264)
 		# openh264

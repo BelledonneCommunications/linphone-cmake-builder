@@ -54,3 +54,4 @@ if (APPLE)
 	lcb_add_option("Fat binary" "Enable fat binary generation using lipo." "${DEFAULT_VALUE_ENABLE_FAT_BINARY}")
 endif()
 
+lcb_add_option("Example Plugin" "Enable compilation of the example plugin." "OFF")

@@ -30,7 +30,6 @@ lcb_add_option("Swift wrapper" "Build the Swift wrapper sources from Liblinphone
 lcb_add_option("Swift wrapper compilation" "Compile and package the swift wrapper framework. Require at least cmake 3.16.3." "${DEFAULT_VALUE_ENABLE_SWIFT_WRAPPER_COMPILATION}")
 lcb_add_option("Jazzy doc" "Build the Swift doc from Liblinphone." "${DEFAULT_VALUE_ENABLE_JAZZY_DOC}")
 lcb_add_option("Java wrapper" "Build the Java wrapper from Liblinphone." "${DEFAULT_VALUE_ENABLE_JAVA_WRAPPER}")
-lcb_add_option("LIME" "Enable Linphone IM Encryption support in  Liblinphone." "${DEFAULT_VALUE_ENABLE_LIME}")
 lcb_add_option("LIME X3DH" "Enable Linphone IM Encryption version 2 support in  Liblinphone." "${DEFAULT_VALUE_ENABLE_LIME_X3DH}")
 lcb_add_option("LDAP" "Enable LDAP Liblinphone." "${DEFAULT_VALUE_ENABLE_LDAP}")
 if( DEFINED DEFAULT_VALUE_ENABLE_DAEMON)

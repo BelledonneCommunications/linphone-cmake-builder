@@ -24,3 +24,5 @@
 set(LINPHONE_BUILDER_USE_SYSTEM_DEPENDENCIES YES CACHE BOOL "" FORCE)
 
 include("configs/config-desktop.cmake")
+
+lcb_builder_cmake_options(bctoolbox "-DENABLE_STRICT=NO")

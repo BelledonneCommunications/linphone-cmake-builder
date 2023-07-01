@@ -1,5 +1,5 @@
 ############################################################################
-# ffmpegandroid.cmake
+# CMakeLists.txt
 # Copyright (C) 2016  Belledonne Communications, Grenoble France
 #
 ############################################################################
@@ -20,5 +20,26 @@
 #
 ############################################################################
 
-lcb_external_source_paths("cmake-builder/builders/ffmpegandroid")
-lcb_dependencies("ffmpeg")
+cmake_minimum_required(VERSION 3.0)
+project(ffmpegandroid LANGUAGES C)
+
+include(GNUInstallDirs)
+
+
+find_library(AVCODEC_LIBRARY avcodec)
+find_library(AVUTIL_LIBRARY avutil)
+find_library(SWRESAMPLE_LIBRARY swresample)
+find_library(SWSCALE_LIBRARY swscale)
+
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/dummy.c" "")
+
+add_library(ffmpeg-linphone SHARED "${CMAKE_CURRENT_BINARY_DIR}/dummy.c")
+target_link_libraries(ffmpeg-linphone LINK_PRIVATE "m" "-Wl,-whole-archive" ${AVCODEC_LIBRARY} ${AVUTIL_LIBRARY} ${SWRESAMPLE_LIBRARY} ${SWSCALE_LIBRARY} "-Wl,-no-whole-archive")
+set_target_properties(ffmpeg-linphone PROPERTIES LINKER_LANGUAGE C)
+
+install(TARGETS ffmpeg-linphone
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)

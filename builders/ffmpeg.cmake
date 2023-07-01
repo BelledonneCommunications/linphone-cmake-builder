@@ -40,9 +40,8 @@ else()
 		set(EP_ffmpeg_PATCH_OPTIONS "--binary")
 	endif()
 
-	lcb_git_repository("https://gitlab.linphone.org/BC/public/external/ffmpeg.git")
-	lcb_git_tag_latest("bc")
-	lcb_git_tag("51aa587f7ddac63c831d73eb360e246765a2675f")
+	lcb_git_repository("https://git.ffmpeg.org/ffmpeg.git")
+	lcb_git_tag_latest("4.4.2")
 	lcb_external_source_paths("externals/ffmpeg" "external/ffmpeg")
 	lcb_may_be_found_on_system(YES)
 	lcb_ignore_warnings(YES)
@@ -53,7 +52,6 @@ else()
 		"--disable-bzlib"
 		"--disable-ffplay"
 		"--disable-ffprobe"
-		"--disable-ffserver"
 		"--disable-avdevice"
 		"--disable-avfilter"
 		"--disable-network"
@@ -62,7 +60,6 @@ else()
 		"--enable-decoder=mjpeg"
 		"--enable-encoder=mjpeg"
 		# Disable video acceleration support for compatibility with older Mac OS X versions (vda, vaapi, vdpau).
-		"--disable-vda"
 		"--disable-vaapi"
 		"--disable-vdpau"
 		"--ar=\$AR"
